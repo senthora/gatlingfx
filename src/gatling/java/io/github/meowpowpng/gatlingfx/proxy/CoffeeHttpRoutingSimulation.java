@@ -7,7 +7,7 @@ import io.github.meowpowpng.gatlingfx.support.ProxyFixtures;
 
 import java.util.List;
 
-public final class CoffeeRoutingSimulation extends BaseSimulation {
+public final class CoffeeHttpRoutingSimulation extends BaseSimulation {
 
     @Override
     protected SimulationProtocol protocol() {
