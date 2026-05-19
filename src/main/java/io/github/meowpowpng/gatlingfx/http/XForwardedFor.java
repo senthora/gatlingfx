@@ -33,6 +33,9 @@ public final class XForwardedFor {
 
     /**
      * Creates forwarding chain from provided addresses.
+     * <p>
+     * <strong>API Note:</strong>
+     * Addresses are preserved in insertion order.
      *
      * @param addresses forwarding chain addresses
      *
