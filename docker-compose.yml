@@ -1,0 +1,7 @@
+services:
+  proxy:
+    build: docker/proxy
+    image: gatlingfx-proxy:dev
+    container_name: proxy
+    ports:
+      - "8080:80"
