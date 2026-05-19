@@ -8,8 +8,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static io.gatling.javaapi.http.HttpDsl.http;
-
 /**
  * Fluent builder for configuring HTTP
  * protocol settings used by Gatling simulations.
@@ -21,11 +19,15 @@ import static io.gatling.javaapi.http.HttpDsl.http;
 public final class SimulationProtocol {
 
     private final Map<String, String> headers = new LinkedHashMap<>();
+    private final HttpProtocolFactory factory;
 
     private @Nullable String baseUrl;
     private boolean followRedirects = true;
 
-    private SimulationProtocol() {}
+    SimulationProtocol(HttpProtocolFactory factory) {
+        Objects.requireNonNull(factory, "factory must not be null");
+        this.factory = factory;
+    }
 
     /**
      * Creates a new protocol configuration instance.
@@ -33,7 +35,7 @@ public final class SimulationProtocol {
      * @return new protocol configuration
      */
     public static SimulationProtocol create() {
-        return new SimulationProtocol();
+        return new SimulationProtocol(new DefaultHttpProtocolFactory());
     }
 
     /**
@@ -97,7 +99,7 @@ public final class SimulationProtocol {
         if (baseUrl == null) {
             throw new IllegalStateException("baseUrl must be configured");
         }
-        var builder = http.baseUrl(baseUrl);
+        var builder = factory.baseUrl(baseUrl);
 
         for (var entry : headers.entrySet()) {
             builder = builder.header(entry.getKey(), entry.getValue());
