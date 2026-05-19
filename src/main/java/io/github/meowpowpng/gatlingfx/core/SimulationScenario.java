@@ -3,6 +3,8 @@ package io.github.meowpowpng.gatlingfx.core;
 import io.gatling.javaapi.core.ScenarioBuilder;
 import io.gatling.javaapi.http.HttpRequestActionBuilder;
 
+import java.util.Objects;
+
 import static io.gatling.javaapi.http.HttpDsl.http;
 
 /**
@@ -25,9 +27,17 @@ public interface SimulationScenario {
      * Creates a basic HTTP GET request builder for the provided path.
      *
      * @param path request path
+     *
      * @return configured HTTP GET request builder
+     *
+     * @throws NullPointerException if {@code path} is null
+     * @throws IllegalArgumentException if {@code path} is blank
      */
     default HttpRequestActionBuilder get(String path) {
+        Objects.requireNonNull(path, "path must not be null");
+        if (path.isBlank()) {
+            throw new IllegalArgumentException("path must not be blank");
+        }
         return http("GET " + path).get(path);
     }
 }

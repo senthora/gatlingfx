@@ -1,5 +1,7 @@
 package io.github.meowpowpng.gatlingfx.proxy;
 
+import java.util.Objects;
+
 /**
  * Immutable reverse proxy server definition
  * used by proxy-oriented simulations.
@@ -14,6 +16,19 @@ public record ProxyServer(NetworkAddress address) {
      * Creates a new proxy server definition.
      *
      * @param address proxy server network address
+     *
+     * @throws NullPointerException if {@code address} is null
+     */
+    public ProxyServer {
+        Objects.requireNonNull(address, "address must not be null");
+    }
+
+    /**
+     * Creates a new proxy server definition.
+     *
+     * @param address proxy server network address
+     *
+     * @throws NullPointerException if {@code address} is null
      */
     public static ProxyServer of(NetworkAddress address) {
         return new ProxyServer(address);

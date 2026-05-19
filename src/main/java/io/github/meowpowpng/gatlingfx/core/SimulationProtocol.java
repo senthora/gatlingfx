@@ -1,9 +1,12 @@
 package io.github.meowpowpng.gatlingfx.core;
 
+import org.jspecify.annotations.Nullable;
+
 import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static io.gatling.javaapi.http.HttpDsl.http;
 
@@ -19,11 +22,10 @@ public final class SimulationProtocol {
 
     private final Map<String, String> headers = new LinkedHashMap<>();
 
-    private String baseUrl;
+    private @Nullable String baseUrl;
     private boolean followRedirects = true;
 
-    private SimulationProtocol() {
-    }
+    private SimulationProtocol() {}
 
     /**
      * Creates a new protocol configuration instance.
@@ -40,8 +42,14 @@ public final class SimulationProtocol {
      * @param baseUrl target base URL
      *
      * @return current protocol configuration
+     * @throws NullPointerException if {@code baseUrl} is null
+     * @throws IllegalArgumentException if {@code baseUrl} is blank
      */
     public SimulationProtocol baseUrl(String baseUrl) {
+        Objects.requireNonNull(baseUrl, "baseUrl must not be null");
+        if (baseUrl.isBlank()) {
+            throw new IllegalArgumentException("baseUrl must not be blank");
+        }
         this.baseUrl = baseUrl;
         return this;
     }
@@ -53,8 +61,16 @@ public final class SimulationProtocol {
      * @param value header value
      *
      * @return current protocol configuration
+     *
+     * @throws NullPointerException if {@code name} or {@code value} is null
+     * @throws IllegalArgumentException if {@code name} is blank
      */
     public SimulationProtocol header(String name, String value) {
+        Objects.requireNonNull(name, "name must not be null");
+        Objects.requireNonNull(value, "value must not be null");
+        if (name.isBlank()) {
+            throw new IllegalArgumentException("name must not be blank");
+        }
         this.headers.put(name, value);
         return this;
     }
@@ -65,6 +81,7 @@ public final class SimulationProtocol {
      * @param enabled whether redirects should be followed
      *
      * @return current protocol configuration
+     * @throws IllegalStateException if base URL was not configured
      */
     public SimulationProtocol followRedirects(boolean enabled) {
         this.followRedirects = enabled;
@@ -77,6 +94,9 @@ public final class SimulationProtocol {
      * @return configured HTTP protocol builder
      */
     HttpProtocolBuilder build() {
+        if (baseUrl == null) {
+            throw new IllegalStateException("baseUrl must be configured");
+        }
         var builder = http.baseUrl(baseUrl);
 
         for (var entry : headers.entrySet()) {

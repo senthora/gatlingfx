@@ -13,6 +13,14 @@ public final class XForwardedFor {
     private final List<String> chain;
 
     private XForwardedFor(List<String> chain) {
+        Objects.requireNonNull(chain, "chain must not be null");
+
+        for (String value : chain) {
+            Objects.requireNonNull(value, "chain entry must not be null");
+            if (value.isBlank()) {
+                throw new IllegalArgumentException("chain entry must not be blank");
+            }
+        }
         this.chain = List.copyOf(chain);
     }
 
@@ -27,8 +35,12 @@ public final class XForwardedFor {
      * Creates forwarding chain from provided addresses.
      *
      * @param addresses forwarding chain addresses
+     *
+     * @throws NullPointerException if {@code addresses} or any entry is null
+     * @throws IllegalArgumentException if any address is blank
      */
     public static XForwardedFor of(String... addresses) {
+        Objects.requireNonNull(addresses, "addresses must not be null");
         return new XForwardedFor(List.of(addresses));
     }
 
@@ -72,14 +84,24 @@ public final class XForwardedFor {
          * Appends IP address to the forwarding chain.
          *
          * @param ip IP address
+         *
+         * @throws NullPointerException if {@code ip} is null
+         * @throws IllegalArgumentException if {@code ip} is blank
          */
         public Builder withIp(String ip) {
+            Objects.requireNonNull(ip, "ip must not be null");
+            if (ip.isBlank()) {
+                throw new IllegalArgumentException("ip must not be blank");
+            }
             chain.add(ip);
             return this;
         }
 
         /**
          * Builds immutable forwarding chain.
+         *
+         * @throws NullPointerException if any address is null
+         * @throws IllegalArgumentException if any address is blank
          */
         public XForwardedFor build() {
             return new XForwardedFor(chain);
