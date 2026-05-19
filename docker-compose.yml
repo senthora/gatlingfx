@@ -5,3 +5,4 @@ services:
     container_name: proxy
     ports:
       - "8080:80"
+      - "8443:443"

@@ -10,13 +10,16 @@ import io.github.meowpowpng.gatlingfx.proxy.ProxyServer;
 public final class ProxyFixtures {
 
     /**
-     * Default local proxy server exposed
-     * by the GatlingFx proxy container.
+     * Default local HTTP proxy server.
      */
-    public static final ProxyServer PROXY = ProxyServer.of(
-            NetworkAddress.of("localhost", 8080)
-    );
+    public static final ProxyServer HTTP_PROXY =
+            ProxyServer.of(NetworkAddress.of("localhost", 8080));
 
+    /**
+     * Default local HTTPS proxy server.
+     */
+    public static final ProxyServer HTTPS_PROXY =
+            ProxyServer.of(NetworkAddress.of("localhost", 8443));
     /**
      * Coffee upstream target used for
      * proxy routing verification.
