@@ -1,0 +1,25 @@
+server {
+    listen 80;
+    resolver 127.0.0.11;
+
+    access_log /var/log/nginx/access.log proxy_access;
+
+    location = /health {
+        if ($remote_addr = 127.0.0.1) {
+            access_log off;
+            return 200;
+        }
+        try_files "" @forward;
+    }
+    location / {
+        try_files "" @forward;
+    }
+    location @forward {
+        proxy_pass $http_x_proxy_target;
+        proxy_ssl_verify off;
+
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
