@@ -32,7 +32,12 @@ public enum RequestHeader {
     /**
      * Proxy forwarding header containing the direct client IP address.
      */
-    X_REAL_IP("X-Real-IP");
+    X_REAL_IP("X-Real-IP"),
+
+    /**
+     * Standard HTTP {@code Content-Type} header.
+     */
+    CONTENT_TYPE("Content-Type");
 
     private final String value;
 
