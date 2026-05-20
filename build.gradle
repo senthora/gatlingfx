@@ -1,33 +1,39 @@
 plugins {
     id 'java'
-    id "io.gatling.gradle" version "3.15.0.3"
+    id "io.gatling.gradle" version "3.15.0.3" apply false
 }
 
 group = 'com.senthora.gatlingfx'
 version = '0.1.0'
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+allprojects {
+    repositories {
+        mavenCentral()
     }
 }
 
-repositories {
-    mavenCentral()
-}
+subprojects {
+    apply plugin: 'java'
 
-dependencies {
-    implementation libs.assertj.core
-    implementation libs.bundles.gatling
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
 
-    testImplementation platform(libs.junit.bom)
-    testImplementation libs.junit.jupiter
-    testRuntimeOnly libs.junit.platform.launcher
+    test {
+        useJUnitPlatform()
+    }
 
-    testImplementation platform(libs.mockito.bom)
-    testImplementation libs.mockito.core
-}
+    dependencies {
+        implementation libs.assertj.core
+        implementation libs.bundles.gatling
 
-test {
-    useJUnitPlatform()
+        testImplementation platform(libs.junit.bom)
+        testImplementation libs.junit.jupiter
+        testRuntimeOnly libs.junit.platform.launcher
+
+        testImplementation platform(libs.mockito.bom)
+        testImplementation libs.mockito.core
+    }
 }
