@@ -5,6 +5,7 @@
       <option name="IMPORT_LAYOUT_TABLE">
         <value>
           <package name="" withSubpackages="true" static="false" module="true" />
+          <package name="io.github.meowpowpng" withSubpackages="true" static="false" />
           <emptyLine />
           <package name="com.senthora" withSubpackages="true" static="false" />
           <emptyLine />
