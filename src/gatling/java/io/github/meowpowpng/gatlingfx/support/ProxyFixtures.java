@@ -1,5 +1,6 @@
 package io.github.meowpowpng.gatlingfx.support;
 
+import io.github.meowpowpng.gatlingfx.http.HttpHost;
 import io.github.meowpowpng.gatlingfx.proxy.NetworkAddress;
 import io.github.meowpowpng.gatlingfx.proxy.ProxyServer;
 
@@ -13,31 +14,24 @@ public final class ProxyFixtures {
      * Default local HTTP proxy server.
      */
     public static final ProxyServer HTTP_PROXY =
-            ProxyServer.of(NetworkAddress.of("localhost", 8080));
+            ProxyServer.of(new NetworkAddress(HttpHost.LOCALHOST, 8080));
 
     /**
      * Default local HTTPS proxy server.
      */
     public static final ProxyServer HTTPS_PROXY =
-            ProxyServer.of(NetworkAddress.of("localhost", 8443));
+            ProxyServer.of(new NetworkAddress(HttpHost.LOCALHOST, 8443));
     /**
      * Coffee upstream target used for
      * proxy routing verification.
      */
-    @SuppressWarnings("HttpUrlsUsage")
-    public static final NetworkAddress COFFEE = NetworkAddress.of(
-            "http://coffee",
-            5678
-    );
+    public static final NetworkAddress COFFEE = NetworkAddress.of("coffee", 5678);
 
     /**
      * Tea upstream target used for
      * proxy routing verification.
      */
-    public static final NetworkAddress TEA = NetworkAddress.of(
-            "http://tea",
-            5678
-    );
+    public static final NetworkAddress TEA = NetworkAddress.of("tea", 5678);
 
     private ProxyFixtures() {}
 }

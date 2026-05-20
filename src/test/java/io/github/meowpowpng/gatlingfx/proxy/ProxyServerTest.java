@@ -1,5 +1,7 @@
 package io.github.meowpowpng.gatlingfx.proxy;
 
+import io.github.meowpowpng.gatlingfx.http.HttpHost;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +21,7 @@ class ProxyServerTest {
     @Test
     @DisplayName("Should return provided address when proxy server is created")
     void should_ReturnProvidedAddress_when_ProxyServerIsCreated() {
-        var address = new NetworkAddress("localhost", 8080);
+        var address = new NetworkAddress(HttpHost.LOCALHOST, 8080);
         var proxyServer = new ProxyServer(address);
 
         assertThat(proxyServer.address()).isEqualTo(address);
@@ -28,7 +30,7 @@ class ProxyServerTest {
     @Test
     @DisplayName("Should return proxy server with provided address when address is valid")
     void should_ReturnProxyServerWithProvidedAddress_when_AddressIsValid() {
-        var address = new NetworkAddress("localhost", 8080);
+        var address = new NetworkAddress(HttpHost.LOCALHOST, 8080);
         var proxyServer = ProxyServer.of(address);
 
         assertThat(proxyServer.address()).isEqualTo(address);

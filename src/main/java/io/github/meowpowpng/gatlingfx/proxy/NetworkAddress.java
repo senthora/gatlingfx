@@ -1,5 +1,7 @@
 package io.github.meowpowpng.gatlingfx.proxy;
 
+import io.github.meowpowpng.gatlingfx.http.HttpHost;
+
 import java.util.Objects;
 
 /**
@@ -9,7 +11,7 @@ import java.util.Objects;
  * routable TCP endpoints such as proxy servers,
  * upstream targets, and backend services.
  */
-public record NetworkAddress(String host, int port) {
+public record NetworkAddress(HttpHost host, int port) {
 
     /**
      * Creates a new network address.
@@ -18,16 +20,12 @@ public record NetworkAddress(String host, int port) {
      * @param port network port
      *
      * @throws NullPointerException if {@code host} is null
-     * @throws IllegalArgumentException if {@code host} is blank
      * @throws IllegalArgumentException if {@code port} is not positive
      */
     public NetworkAddress {
-        Objects.requireNonNull(host, "Host must not be null");
-        if (host.isBlank()) {
-            throw new IllegalArgumentException("Host must not be blank");
-        }
+        Objects.requireNonNull(host, "host must not be null");
         if (port <= 0) {
-            throw new IllegalArgumentException("Port must be greater than zero");
+            throw new IllegalArgumentException("port must be greater than zero");
         }
     }
 
@@ -38,11 +36,10 @@ public record NetworkAddress(String host, int port) {
      * @param port network port
      *
      * @throws NullPointerException if {@code host} is null
-     * @throws IllegalArgumentException if {@code host} is blank
      * @throws IllegalArgumentException if {@code port} is not positive
      */
     public static NetworkAddress of(String host, int port) {
-        return new NetworkAddress(host, port);
+        return new NetworkAddress(HttpHost.of(host), port);
     }
 
     /**
@@ -52,6 +49,6 @@ public record NetworkAddress(String host, int port) {
      * @return formatted network address
      */
     public String value() {
-        return host + ':' + port;
+        return host.value() + ':' + port;
     }
 }
