@@ -1,5 +1,7 @@
 package io.github.meowpowpng.gatlingfx.http;
 
+import io.github.meowpowpng.gatlingfx.support.TestHeaders;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -39,7 +41,7 @@ class HttpHeaderTest {
         @Test
         @DisplayName("Should create header when name and value are valid")
         void should_CreateHeader_when_NameAndValueAreValid() {
-            var header = new HttpHeader("Content-Type", "application/json");
+            var header = TestHeaders.jsonContentTypeHeader();
 
             assertThat(header.name()).isEqualTo("Content-Type");
             assertThat(header.value()).isEqualTo("application/json");
@@ -61,7 +63,7 @@ class HttpHeaderTest {
         @Test
         @DisplayName("Should create header when request header and value are valid")
         void should_CreateHeader_when_RequestHeaderAndValueAreValid() {
-            var header = HttpHeader.of(RequestHeader.CONTENT_TYPE, "application/json");
+            var header = TestHeaders.jsonContentTypeHeader();
 
             assertThat(header.name()).isEqualTo("Content-Type");
             assertThat(header.value()).isEqualTo("application/json");
