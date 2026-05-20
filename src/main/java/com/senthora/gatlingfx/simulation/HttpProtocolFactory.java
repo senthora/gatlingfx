@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.core;
+package com.senthora.gatlingfx.simulation;
 
 import com.senthora.gatlingfx.http.HttpBaseUrl;
 

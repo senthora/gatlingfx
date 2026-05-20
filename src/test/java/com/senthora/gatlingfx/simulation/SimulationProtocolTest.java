@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.core;
+package com.senthora.gatlingfx.simulation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

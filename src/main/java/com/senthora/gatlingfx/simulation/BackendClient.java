@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.core;
+package com.senthora.gatlingfx.simulation;
 
 /**
  * Represents a backend system used by a simulation.
