@@ -1,5 +1,7 @@
 package io.github.meowpowpng.gatlingfx.core;
 
+import io.github.meowpowpng.gatlingfx.http.HttpBaseUrl;
+
 import org.jspecify.annotations.Nullable;
 
 import io.gatling.javaapi.http.HttpProtocolBuilder;
@@ -21,7 +23,7 @@ public final class SimulationProtocol {
     private final Map<String, String> headers = new LinkedHashMap<>();
     private final HttpProtocolFactory factory;
 
-    private @Nullable String baseUrl;
+    private @Nullable HttpBaseUrl baseUrl;
     private boolean followRedirects = true;
 
     SimulationProtocol(HttpProtocolFactory factory) {
@@ -45,13 +47,9 @@ public final class SimulationProtocol {
      *
      * @return current protocol configuration
      * @throws NullPointerException if {@code baseUrl} is null
-     * @throws IllegalArgumentException if {@code baseUrl} is blank
      */
-    public SimulationProtocol baseUrl(String baseUrl) {
+    public SimulationProtocol baseUrl(HttpBaseUrl baseUrl) {
         Objects.requireNonNull(baseUrl, "baseUrl must not be null");
-        if (baseUrl.isBlank()) {
-            throw new IllegalArgumentException("baseUrl must not be blank");
-        }
         this.baseUrl = baseUrl;
         return this;
     }

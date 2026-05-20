@@ -23,13 +23,6 @@ class SimulationProtocolTest {
         }
 
         @Test
-        @DisplayName("Should throw IllegalArgumentException when base URL is blank")
-        void should_ThrowIllegalArgumentException_when_BaseUrlIsBlank() {
-            assertThatThrownBy(() -> SimulationProtocol.create().baseUrl(" "))
-                    .isInstanceOf(IllegalArgumentException.class);
-        }
-
-        @Test
         @DisplayName("Should use configured base URL when protocol is built")
         void should_UseConfiguredBaseUrl_when_ProtocolIsBuilt() {
             var builder = SimulationProtocolFixtures.mockBuilder();

@@ -1,5 +1,7 @@
 package io.github.meowpowpng.gatlingfx.core;
 
+import io.github.meowpowpng.gatlingfx.http.HttpBaseUrl;
+
 import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 /**
@@ -13,5 +15,5 @@ interface HttpProtocolFactory {
      *
      * @param baseUrl protocol base URL
      */
-    HttpProtocolBuilder baseUrl(String baseUrl);
+    HttpProtocolBuilder baseUrl(HttpBaseUrl baseUrl);
 }

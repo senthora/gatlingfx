@@ -1,12 +1,19 @@
 package io.github.meowpowpng.gatlingfx.core;
 
+import io.github.meowpowpng.gatlingfx.http.HttpBaseUrl;
+import io.github.meowpowpng.gatlingfx.http.HttpScheme;
+import io.github.meowpowpng.gatlingfx.proxy.NetworkAddress;
+
 import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 import org.mockito.Mockito;
 
 final class SimulationProtocolFixtures {
 
-    static final String EXAMPLE_URL = "https://example.com";
+    static final HttpBaseUrl EXAMPLE_URL = HttpBaseUrl.of(
+            HttpScheme.HTTPS,
+            NetworkAddress.of("example.com", 443)
+    );
 
     private SimulationProtocolFixtures() {}
 
