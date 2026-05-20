@@ -37,7 +37,12 @@ public enum RequestHeader {
     /**
      * Standard HTTP {@code Content-Type} header.
      */
-    CONTENT_TYPE("Content-Type");
+    CONTENT_TYPE("Content-Type"),
+
+    /**
+     * Standard HTTP {@code Authorization} header.
+     */
+    AUTHORIZATION("Authorization");
 
     private final String value;
 
