@@ -1,6 +1,7 @@
 package io.github.meowpowpng.gatlingfx.proxy;
 
 import io.github.meowpowpng.gatlingfx.core.SimulationProtocol;
+import io.github.meowpowpng.gatlingfx.http.HttpScheme;
 
 /**
  * Factory for creating protocol
@@ -12,16 +13,6 @@ public final class ProxyProtocols {
 
     private ProxyProtocols() {}
 
-    private enum Scheme {
-        HTTP("http"),
-        HTTPS("https");
-
-        private final String value;
-        Scheme(String value) {
-            this.value = value;
-        }
-    }
-
     /**
      * Creates an HTTP protocol configuration
      * routed through the provided proxy server.
@@ -30,7 +21,7 @@ public final class ProxyProtocols {
      * @param target upstream target address
      */
     public static SimulationProtocol http(ProxyServer proxy, NetworkAddress target) {
-        return create(Scheme.HTTP, proxy, target);
+        return create(HttpScheme.HTTP, proxy, target);
     }
 
     /**
@@ -43,16 +34,16 @@ public final class ProxyProtocols {
      * @return configured simulation protocol
      */
     public static SimulationProtocol https(ProxyServer proxy, NetworkAddress target) {
-        return create(Scheme.HTTPS, proxy, target);
+        return create(HttpScheme.HTTPS, proxy, target);
     }
 
     private static SimulationProtocol create(
-            Scheme scheme,
+            HttpScheme scheme,
             ProxyServer proxy,
             NetworkAddress target
     ) {
         return SimulationProtocol.create()
-                .baseUrl(scheme.value + "://" + proxy.address().value())
+                .baseUrl(scheme.value() + "://" + proxy.address().value())
                 .header(TARGET_HEADER, target.value());
     }
 }
