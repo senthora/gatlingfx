@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation project(':core')
+    gatlingImplementation project(':core')
 
     gatlingImplementation libs.jspecify
 }
