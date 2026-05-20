@@ -7,7 +7,7 @@ import java.util.Objects;
  */
 public record HttpHost(String value) {
 
-    public static HttpHost LOCALHOST = HttpHost.of("localhost");
+    public static final HttpHost LOCALHOST = HttpHost.of("localhost");
 
     /**
      * Creates a new HTTP host.
