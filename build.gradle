@@ -31,8 +31,5 @@ subprojects {
         testRuntimeOnly libs.junit.platform.launcher
 
         testImplementation libs.assertj.core
-
-        testImplementation platform(libs.mockito.bom)
-        testImplementation libs.mockito.core
     }
 }
