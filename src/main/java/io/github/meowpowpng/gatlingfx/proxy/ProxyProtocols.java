@@ -1,6 +1,7 @@
 package io.github.meowpowpng.gatlingfx.proxy;
 
 import io.github.meowpowpng.gatlingfx.core.SimulationProtocol;
+import io.github.meowpowpng.gatlingfx.http.HttpBaseUrl;
 import io.github.meowpowpng.gatlingfx.http.HttpScheme;
 
 /**
@@ -43,7 +44,7 @@ public final class ProxyProtocols {
             NetworkAddress target
     ) {
         return SimulationProtocol.create()
-                .baseUrl(scheme.value() + "://" + proxy.address().value())
+                .baseUrl(HttpBaseUrl.of(scheme, proxy.address()))
                 .header(TARGET_HEADER, target.value());
     }
 }
