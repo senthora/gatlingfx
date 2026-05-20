@@ -39,6 +39,8 @@ class HttpBaseUrlTest {
     @DisplayName("of")
     class OfMethodTests {
 
+        private static final HttpHost EXAMPLE_HOST = HttpHost.of("example.com");
+
         @Test
         @DisplayName("Should create base URL from provided scheme and address")
         void should_CreateBaseUrl_when_ValidArgumentsAreProvided() {
@@ -49,6 +51,46 @@ class HttpBaseUrlTest {
 
             assertThat(result.scheme()).isEqualTo(scheme);
             assertThat(result.address()).isEqualTo(address);
+        }
+
+        @Test
+        @SuppressWarnings("DataFlowIssue")
+        @DisplayName("Should throw NullPointerException when scheme is null")
+        void should_ThrowNullPointerException_when_SchemeIsNull() {
+            assertThatThrownBy(() -> HttpBaseUrl.of(null, EXAMPLE_HOST))
+                    .isInstanceOf(NullPointerException.class);
+        }
+
+        @Test
+        @SuppressWarnings("DataFlowIssue")
+        @DisplayName("Should throw NullPointerException when host is null")
+        void should_ThrowNullPointerException_when_HostIsNull() {
+            assertThatThrownBy(() -> HttpBaseUrl.of(HttpScheme.HTTP, (NetworkAddress) null))
+                    .isInstanceOf(NullPointerException.class);
+        }
+
+        @Test
+        @DisplayName("Should create base URL using HTTP default port")
+        void should_CreateBaseUrlUsingHttpDefaultPort_when_SchemeIsHttp() {
+            var expected = new HttpBaseUrl(
+                    HttpScheme.HTTP,
+                    new NetworkAddress(EXAMPLE_HOST, 80)
+            );
+            var actual = HttpBaseUrl.of(HttpScheme.HTTP, EXAMPLE_HOST);
+
+            assertThat(actual).isEqualTo(expected);
+        }
+
+        @Test
+        @DisplayName("Should create base URL using HTTPS default port")
+        void should_CreateBaseUrlUsingHttpsDefaultPort_when_SchemeIsHttps() {
+            var expected = new HttpBaseUrl(
+                    HttpScheme.HTTPS,
+                    new NetworkAddress(EXAMPLE_HOST, 443)
+            );
+            var actual = HttpBaseUrl.of(HttpScheme.HTTPS, EXAMPLE_HOST);
+
+            assertThat(actual).isEqualTo(expected);
         }
     }
 

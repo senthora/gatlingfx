@@ -1,8 +1,8 @@
 package io.github.meowpowpng.gatlingfx.core;
 
 import io.github.meowpowpng.gatlingfx.http.HttpBaseUrl;
+import io.github.meowpowpng.gatlingfx.http.HttpHost;
 import io.github.meowpowpng.gatlingfx.http.HttpScheme;
-import io.github.meowpowpng.gatlingfx.proxy.NetworkAddress;
 
 import io.gatling.javaapi.http.HttpProtocolBuilder;
 
@@ -12,7 +12,7 @@ final class SimulationProtocolFixtures {
 
     static final HttpBaseUrl EXAMPLE_URL = HttpBaseUrl.of(
             HttpScheme.HTTPS,
-            NetworkAddress.of("example.com", 443)
+            HttpHost.of("example.com")
     );
 
     private SimulationProtocolFixtures() {}

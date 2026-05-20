@@ -36,6 +36,24 @@ public record HttpBaseUrl(HttpScheme scheme, NetworkAddress address) {
     }
 
     /**
+     * Creates a new HTTP base URL using
+     * the default port for provided scheme.
+     *
+     * @param scheme HTTP URI scheme
+     * @param host HTTP host
+     *
+     * @throws NullPointerException if {@code scheme} or {@code host} is null
+     */
+    public static HttpBaseUrl of(HttpScheme scheme, HttpHost host) {
+        var port = switch (scheme) {
+            case HTTP -> 80;
+            case HTTPS -> 443;
+        };
+        var address = new NetworkAddress(host, port);
+        return new HttpBaseUrl(scheme, address);
+    }
+
+    /**
      * Creates a URI for the provided path.
      * <p>
      * <strong>API Note:</strong>
