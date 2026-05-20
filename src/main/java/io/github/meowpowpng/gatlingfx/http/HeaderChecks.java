@@ -15,23 +15,26 @@ public final class HeaderChecks {
      * Asserts that the provided header
      * matches the expected value.
      *
-     * @param name header name
-     * @param value expected header value
+     * @param header expected HTTP header
+     *
+     * @return response check
      */
-    public static ResponseCheck headerIs(String name, String value) {
+    public static ResponseCheck headerIs(HttpHeader header) {
         return () -> new CheckBuilder[]{
-                header(name).is(value)
+                header(header.name()).is(header.value())
         };
     }
 
     /**
      * Asserts that the provided header exists.
      *
-     * @param name header name
+     * @param header expected HTTP header
+     *
+     * @return response check
      */
-    public static ResponseCheck headerExists(String name) {
+    public static ResponseCheck headerExists(RequestHeader header) {
         return () -> new CheckBuilder[]{
-                header(name).exists()
+                header(header.headerName()).exists()
         };
     }
 }
