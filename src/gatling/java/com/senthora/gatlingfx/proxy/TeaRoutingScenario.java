@@ -1,7 +1,8 @@
 package com.senthora.gatlingfx.proxy;
 
-import io.gatling.javaapi.core.ScenarioBuilder;
 import com.senthora.gatlingfx.core.SimulationScenario;
+
+import io.gatling.javaapi.core.ScenarioBuilder;
 
 import static io.gatling.javaapi.core.CoreDsl.scenario;
 import static io.gatling.javaapi.http.HttpDsl.status;

@@ -1,7 +1,6 @@
 package com.senthora.gatlingfx.wiremock.internal;
 
 import com.senthora.gatlingfx.http.HttpHeader;
-import com.senthora.gatlingfx.wiremock.internal.WireMockStubResponse;
 
 import java.util.List;
 import java.util.Map;

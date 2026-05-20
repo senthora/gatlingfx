@@ -1,9 +1,8 @@
 package com.senthora.gatlingfx.wiremock.internal;
 
 import com.senthora.gatlingfx.http.HttpMethod;
-import com.senthora.gatlingfx.wiremock.api.*;
-
 import com.senthora.gatlingfx.support.TestHeaders;
+import com.senthora.gatlingfx.wiremock.api.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,8 +10,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.senthora.gatlingfx.wiremock.internal.TestWireMockResponses.*;
-import static org.assertj.core.api.Assertions.*;
+import static com.senthora.gatlingfx.wiremock.internal.TestWireMockResponses.responseOk;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class WireMockMapperTest {
 

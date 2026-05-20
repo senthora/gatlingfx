@@ -1,7 +1,5 @@
 package com.senthora.gatlingfx.core;
 
-import com.senthora.gatlingfx.core.HttpProtocolFactory;
-import com.senthora.gatlingfx.core.SimulationProtocol;
 import com.senthora.gatlingfx.http.HttpBaseUrl;
 import com.senthora.gatlingfx.http.HttpHost;
 import com.senthora.gatlingfx.http.HttpScheme;

@@ -1,7 +1,6 @@
 package com.senthora.gatlingfx.wiremock.internal;
 
 import com.senthora.gatlingfx.http.HttpHeader;
-
 import com.senthora.gatlingfx.support.TestHeaders;
 
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.senthora.gatlingfx.wiremock.internal.TestWireMockResponses.*;
+import static com.senthora.gatlingfx.wiremock.internal.TestWireMockResponses.responseOk;
 import static org.assertj.core.api.Assertions.*;
 
 class WireMockStubResponseTest {

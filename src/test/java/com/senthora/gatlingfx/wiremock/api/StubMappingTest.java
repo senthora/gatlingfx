@@ -1,9 +1,6 @@
 package com.senthora.gatlingfx.wiremock.api;
 
 import com.senthora.gatlingfx.http.HttpMethod;
-import com.senthora.gatlingfx.wiremock.api.StubMapping;
-import com.senthora.gatlingfx.wiremock.api.StubRequest;
-import com.senthora.gatlingfx.wiremock.api.StubResponse;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

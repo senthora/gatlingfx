@@ -1,7 +1,8 @@
 package com.senthora.gatlingfx.wiremock.api;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.senthora.gatlingfx.http.RequestHeader;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Map;
 import java.util.Objects;

@@ -1,13 +1,13 @@
 package com.senthora.gatlingfx.wiremock.internal;
 
 import com.senthora.gatlingfx.http.HttpMethod;
-import com.senthora.gatlingfx.wiremock.internal.WireMockStubRequest;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 class WireMockStubRequestTest {
 
