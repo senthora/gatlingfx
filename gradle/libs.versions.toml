@@ -3,16 +3,19 @@ gatling = "3.15.0"
 assertj = "3.27.7"
 junit = "6.0.3"
 mockito = "5.23.0"
+jspecify = "1.0.0"
 
 [libraries]
 gatling-core = { module = "io.gatling:gatling-core-java", version.ref = "gatling" }
 gatling-http = { module = "io.gatling:gatling-http-java", version.ref = "gatling" }
 
-assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+
+assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 
 mockito-bom = { module = "org.mockito:mockito-bom", version.ref = "mockito" }
 mockito-core = { module = "org.mockito:mockito-core" }

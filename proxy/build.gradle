@@ -1,5 +1,5 @@
 dependencies {
     implementation project(':core')
 
-    testImplementation(testFixtures(project(':core')))
+    gatlingImplementation libs.jspecify
 }
