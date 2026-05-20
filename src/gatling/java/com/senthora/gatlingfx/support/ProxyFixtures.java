@@ -1,7 +1,7 @@
 package com.senthora.gatlingfx.support;
 
 import com.senthora.gatlingfx.http.HttpHost;
-import com.senthora.gatlingfx.proxy.NetworkAddress;
+import com.senthora.gatlingfx.http.NetworkAddress;
 import com.senthora.gatlingfx.proxy.ProxyServer;
 
 /**

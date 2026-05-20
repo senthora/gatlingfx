@@ -1,7 +1,5 @@
 package com.senthora.gatlingfx.http;
 
-import com.senthora.gatlingfx.proxy.NetworkAddress;
-
 import java.net.URI;
 import java.util.Objects;
 

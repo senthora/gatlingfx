@@ -1,6 +1,4 @@
-package com.senthora.gatlingfx.proxy;
-
-import com.senthora.gatlingfx.http.HttpHost;
+package com.senthora.gatlingfx.http;
 
 import java.util.Objects;
 
