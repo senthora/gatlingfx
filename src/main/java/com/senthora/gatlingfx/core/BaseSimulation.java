@@ -53,6 +53,7 @@ public abstract class BaseSimulation extends Simulation {
      * Intended for checking backend requests, response behavior,
      * or other results produced during simulation execution.
      */
+    @SuppressWarnings("EmptyMethod")
     protected void verify() {}
 
     /**
