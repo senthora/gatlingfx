@@ -17,7 +17,7 @@ import static com.senthora.gatlingfx.wiremock.internal.TestWireMockResponses.STA
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class DefaultWireMockClientTest {
+class DefaultWireMockBackendTest {
 
     @Nested
     @DisplayName("constructor")
@@ -35,10 +35,10 @@ class DefaultWireMockClientTest {
             var response = new StubResponse(200, STATUS_OK, List.of());
             var mapping = new StubMapping(request, response);
 
-            assertThatThrownBy(() -> new DefaultWireMockClient(null, mapping))
+            assertThatThrownBy(() -> new DefaultWireMockBackend(null, mapping))
                     .isInstanceOf(NullPointerException.class);
 
-            assertThatThrownBy(() -> new DefaultWireMockClient(null))
+            assertThatThrownBy(() -> new DefaultWireMockBackend(null))
                     .isInstanceOf(NullPointerException.class);
         }
 
@@ -48,7 +48,7 @@ class DefaultWireMockClientTest {
         void should_ThrowNullPointerException_when_DefaultStubIsNull() {
             var httpClient = Mockito.mock(SimpleHttpClient.class);
 
-            assertThatThrownBy(() -> new DefaultWireMockClient(httpClient, null))
+            assertThatThrownBy(() -> new DefaultWireMockBackend(httpClient, null))
                     .isInstanceOf(NullPointerException.class);
         }
     }
@@ -61,7 +61,7 @@ class DefaultWireMockClientTest {
         @DisplayName("Should return same client when mapping is added")
         void should_ReturnSameClient_when_MappingIsAdded() {
             var httpClient = Mockito.mock(SimpleHttpClient.class);
-            var wireMockClient = new DefaultWireMockClient(httpClient);
+            var wireMockClient = new DefaultWireMockBackend(httpClient);
 
             var request = new StubRequest(
                     HttpMethod.GET,
@@ -79,7 +79,7 @@ class DefaultWireMockClientTest {
         @DisplayName("Should throw NullPointerException when mapping is null")
         void should_ThrowNullPointerException_when_MappingIsNull() {
             var httpClient = Mockito.mock(SimpleHttpClient.class);
-            var wireMockClient = new DefaultWireMockClient(httpClient);
+            var wireMockClient = new DefaultWireMockBackend(httpClient);
 
             assertThatThrownBy(() -> wireMockClient.stub(null))
                     .isInstanceOf(NullPointerException.class);
@@ -96,7 +96,7 @@ class DefaultWireMockClientTest {
             var httpClient = Mockito.mock(SimpleHttpClient.class);
             Mockito.when(httpClient.baseUrl()).thenReturn(HttpBaseUrl.LOCALHOST);
 
-            var wireMockClient = new DefaultWireMockClient(httpClient);
+            var wireMockClient = new DefaultWireMockBackend(httpClient);
 
             assertThat(wireMockClient.baseUrl()).isEqualTo(HttpBaseUrl.LOCALHOST);
         }

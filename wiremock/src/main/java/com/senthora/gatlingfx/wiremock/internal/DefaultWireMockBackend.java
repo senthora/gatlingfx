@@ -4,7 +4,7 @@ import com.senthora.gatlingfx.http.api.HttpBaseUrl;
 import com.senthora.gatlingfx.http.api.SimpleHttpClient;
 import com.senthora.gatlingfx.wiremock.api.LoggedRequests;
 import com.senthora.gatlingfx.wiremock.api.StubMapping;
-import com.senthora.gatlingfx.wiremock.api.WireMockClient;
+import com.senthora.gatlingfx.wiremock.api.WireMockBackend;
 
 import org.jspecify.annotations.Nullable;
 
@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Default {@link WireMockClient} implementation.
+ * Default {@link WireMockBackend} implementation.
  * <p>
  * <strong>Thread Safety:</strong>
  * This implementation maintains mutable stub state
  * and is intended to be configured and used from
  * a single orchestration thread during simulation setup.
  */
-public final class DefaultWireMockClient implements WireMockClient {
+public final class DefaultWireMockBackend implements WireMockBackend {
 
     private static final String RESET_PATH = "/__admin/reset";
     private static final String MAPPINGS_PATH = "/__admin/mappings";
@@ -31,7 +31,7 @@ public final class DefaultWireMockClient implements WireMockClient {
     private final SimpleHttpClient httpClient;
     private final @Nullable StubMapping defaultStub;
 
-    public DefaultWireMockClient(SimpleHttpClient httpClient, StubMapping defaultStub) {
+    public DefaultWireMockBackend(SimpleHttpClient httpClient, StubMapping defaultStub) {
         Objects.requireNonNull(httpClient, "httpClient must not be null");
         Objects.requireNonNull(defaultStub, "default stub must not be null");
 
@@ -39,7 +39,7 @@ public final class DefaultWireMockClient implements WireMockClient {
         this.defaultStub = defaultStub;
     }
 
-    public DefaultWireMockClient(SimpleHttpClient httpClient) {
+    public DefaultWireMockBackend(SimpleHttpClient httpClient) {
         Objects.requireNonNull(httpClient, "httpClient must not be null");
 
         this.httpClient = httpClient;
@@ -60,7 +60,7 @@ public final class DefaultWireMockClient implements WireMockClient {
     }
 
     @Override
-    public DefaultWireMockClient stub(StubMapping mapping) {
+    public DefaultWireMockBackend stub(StubMapping mapping) {
         Objects.requireNonNull(mapping, "mapping must not be null");
         mappings.add(mapping);
         return this;

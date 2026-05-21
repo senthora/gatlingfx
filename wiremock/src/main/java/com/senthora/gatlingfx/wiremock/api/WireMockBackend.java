@@ -3,21 +3,21 @@ package com.senthora.gatlingfx.wiremock.api;
 import com.senthora.gatlingfx.http.api.SimpleHttpClient;
 import com.senthora.gatlingfx.simulation.api.SimulationBackend;
 import com.senthora.gatlingfx.http.api.HttpBaseUrl;
-import com.senthora.gatlingfx.wiremock.internal.DefaultWireMockClient;
+import com.senthora.gatlingfx.wiremock.internal.DefaultWireMockBackend;
 
 /**
  * Backend client backed by WireMock.
  */
-public interface WireMockClient extends SimulationBackend {
+public interface WireMockBackend extends SimulationBackend {
 
     /**
      * Creates a new WireMock client instance.
      *
      * @param baseUrl WireMock server base URL
      */
-    static WireMockClient create(HttpBaseUrl baseUrl) {
+    static WireMockBackend create(HttpBaseUrl baseUrl) {
         var httpClient = SimpleHttpClient.create(baseUrl);
-        return new DefaultWireMockClient(httpClient);
+        return new DefaultWireMockBackend(httpClient);
     }
 
     /**
@@ -29,9 +29,9 @@ public interface WireMockClient extends SimulationBackend {
      * @param baseUrl WireMock server base URL
      * @param defaultStub default fallback stub mapping
      */
-    static WireMockClient create(HttpBaseUrl baseUrl, StubMapping defaultStub) {
+    static WireMockBackend create(HttpBaseUrl baseUrl, StubMapping defaultStub) {
         var httpClient = SimpleHttpClient.create(baseUrl);
-        return new DefaultWireMockClient(httpClient, defaultStub);
+        return new DefaultWireMockBackend(httpClient, defaultStub);
     }
 
     /**
@@ -39,7 +39,7 @@ public interface WireMockClient extends SimulationBackend {
      *
      * @throws NullPointerException if {@code mapping} is null
      */
-    WireMockClient stub(StubMapping mapping);
+    WireMockBackend stub(StubMapping mapping);
 
     /**
      * Resets WireMock server state.
