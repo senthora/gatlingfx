@@ -9,4 +9,4 @@ run-simulation simulation:
 
 [private]
 gatling +args:
-    just gradle gatlingRun {{args}}
+    just gradle gatling gatlingRun {{args}}
