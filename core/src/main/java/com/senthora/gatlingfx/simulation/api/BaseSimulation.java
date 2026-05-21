@@ -31,7 +31,7 @@ public abstract class BaseSimulation extends Simulation {
 
     @Override
     public final void before() {
-        backendClient().setup();
+        backend().setup();
     }
 
     @Override
@@ -43,7 +43,7 @@ public abstract class BaseSimulation extends Simulation {
             throw new RuntimeException("Failed verifying simulation", t);
         }
         finally {
-            backendClient().teardown();
+            backend().teardown();
         }
     }
 
@@ -57,11 +57,11 @@ public abstract class BaseSimulation extends Simulation {
     protected void verify() {}
 
     /**
-     * Returns the backend client used by the simulation.
+     * Returns the backend used by the simulation.
      * <p>
-     * By default, returns a no-op client implementation.
+     * By default, returns a no-op backend implementation.
      */
-    protected SimulationBackend backendClient() {
+    protected SimulationBackend backend() {
         return SimulationBackend.stub();
     }
 
