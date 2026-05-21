@@ -22,3 +22,7 @@ tasks.register("gatlingFx", JavaExec) {
 
     jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
 }
+
+tasks.named("test", Test) {
+    jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
+}
