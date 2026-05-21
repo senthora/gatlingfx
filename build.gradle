@@ -1,5 +1,6 @@
 plugins {
     id 'base'
+    id 'jacoco'
     id 'io.gatling.gradle' version '3.15.0.3' apply false
 }
 
@@ -14,6 +15,7 @@ allprojects {
 
 subprojects {
     apply plugin: 'java-library'
+    apply plugin: 'jacoco'
 
     base {
         archivesName = "${rootProject.name}-${project.name}"
@@ -25,12 +27,27 @@ subprojects {
         }
     }
 
+    jacoco {
+        toolVersion = '0.8.14'
+    }
+
     tasks.withType(Test).configureEach {
         useJUnitPlatform()
 
         testLogging {
             events "passed", "skipped", "failed"
             showStandardStreams = true
+        }
+
+        finalizedBy tasks.jacocoTestReport
+    }
+
+    tasks.jacocoTestReport {
+        dependsOn tasks.test
+
+        reports {
+            xml.required = true
+            html.required = true
         }
     }
 
@@ -40,6 +57,34 @@ subprojects {
         testRuntimeOnly libs.junit.platform.launcher
 
         testImplementation libs.assertj.core
+    }
+}
+
+tasks.register('jacocoTestReport', JacocoReport) {
+    dependsOn subprojects.collectMany { project ->
+        project.tasks.matching {
+            it.name in ['test', 'integrationTest']
+        }
+    }
+    dependsOn subprojects.collect { it.tasks.named('jacocoTestReport') }
+
+    additionalSourceDirs.from files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories.from files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories.from files(subprojects.sourceSets.main.output)
+
+    executionData.from fileTree(layout.projectDirectory) {
+        include '**/build/jacoco/*.exec'
+    }
+    reports {
+        xml.required = true
+        html.required = true
+
+        xml.outputLocation = layout.buildDirectory.file(
+                'reports/jacoco/jacocoRootReport.xml'
+        )
+        html.outputLocation = layout.buildDirectory.dir(
+                'reports/jacoco/html'
+        )
     }
 }
 
