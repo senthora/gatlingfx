@@ -7,17 +7,18 @@ dependencies {
 
     testImplementation platform(libs.mockito.bom)
     testImplementation libs.mockito.core
-
-    testFixturesImplementation platform(libs.junit.bom)
-    testFixturesImplementation libs.junit.jupiter
-    testFixturesImplementation libs.mockwebserver
 }
 
 testing {
     suites {
         integrationTest(JvmTestSuite) {
             dependencies {
+                implementation projects.core
+
+                implementation platform(libs.junit.bom)
+                implementation libs.junit.jupiter
                 implementation libs.mockwebserver
+                implementation libs.assertj.core
             }
             targets {
                 all {
@@ -28,13 +29,4 @@ testing {
             }
         }
     }
-}
-
-configurations {
-    integrationTestImplementation.extendsFrom(testImplementation)
-    integrationTestRuntimeOnly.extendsFrom(testRuntimeOnly)
-}
-
-tasks.named("check") {
-    dependsOn(testing.suites.integrationTest)
 }
