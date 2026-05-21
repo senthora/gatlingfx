@@ -8,6 +8,9 @@ import java.util.Objects;
  */
 public record HttpBaseUrl(HttpScheme scheme, NetworkAddress address) {
 
+    public static final HttpBaseUrl LOCALHOST =
+            HttpBaseUrl.of(HttpScheme.HTTP, HttpHost.LOCALHOST);
+
     /**
      * Creates a new HTTP base URL.
      *

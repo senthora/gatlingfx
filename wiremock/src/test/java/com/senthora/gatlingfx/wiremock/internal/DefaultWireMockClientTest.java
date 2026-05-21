@@ -19,9 +19,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class DefaultWireMockClientTest {
 
-    private static final HttpBaseUrl LOCALHOST_URL =
-            HttpBaseUrl.of(HttpScheme.HTTP, HttpHost.LOCALHOST);
-
     @Nested
     @DisplayName("constructor")
     class ConstructorTests {
@@ -97,11 +94,11 @@ class DefaultWireMockClientTest {
         @DisplayName("Should return configured base URL when client is created")
         void should_ReturnConfiguredBaseUrl_when_ClientIsCreated() {
             var httpClient = Mockito.mock(SimpleHttpClient.class);
-            Mockito.when(httpClient.baseUrl()).thenReturn(LOCALHOST_URL);
+            Mockito.when(httpClient.baseUrl()).thenReturn(HttpBaseUrl.LOCALHOST);
 
             var wireMockClient = new DefaultWireMockClient(httpClient);
 
-            assertThat(wireMockClient.baseUrl()).isEqualTo(LOCALHOST_URL);
+            assertThat(wireMockClient.baseUrl()).isEqualTo(HttpBaseUrl.LOCALHOST);
         }
     }
 }
