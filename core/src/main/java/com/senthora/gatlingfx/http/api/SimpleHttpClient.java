@@ -14,6 +14,8 @@ public interface SimpleHttpClient {
      * Creates a new HTTP client instance.
      *
      * @param baseUrl target base URL
+     *
+     * @throws NullPointerException if {@code baseUrl} is null
      */
     static SimpleHttpClient create(HttpBaseUrl baseUrl) {
         return new DefaultSimpleHttpClient(baseUrl);
@@ -23,6 +25,9 @@ public interface SimpleHttpClient {
      * Sends an HTTP GET request to the provided path.
      *
      * @param path target request path
+     *
+     * @throws NullPointerException if {@code path} is null
+     * @throws HttpClientException if request execution fails
      */
     HttpResponse<String> get(String path);
 
@@ -30,6 +35,9 @@ public interface SimpleHttpClient {
      * Sends an HTTP POST request without a request body.
      *
      * @param path target request path
+     *
+     * @throws NullPointerException if {@code path} is null
+     * @throws HttpClientException if request execution fails
      */
     HttpResponse<String> post(String path);
 
@@ -38,6 +46,9 @@ public interface SimpleHttpClient {
      *
      * @param path target request path
      * @param body request body
+     *
+     * @throws NullPointerException if {@code path} or {@code body} is null
+     * @throws HttpClientException if request execution fails
      */
     HttpResponse<String> post(String path, String body);
 
