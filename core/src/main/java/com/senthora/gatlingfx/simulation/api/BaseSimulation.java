@@ -61,8 +61,8 @@ public abstract class BaseSimulation extends Simulation {
      * <p>
      * By default, returns a no-op client implementation.
      */
-    protected BackendClient backendClient() {
-        return BackendClient.stub();
+    protected SimulationBackend backendClient() {
+        return SimulationBackend.stub();
     }
 
     /**

@@ -1,14 +1,14 @@
 package com.senthora.gatlingfx.wiremock.api;
 
 import com.senthora.gatlingfx.http.api.SimpleHttpClient;
-import com.senthora.gatlingfx.simulation.api.BackendClient;
+import com.senthora.gatlingfx.simulation.api.SimulationBackend;
 import com.senthora.gatlingfx.http.api.HttpBaseUrl;
 import com.senthora.gatlingfx.wiremock.internal.DefaultWireMockClient;
 
 /**
  * Backend client backed by WireMock.
  */
-public interface WireMockClient extends BackendClient {
+public interface WireMockClient extends SimulationBackend {
 
     /**
      * Creates a new WireMock client instance.

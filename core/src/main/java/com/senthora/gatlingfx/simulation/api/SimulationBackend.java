@@ -3,7 +3,7 @@ package com.senthora.gatlingfx.simulation.api;
 /**
  * Represents a backend system used by a simulation.
  */
-public interface BackendClient {
+public interface SimulationBackend {
 
     /**
      * Prepares the backend before simulation starts.
@@ -18,8 +18,8 @@ public interface BackendClient {
     /**
      * Returns a backend client that performs no operations.
      */
-    static BackendClient stub() {
-        return new BackendClient() {
+    static SimulationBackend stub() {
+        return new SimulationBackend() {
 
             @Override
             public void setup() {}
