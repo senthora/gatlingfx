@@ -1,6 +1,5 @@
-package com.senthora.gatlingfx.http;
+package com.senthora.gatlingfx.http.api;
 
-import com.senthora.gatlingfx.http.api.HttpHeader;
 import com.senthora.gatlingfx.support.TestHeaders;
 
 import org.junit.jupiter.api.DisplayName;
