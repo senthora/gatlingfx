@@ -3,9 +3,13 @@ plugins {
 }
 
 dependencies {
-    gatlingImplementation projects.core
-    gatlingImplementation projects.proxy
-    gatlingImplementation projects.wiremock
+    implementation projects.core
+    implementation projects.runtime
+    implementation projects.proxy
+    implementation projects.wiremock
 
-    gatlingImplementation libs.jspecify
+    implementation libs.jspecify
+
+    testImplementation projects.runtime
+}
 }
