@@ -1,9 +1,6 @@
 package com.senthora.gatlingfx.wiremock.internal;
 
-import com.senthora.gatlingfx.http.api.HttpBaseUrl;
-import com.senthora.gatlingfx.http.api.HttpHost;
-import com.senthora.gatlingfx.http.api.HttpMethod;
-import com.senthora.gatlingfx.http.api.HttpScheme;
+import com.senthora.gatlingfx.http.api.*;
 import com.senthora.gatlingfx.wiremock.api.StubMapping;
 import com.senthora.gatlingfx.wiremock.api.StubRequest;
 import com.senthora.gatlingfx.wiremock.api.StubResponse;
@@ -11,6 +8,8 @@ import com.senthora.gatlingfx.wiremock.api.StubResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import org.mockito.Mockito;
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class DefaultWireMockClientTest {
 
     private static final HttpBaseUrl LOCALHOST_URL =
-            HttpBaseUrl.of(HttpScheme.HTTPS, HttpHost.LOCALHOST);
+            HttpBaseUrl.of(HttpScheme.HTTP, HttpHost.LOCALHOST);
 
     @Nested
     @DisplayName("constructor")
@@ -29,8 +28,8 @@ class DefaultWireMockClientTest {
 
         @Test
         @SuppressWarnings("DataFlowIssue")
-        @DisplayName("Should throw NullPointerException when base URL is null")
-        void should_ThrowNullPointerException_when_BaseUrlIsNull() {
+        @DisplayName("Should throw NullPointerException when HTTP client is null")
+        void should_ThrowNullPointerException_when_HttpClientIsNull() {
             var request = new StubRequest(
                     HttpMethod.GET,
                     new StubRequest.ExactUrl("/test"),
@@ -50,7 +49,9 @@ class DefaultWireMockClientTest {
         @SuppressWarnings("DataFlowIssue")
         @DisplayName("Should throw NullPointerException when default stub is null")
         void should_ThrowNullPointerException_when_DefaultStubIsNull() {
-            assertThatThrownBy(() -> new DefaultWireMockClient(LOCALHOST_URL, null))
+            var httpClient = Mockito.mock(SimpleHttpClient.class);
+
+            assertThatThrownBy(() -> new DefaultWireMockClient(httpClient, null))
                     .isInstanceOf(NullPointerException.class);
         }
     }
@@ -62,7 +63,8 @@ class DefaultWireMockClientTest {
         @Test
         @DisplayName("Should return same client when mapping is added")
         void should_ReturnSameClient_when_MappingIsAdded() {
-            var client = new DefaultWireMockClient(LOCALHOST_URL);
+            var httpClient = Mockito.mock(SimpleHttpClient.class);
+            var wireMockClient = new DefaultWireMockClient(httpClient);
 
             var request = new StubRequest(
                     HttpMethod.GET,
@@ -72,16 +74,17 @@ class DefaultWireMockClientTest {
             var response = new StubResponse(200, STATUS_OK, List.of());
             var mapping = new StubMapping(request, response);
 
-            assertThat(client.stub(mapping)).isSameAs(client);
+            assertThat(wireMockClient.stub(mapping)).isSameAs(wireMockClient);
         }
 
         @Test
         @SuppressWarnings("DataFlowIssue")
         @DisplayName("Should throw NullPointerException when mapping is null")
         void should_ThrowNullPointerException_when_MappingIsNull() {
-            var client = new DefaultWireMockClient(LOCALHOST_URL);
+            var httpClient = Mockito.mock(SimpleHttpClient.class);
+            var wireMockClient = new DefaultWireMockClient(httpClient);
 
-            assertThatThrownBy(() -> client.stub(null))
+            assertThatThrownBy(() -> wireMockClient.stub(null))
                     .isInstanceOf(NullPointerException.class);
         }
     }
@@ -93,9 +96,12 @@ class DefaultWireMockClientTest {
         @Test
         @DisplayName("Should return configured base URL when client is created")
         void should_ReturnConfiguredBaseUrl_when_ClientIsCreated() {
-            var client = new DefaultWireMockClient(LOCALHOST_URL);
+            var httpClient = Mockito.mock(SimpleHttpClient.class);
+            Mockito.when(httpClient.baseUrl()).thenReturn(LOCALHOST_URL);
 
-            assertThat(client.baseUrl()).isEqualTo(LOCALHOST_URL);
+            var wireMockClient = new DefaultWireMockClient(httpClient);
+
+            assertThat(wireMockClient.baseUrl()).isEqualTo(LOCALHOST_URL);
         }
     }
 }

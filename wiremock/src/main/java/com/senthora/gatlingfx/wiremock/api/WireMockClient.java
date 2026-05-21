@@ -1,5 +1,6 @@
 package com.senthora.gatlingfx.wiremock.api;
 
+import com.senthora.gatlingfx.http.api.SimpleHttpClient;
 import com.senthora.gatlingfx.simulation.api.BackendClient;
 import com.senthora.gatlingfx.http.api.HttpBaseUrl;
 import com.senthora.gatlingfx.wiremock.internal.DefaultWireMockClient;
@@ -15,7 +16,8 @@ public interface WireMockClient extends BackendClient {
      * @param baseUrl WireMock server base URL
      */
     static WireMockClient create(HttpBaseUrl baseUrl) {
-        return new DefaultWireMockClient(baseUrl);
+        var httpClient = SimpleHttpClient.create(baseUrl);
+        return new DefaultWireMockClient(httpClient);
     }
 
     /**
@@ -28,7 +30,8 @@ public interface WireMockClient extends BackendClient {
      * @param defaultStub default fallback stub mapping
      */
     static WireMockClient create(HttpBaseUrl baseUrl, StubMapping defaultStub) {
-        return new DefaultWireMockClient(baseUrl, defaultStub);
+        var httpClient = SimpleHttpClient.create(baseUrl);
+        return new DefaultWireMockClient(httpClient, defaultStub);
     }
 
     /**
@@ -39,7 +42,7 @@ public interface WireMockClient extends BackendClient {
     WireMockClient stub(StubMapping mapping);
 
     /**
-     * Removes all registered mappings and requests.
+     * Resets WireMock server state.
      */
     void reset();
 
