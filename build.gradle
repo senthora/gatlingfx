@@ -2,10 +2,10 @@ plugins {
     id 'io.gatling.gradle' version '3.15.0.3' apply false
 }
 
-group = 'com.senthora.gatlingfx'
-version = '0.1.0'
-
 allprojects {
+    group = 'com.senthora.gatlingfx'
+    version = '0.1.0'
+
     repositories {
         mavenCentral()
     }
@@ -13,6 +13,10 @@ allprojects {
 
 subprojects {
     apply plugin: 'java-library'
+
+    base {
+        archivesName = "${rootProject.name}-${project.name}"
+    }
 
     java {
         toolchain {
