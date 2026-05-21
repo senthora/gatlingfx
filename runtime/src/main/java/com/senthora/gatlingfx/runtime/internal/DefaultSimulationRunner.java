@@ -16,6 +16,7 @@ import scala.Option;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Default {@link SimulationRunner} implementation.
@@ -53,7 +54,7 @@ public final class DefaultSimulationRunner implements SimulationRunner {
                 }
             }
             finally {
-                eventLoopGroup.shutdownGracefully();
+                shutdownGracefully(eventLoopGroup);
             }
         }
         return !simulationContext.failed();
@@ -86,6 +87,11 @@ public final class DefaultSimulationRunner implements SimulationRunner {
                 "src/resources/logback-test.xml"
         );
         return GatlingConfiguration.load();
+    }
+
+    private static void shutdownGracefully(EventLoopGroup loopGroup) {
+        loopGroup.shutdownGracefully(0, 0, TimeUnit.SECONDS)
+                .syncUninterruptibly();
     }
 
     private record RunnerStartupContext(
