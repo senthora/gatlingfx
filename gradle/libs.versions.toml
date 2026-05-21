@@ -22,9 +22,3 @@ mockito-bom = { module = "org.mockito:mockito-bom", version.ref = "mockito" }
 mockito-core = { module = "org.mockito:mockito-core" }
 
 mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "mockwebserver" }
-
-[bundles]
-gatling = [
-    "gatling-core",
-    "gatling-http"
-]

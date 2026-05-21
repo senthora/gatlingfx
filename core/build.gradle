@@ -3,7 +3,8 @@ plugins {
 }
 
 dependencies {
-    api libs.bundles.gatling
+    api libs.gatling.core
+    api libs.gatling.http
 
     testImplementation platform(libs.mockito.bom)
     testImplementation libs.mockito.core
