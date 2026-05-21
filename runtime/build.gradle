@@ -1,0 +1,9 @@
+dependencies {
+    implementation projects.core
+
+    implementation libs.classgraph
+
+    implementation libs.gatling.app
+    implementation libs.gatling.charts
+    implementation "io.gatling.highcharts:gatling-charts-highcharts:3.15.0"
+}
