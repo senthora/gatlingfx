@@ -38,7 +38,10 @@ public final class DefaultSimulationRunner implements SimulationRunner {
             var startupContext = new RunnerStartupContext(actorSystem, eventLoopGroup);
             try {
                 for (Class<?> clazz : simulationClasses) {
-                    runSimulation(clazz, startupContext);
+                    var statusCode = runSimulation(clazz, startupContext);
+                    if (statusCode != StatusCode.Success$.MODULE$) {
+                        return false;
+                    }
                 }
             }
             finally {
@@ -48,7 +51,7 @@ public final class DefaultSimulationRunner implements SimulationRunner {
         return !simulationContext.failed();
     }
 
-    private void runSimulation(Class<?> simulationClass, RunnerStartupContext context) {
+    private StatusCode runSimulation(Class<?> simulationClass, RunnerStartupContext context) {
         var gatlingArgs = GatlingArgs.apply(
                 Option.apply(simulationClass.getName()),
                 Option.empty(),
@@ -64,7 +67,9 @@ public final class DefaultSimulationRunner implements SimulationRunner {
                 gatlingArgs,
                 gatlingConfig
         );
-        runner.run();
+        RunResult runResult = runner.run();
+        return new RunResultProcessor(gatlingArgs, gatlingConfig)
+                .processRunResult(runResult);
     }
 
     private static GatlingConfiguration loadConfiguration() {
