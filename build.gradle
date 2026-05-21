@@ -1,4 +1,5 @@
 plugins {
+    id 'base'
     id 'io.gatling.gradle' version '3.15.0.3' apply false
 }
 
@@ -40,4 +41,8 @@ subprojects {
 
         testImplementation libs.assertj.core
     }
+}
+
+tasks.named('clean') {
+    delete layout.buildDirectory
 }
