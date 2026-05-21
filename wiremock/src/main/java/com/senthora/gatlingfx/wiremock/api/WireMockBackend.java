@@ -6,12 +6,12 @@ import com.senthora.gatlingfx.http.api.HttpBaseUrl;
 import com.senthora.gatlingfx.wiremock.internal.DefaultWireMockBackend;
 
 /**
- * Backend client backed by WireMock.
+ * Simulation backend backed by WireMock.
  */
 public interface WireMockBackend extends SimulationBackend {
 
     /**
-     * Creates a new WireMock client instance.
+     * Creates a new WireMock backend instance.
      *
      * @param baseUrl WireMock server base URL
      */
@@ -21,7 +21,7 @@ public interface WireMockBackend extends SimulationBackend {
     }
 
     /**
-     * Creates a new WireMock client instance.
+     * Creates a new WireMock backend instance.
      * <p>
      * The provided default stub is applied during
      * {@link #setup()} before user-registered mappings.
