@@ -12,3 +12,29 @@ dependencies {
     testFixturesImplementation libs.junit.jupiter
     testFixturesImplementation libs.mockwebserver
 }
+
+testing {
+    suites {
+        integrationTest(JvmTestSuite) {
+            dependencies {
+                implementation libs.mockwebserver
+            }
+            targets {
+                all {
+                    testTask.configure {
+                        shouldRunAfter(tasks.test)
+                    }
+                }
+            }
+        }
+    }
+}
+
+configurations {
+    integrationTestImplementation.extendsFrom(testImplementation)
+    integrationTestRuntimeOnly.extendsFrom(testRuntimeOnly)
+}
+
+tasks.named("check") {
+    dependsOn(testing.suites.integrationTest)
+}
