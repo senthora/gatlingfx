@@ -1,7 +1,7 @@
 package com.senthora.gatlingfx.wiremock.api;
 
-import com.senthora.gatlingfx.http.HttpHeader;
-import com.senthora.gatlingfx.http.HttpMethod;
+import com.senthora.gatlingfx.http.api.HttpHeader;
+import com.senthora.gatlingfx.http.api.HttpMethod;
 
 import com.senthora.gatlingfx.support.TestHeaders;
 

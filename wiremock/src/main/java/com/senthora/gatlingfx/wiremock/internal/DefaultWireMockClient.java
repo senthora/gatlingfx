@@ -1,8 +1,8 @@
 package com.senthora.gatlingfx.wiremock.internal;
 
-import com.senthora.gatlingfx.http.HttpBaseUrl;
-import com.senthora.gatlingfx.http.HttpMethod;
-import com.senthora.gatlingfx.http.RequestHeader;
+import com.senthora.gatlingfx.http.api.HttpBaseUrl;
+import com.senthora.gatlingfx.http.api.HttpMethod;
+import com.senthora.gatlingfx.http.api.RequestHeader;
 import com.senthora.gatlingfx.wiremock.api.LoggedRequests;
 import com.senthora.gatlingfx.wiremock.api.StubMapping;
 import com.senthora.gatlingfx.wiremock.api.WireMockClient;

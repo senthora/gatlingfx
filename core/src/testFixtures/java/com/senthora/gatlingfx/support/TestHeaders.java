@@ -1,7 +1,7 @@
 package com.senthora.gatlingfx.support;
 
-import com.senthora.gatlingfx.http.HttpHeader;
-import com.senthora.gatlingfx.http.RequestHeader;
+import com.senthora.gatlingfx.http.api.HttpHeader;
+import com.senthora.gatlingfx.http.api.RequestHeader;
 
 import java.util.Map;
 

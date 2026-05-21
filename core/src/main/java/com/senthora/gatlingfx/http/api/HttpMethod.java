@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.http;
+package com.senthora.gatlingfx.http.api;
 
 /**
  * HTTP request methods.

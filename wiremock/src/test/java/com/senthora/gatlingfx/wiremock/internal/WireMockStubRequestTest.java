@@ -1,6 +1,6 @@
 package com.senthora.gatlingfx.wiremock.internal;
 
-import com.senthora.gatlingfx.http.HttpMethod;
+import com.senthora.gatlingfx.http.api.HttpMethod;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

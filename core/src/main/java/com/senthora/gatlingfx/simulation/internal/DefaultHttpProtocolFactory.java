@@ -1,6 +1,6 @@
 package com.senthora.gatlingfx.simulation.internal;
 
-import com.senthora.gatlingfx.http.HttpBaseUrl;
+import com.senthora.gatlingfx.http.api.HttpBaseUrl;
 
 import io.gatling.javaapi.http.HttpProtocolBuilder;
 

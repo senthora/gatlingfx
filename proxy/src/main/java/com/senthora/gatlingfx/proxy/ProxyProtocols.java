@@ -1,9 +1,9 @@
 package com.senthora.gatlingfx.proxy;
 
 import com.senthora.gatlingfx.simulation.api.SimulationProtocol;
-import com.senthora.gatlingfx.http.HttpBaseUrl;
-import com.senthora.gatlingfx.http.HttpScheme;
-import com.senthora.gatlingfx.http.NetworkAddress;
+import com.senthora.gatlingfx.http.api.HttpBaseUrl;
+import com.senthora.gatlingfx.http.api.HttpScheme;
+import com.senthora.gatlingfx.http.api.NetworkAddress;
 
 /**
  * Factory for creating protocol

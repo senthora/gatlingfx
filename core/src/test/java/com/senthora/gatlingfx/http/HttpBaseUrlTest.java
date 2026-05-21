@@ -1,5 +1,10 @@
 package com.senthora.gatlingfx.http;
 
+import com.senthora.gatlingfx.http.api.HttpBaseUrl;
+import com.senthora.gatlingfx.http.api.HttpHost;
+import com.senthora.gatlingfx.http.api.HttpScheme;
+import com.senthora.gatlingfx.http.api.NetworkAddress;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

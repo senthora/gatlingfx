@@ -1,6 +1,6 @@
 package com.senthora.gatlingfx.wiremock.internal;
 
-import com.senthora.gatlingfx.http.HttpHeader;
+import com.senthora.gatlingfx.http.api.HttpHeader;
 import com.senthora.gatlingfx.support.TestHeaders;
 
 import org.junit.jupiter.api.DisplayName;

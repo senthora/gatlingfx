@@ -1,6 +1,6 @@
 package com.senthora.gatlingfx.wiremock.api;
 
-import com.senthora.gatlingfx.http.HttpHeader;
+import com.senthora.gatlingfx.http.api.HttpHeader;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.senthora.gatlingfx.proxy;
 
-import com.senthora.gatlingfx.http.HttpHost;
-import com.senthora.gatlingfx.http.NetworkAddress;
+import com.senthora.gatlingfx.http.api.HttpHost;
+import com.senthora.gatlingfx.http.api.NetworkAddress;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
