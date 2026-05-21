@@ -2,4 +2,6 @@ dependencies {
     implementation project(':core')
 
     testImplementation(testFixtures(project(':core')))
+    testImplementation platform(libs.mockito.bom)
+    testImplementation libs.mockito.core
 }
