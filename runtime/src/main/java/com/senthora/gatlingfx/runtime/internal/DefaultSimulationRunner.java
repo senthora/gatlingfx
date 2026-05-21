@@ -1,8 +1,12 @@
 package com.senthora.gatlingfx.runtime.internal;
 
+import com.senthora.gatlingfx.runtime.api.SimulationRunResult;
 import com.senthora.gatlingfx.runtime.api.SimulationRunner;
 
+import io.gatling.app.RunResult;
+import io.gatling.app.RunResultProcessor;
 import io.gatling.app.Runner;
+import io.gatling.app.cli.StatusCode;
 import io.gatling.core.actor.ActorSystem;
 import io.gatling.core.cli.GatlingArgs;
 import io.gatling.core.config.GatlingConfiguration;
@@ -21,12 +25,16 @@ public final class DefaultSimulationRunner implements SimulationRunner {
     private final GatlingConfiguration gatlingConfig = loadConfiguration();
 
     @Override
-    public boolean run(Class<?> simulationClass) {
-        return runAll(List.of(simulationClass));
+    public SimulationRunResult run(Class<?> simulationClass) {
+        return new DefaultSimulationRunResult(
+                runAll(List.of(simulationClass))
+        );
     }
 
-    public boolean runAll() {
-        return runAll(SimulationProbe.scan());
+    public SimulationRunResult runAll() {
+        return new DefaultSimulationRunResult(
+                runAll(SimulationProbe.scan())
+        );
     }
 
     private boolean runAll(List<Class<?>> simulationClasses) {

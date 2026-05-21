@@ -26,14 +26,14 @@ public interface SimulationRunner {
      * Executes simulation for a given class.
      *
      * @param simulationClass class of the simulation to run
-     * @return true if the simulation executed successfully, otherwise false
+     * @return result of simulation execution
      */
-    boolean run(Class<?> simulationClass);
+    SimulationRunResult run(Class<?> simulationClass);
 
     /**
      * Execute all simulations discovered on the runtime classpath.
      *
-     * @return true if all simulations executed successfully, otherwise false
+     * @return result of simulation executions
      */
-    boolean runAll();
+    SimulationRunResult runAll();
 }
