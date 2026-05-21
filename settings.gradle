@@ -3,5 +3,6 @@ rootProject.name = 'gatlingfx'
 include 'core'
 include 'proxy'
 include 'wiremock'
+include 'gatling'
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

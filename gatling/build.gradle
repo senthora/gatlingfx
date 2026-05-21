@@ -1,0 +1,12 @@
+plugins {
+    id 'java'
+    id 'io.gatling.gradle'
+}
+
+dependencies {
+    gatlingImplementation projects.core
+    gatlingImplementation projects.proxy
+    gatlingImplementation projects.wiremock
+
+    gatlingImplementation libs.jspecify
+}
