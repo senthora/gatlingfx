@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.simulation;
+package com.senthora.gatlingfx.simulation.api;
 
 import io.gatling.javaapi.core.Assertion;
 import io.gatling.javaapi.core.PopulationBuilder;

@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.simulation;
+package com.senthora.gatlingfx.simulation.internal;
 
 import com.senthora.gatlingfx.http.HttpBaseUrl;
 
@@ -7,7 +7,7 @@ import io.gatling.javaapi.http.HttpProtocolBuilder;
 /**
  * Factory for creating Gatling HTTP protocol builders.
  */
-interface HttpProtocolFactory {
+public interface HttpProtocolFactory {
 
     /**
      * Creates a protocol builder configured

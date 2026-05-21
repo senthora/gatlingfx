@@ -1,6 +1,6 @@
 package com.senthora.gatlingfx.proxy;
 
-import com.senthora.gatlingfx.simulation.SimulationScenario;
+import com.senthora.gatlingfx.simulation.api.SimulationScenario;
 
 import io.gatling.javaapi.core.ScenarioBuilder;
 

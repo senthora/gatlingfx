@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.simulation;
+package com.senthora.gatlingfx.simulation.internal;
 
 import com.senthora.gatlingfx.http.HttpBaseUrl;
 
@@ -9,7 +9,7 @@ import static io.gatling.javaapi.http.HttpDsl.http;
 /**
  * Default implementation of {@link HttpProtocolFactory}.
  */
-final class DefaultHttpProtocolFactory implements HttpProtocolFactory {
+public final class DefaultHttpProtocolFactory implements HttpProtocolFactory {
 
     @Override
     public HttpProtocolBuilder baseUrl(HttpBaseUrl baseUrl) {

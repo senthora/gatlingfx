@@ -1,8 +1,8 @@
 package com.senthora.gatlingfx.proxy;
 
-import com.senthora.gatlingfx.simulation.BaseSimulation;
-import com.senthora.gatlingfx.simulation.SimulationProtocol;
-import com.senthora.gatlingfx.simulation.SimulationScenario;
+import com.senthora.gatlingfx.simulation.api.BaseSimulation;
+import com.senthora.gatlingfx.simulation.api.SimulationProtocol;
+import com.senthora.gatlingfx.simulation.api.SimulationScenario;
 
 import com.senthora.gatlingfx.support.ProxyFixtures;
 
