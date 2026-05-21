@@ -3,6 +3,7 @@ gatling = "3.15.0"
 assertj = "3.27.7"
 junit = "6.0.3"
 mockito = "5.23.0"
+mockwebserver = "5.3.2"
 jspecify = "1.0.0"
 
 [libraries]
@@ -19,6 +20,8 @@ assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 
 mockito-bom = { module = "org.mockito:mockito-bom", version.ref = "mockito" }
 mockito-core = { module = "org.mockito:mockito-core" }
+
+mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "mockwebserver" }
 
 [bundles]
 gatling = [
