@@ -12,4 +12,13 @@ dependencies {
 
     testImplementation projects.runtime
 }
+
+tasks.register("gatlingFx", JavaExec) {
+    group = "verification"
+    description = "Runs GatlingFx simulations"
+
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = "com.senthora.gatlingfx.runtime.application.GatlingFx"
+
+    jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
 }
