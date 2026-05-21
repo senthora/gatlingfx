@@ -1,7 +1,6 @@
 plugins {
     id 'base'
     id 'jacoco'
-    id 'io.gatling.gradle' version '3.15.0.3' apply false
 }
 
 allprojects {
