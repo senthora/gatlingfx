@@ -1,5 +1,7 @@
 package com.senthora.gatlingfx.http.api;
 
+import com.senthora.gatlingfx.http.internal.DefaultSimpleHttpClient;
+
 import java.net.http.HttpResponse;
 
 /**
@@ -7,6 +9,15 @@ import java.net.http.HttpResponse;
  * for simple infrastructure communication.
  */
 public interface SimpleHttpClient {
+
+    /**
+     * Creates a new HTTP client instance.
+     *
+     * @param baseUrl target base URL
+     */
+    static SimpleHttpClient create(HttpBaseUrl baseUrl) {
+        return new DefaultSimpleHttpClient(baseUrl);
+    }
 
     /**
      * Sends an HTTP GET request to the provided path.
