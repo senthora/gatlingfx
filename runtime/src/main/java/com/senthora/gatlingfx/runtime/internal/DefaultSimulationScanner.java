@@ -8,15 +8,15 @@ import io.github.classgraph.ClassGraph;
 import java.util.List;
 
 /**
- * Default {@link SimulationScanner} implementation.
+ * Internal runtime classpath scanner
+ * used by {@link SimulationScanner}.
  */
 public final class DefaultSimulationScanner implements SimulationScanner {
 
     private static final ClassGraph CLASS_GRAPH = classGraph();
     private static final String ANNOTATION_NAME = GatlingSimulation.class.getName();
 
-    @Override
-    public List<Class<?>> scan() {
+    public static List<Class<?>> scan() {
         try (var scan = CLASS_GRAPH.scan()) {
             return scan.getClassesWithAnnotation(ANNOTATION_NAME).loadClasses();
         }

@@ -18,18 +18,13 @@ import java.util.List;
 public interface SimulationScanner {
 
     /**
-     * Creates a new simulation scanner.
-     */
-    static SimulationScanner create() {
-        return new DefaultSimulationScanner();
-    }
-
-    /**
      * Scans the runtime classpath
      * for discoverable simulations.
      *
      * @return list of discovered simulation classes,
      * or an empty list if no simulations were discovered
      */
-    List<Class<?>> scan();
+    static List<Class<?>> scan() {
+        return DefaultSimulationScanner.scan();
+    }
 }
