@@ -35,7 +35,7 @@ public final class DefaultSimulationRunner implements SimulationRunner {
     }
 
     public SimulationRunResult runAll() {
-        var results = runInternal(SimulationProbe.scan());
+        var results = runInternal(DefaultSimulationScanner.scan());
         return new DefaultSimulationRunResult(results);
     }
 

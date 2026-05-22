@@ -17,12 +17,12 @@ import java.util.List;
  * need to automatically locate and execute simulations
  * without requiring explicit registration.
  */
-final class SimulationProbe {
+final class DefaultSimulationScanner {
 
     private static final ClassGraph CLASS_GRAPH = classGraph();
     private static final String ANNOTATION_NAME = GatlingSimulation.class.getName();
 
-    private SimulationProbe() {}
+    private DefaultSimulationScanner() {}
 
     /**
      * Scans the runtime classpath for discoverable simulations.
