@@ -2,6 +2,9 @@ dependencies {
     implementation projects.core
 
     implementation libs.classgraph
+    implementation platform(libs.junit.bom)
+    implementation libs.junit.jupiter.api
+    implementation libs.junit.platform.engine
 
     implementation libs.gatling.app
     implementation libs.gatling.charts
