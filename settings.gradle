@@ -4,6 +4,5 @@ include 'core'
 include 'runtime'
 include 'proxy'
 include 'wiremock'
-include 'gatling'
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
