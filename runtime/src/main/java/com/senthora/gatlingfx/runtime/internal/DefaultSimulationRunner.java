@@ -39,9 +39,6 @@ public final class DefaultSimulationRunner implements SimulationRunner {
     }
 
     private boolean runAll(List<Class<?>> simulationClasses) {
-        var simulationContext = new SimulationExecutionContext();
-        SimulationExecution.set(simulationContext);
-
         try (var actorSystem = new ActorSystem()) {
             var eventLoopGroup = new EpollEventLoopGroup();
             var startupContext = new RunnerStartupContext(actorSystem, eventLoopGroup);
@@ -57,7 +54,7 @@ public final class DefaultSimulationRunner implements SimulationRunner {
                 shutdownGracefully(eventLoopGroup);
             }
         }
-        return !simulationContext.failed();
+        return true;
     }
 
     private StatusCode runSimulation(Class<?> simulationClass, RunnerStartupContext context) {
