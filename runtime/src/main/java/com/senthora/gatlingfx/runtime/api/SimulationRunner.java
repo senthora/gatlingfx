@@ -2,16 +2,22 @@ package com.senthora.gatlingfx.runtime.api;
 
 import com.senthora.gatlingfx.runtime.internal.DefaultSimulationRunner;
 
+import java.util.List;
+
 /**
- * Executes GatlingFx simulations discovered on the runtime classpath.
+ * Executes Gatling simulations.
  * <p>
- * Implementations are responsible for locating simulation classes,
- * instantiating, and executing them through Gatling,
+ * The runner does not automatically discover
+ * Gatling simulation classes. See {@link SimulationScanner}
+ * for more information on discovering simulations
+ * available on the runtime classpath.
  * <p>
- * This abstraction is primarily intended for integration-style
- * execution inside standard JVM test tasks, allowing simulation
- * execution to participate in conventional tooling such as
- * JaCoCo coverage reporting and CI pipelines.
+ * <strong>API Note:</strong>
+ * This abstraction is primarily intended for executing
+ * simulations in integrated JVM environments such
+ * as JUnit tests, allowing execution to participate
+ * in conventional tooling such as JaCoCo
+ * coverage reporting and CI pipelines.
  */
 public interface SimulationRunner {
 
@@ -23,7 +29,7 @@ public interface SimulationRunner {
     }
 
     /**
-     * Executes simulation for a given class.
+     * Executes a single Gatling simulation.
      *
      * @param simulationClass class of the simulation to run
      * @return result of simulation execution
@@ -31,9 +37,10 @@ public interface SimulationRunner {
     SimulationRunResult run(Class<?> simulationClass);
 
     /**
-     * Execute all simulations discovered on the runtime classpath.
+     * Executes multiple Gatling simulations.
      *
+     * @param simulationClasses classes of simulations to run
      * @return result of simulation executions
      */
-    SimulationRunResult runAll();
+    SimulationRunResult run(List<Class<?>> simulationClasses);
 }

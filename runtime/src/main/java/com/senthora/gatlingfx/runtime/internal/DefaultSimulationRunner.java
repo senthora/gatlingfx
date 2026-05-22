@@ -34,8 +34,9 @@ public final class DefaultSimulationRunner implements SimulationRunner {
         return new DefaultSimulationRunResult(results);
     }
 
-    public SimulationRunResult runAll() {
-        var results = runInternal(DefaultSimulationScanner.scan());
+    @Override
+    public SimulationRunResult run(List<Class<?>> simulationClasses) {
+        var results = runInternal(simulationClasses);
         return new DefaultSimulationRunResult(results);
     }
 
