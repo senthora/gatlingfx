@@ -1,5 +1,7 @@
 package com.senthora.gatlingfx.runtime.internal;
 
+import com.senthora.gatlingfx.runtime.api.SimulationExecutionResult;
+import com.senthora.gatlingfx.runtime.api.SimulationResult;
 import com.senthora.gatlingfx.runtime.api.SimulationRunResult;
 import com.senthora.gatlingfx.runtime.api.SimulationRunner;
 
@@ -15,6 +17,7 @@ import io.netty.channel.epoll.EpollEventLoopGroup;
 import scala.Option;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -27,34 +30,34 @@ public final class DefaultSimulationRunner implements SimulationRunner {
 
     @Override
     public SimulationRunResult run(Class<?> simulationClass) {
-        return new DefaultSimulationRunResult(
-                runAll(List.of(simulationClass))
-        );
+        var results = runInternal(List.of(simulationClass));
+        return new DefaultSimulationRunResult(results);
     }
 
     public SimulationRunResult runAll() {
-        return new DefaultSimulationRunResult(
-                runAll(SimulationProbe.scan())
-        );
+        var results = runInternal(SimulationProbe.scan());
+        return new DefaultSimulationRunResult(results);
     }
 
-    private boolean runAll(List<Class<?>> simulationClasses) {
+    private List<SimulationExecutionResult> runInternal(List<Class<?>> simulationClasses) {
+        List<SimulationExecutionResult> results = new ArrayList<>();
+
         try (var actorSystem = new ActorSystem()) {
             var eventLoopGroup = new EpollEventLoopGroup();
             var startupContext = new RunnerStartupContext(actorSystem, eventLoopGroup);
             try {
                 for (Class<?> clazz : simulationClasses) {
                     var statusCode = runSimulation(clazz, startupContext);
-                    if (statusCode != StatusCode.Success$.MODULE$) {
-                        return false;
-                    }
+                    var result = simulationResult(statusCode);
+
+                    results.add(new DefaultSimulationExecutionResult(clazz, result));
                 }
             }
             finally {
                 shutdownGracefully(eventLoopGroup);
             }
         }
-        return true;
+        return results;
     }
 
     private StatusCode runSimulation(Class<?> simulationClass, RunnerStartupContext context) {
@@ -89,6 +92,11 @@ public final class DefaultSimulationRunner implements SimulationRunner {
     private static void shutdownGracefully(EventLoopGroup loopGroup) {
         loopGroup.shutdownGracefully(0, 0, TimeUnit.SECONDS)
                 .syncUninterruptibly();
+    }
+
+    private static SimulationResult simulationResult(StatusCode status) {
+        return status == StatusCode.Success$.MODULE$ ?
+                SimulationResult.SUCCESS : SimulationResult.FAILURE;
     }
 
     private record RunnerStartupContext(

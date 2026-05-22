@@ -16,7 +16,7 @@ public final class GatlingFx {
 
     public static void main(String[] args) {
         var result = new DefaultSimulationRunner().runAll();
-        if (!result.successful()) {
+        if (!result.success()) {
             System.exit(1);
         }
     }

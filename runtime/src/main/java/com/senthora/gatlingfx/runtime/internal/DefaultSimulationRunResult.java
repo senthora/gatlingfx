@@ -1,34 +1,35 @@
 package com.senthora.gatlingfx.runtime.internal;
 
+import com.senthora.gatlingfx.runtime.api.SimulationExecutionResult;
+import com.senthora.gatlingfx.runtime.api.SimulationResult;
 import com.senthora.gatlingfx.runtime.api.SimulationRunResult;
 
+import java.util.List;
+import java.util.Objects;
+
 /**
- * Result of a GatlingFx simulation execution.
+ * Default {@link SimulationRunResult} implementation.
  */
 public final class DefaultSimulationRunResult implements SimulationRunResult {
 
-    private final boolean successful;
+    private final List<SimulationExecutionResult> results;
+    private final boolean success;
 
-    DefaultSimulationRunResult(boolean successful) {
-        this.successful = successful;
+    DefaultSimulationRunResult(List<SimulationExecutionResult> results) {
+        Objects.requireNonNull(results, "results must not be null");
+        this.results = List.copyOf(results);
+        this.success = results.stream().allMatch(result ->
+                result.result() == SimulationResult.SUCCESS
+        );
     }
 
     @Override
-    public boolean successful() {
-        return successful;
+    public List<SimulationExecutionResult> simulations() {
+        return results;
     }
 
     @Override
-    public void assertSuccess() {
-        if (!successful) {
-            throw new AssertionError("Expected simulation to complete successfully");
-        }
-    }
-
-    @Override
-    public void assertFailure() {
-        if (successful) {
-            throw new AssertionError("Expected simulation to fail");
-        }
+    public boolean success() {
+        return success;
     }
 }
