@@ -37,8 +37,6 @@ subprojects {
             events "passed", "skipped", "failed"
             showStandardStreams = true
         }
-
-        finalizedBy tasks.jacocoTestReport
     }
 
     tasks.jacocoTestReport {
