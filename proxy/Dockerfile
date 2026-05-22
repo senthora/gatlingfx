@@ -10,9 +10,9 @@ RUN openssl req -x509 -nodes -days 365 \
     -out /etc/nginx/certs/localhost.crt \
     -subj "/CN=localhost"
 
-COPY conf /etc/nginx/conf
-COPY conf.d /etc/nginx/conf.d
-COPY templates /etc/nginx/templates
+COPY ../docker/proxy/conf /etc/nginx/conf
+COPY ../docker/proxy/conf.d /etc/nginx/conf.d
+COPY ../docker/proxy/templates /etc/nginx/templates
 
 HEALTHCHECK --interval=5s --timeout=3s --start-period=2s --retries=5 \
     CMD wget --spider -q http://127.0.0.1/health
