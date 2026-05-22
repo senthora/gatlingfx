@@ -3,7 +3,6 @@ package com.senthora.gatlingfx.proxy;
 import com.senthora.gatlingfx.simulation.api.SimulationProtocol;
 import com.senthora.gatlingfx.http.api.HttpBaseUrl;
 import com.senthora.gatlingfx.http.api.HttpScheme;
-import com.senthora.gatlingfx.http.api.NetworkAddress;
 
 /**
  * Factory for creating protocol
@@ -20,10 +19,10 @@ public final class ProxyProtocols {
      * routed through the provided proxy server.
      *
      * @param proxy proxy server definition
-     * @param target upstream target address
+     * @param upstream upstream target base URL
      */
-    public static SimulationProtocol http(ProxyServer proxy, NetworkAddress target) {
-        return create(HttpScheme.HTTP, proxy, target);
+    public static SimulationProtocol http(ProxyServer proxy, HttpBaseUrl upstream) {
+        return create(HttpScheme.HTTP, proxy, upstream);
     }
 
     /**
@@ -31,21 +30,21 @@ public final class ProxyProtocols {
      * routed through the provided proxy server.
      *
      * @param proxy proxy server definition
-     * @param target upstream target address
+     * @param upstream upstream target base URL
      *
      * @return configured simulation protocol
      */
-    public static SimulationProtocol https(ProxyServer proxy, NetworkAddress target) {
-        return create(HttpScheme.HTTPS, proxy, target);
+    public static SimulationProtocol https(ProxyServer proxy, HttpBaseUrl upstream) {
+        return create(HttpScheme.HTTPS, proxy, upstream);
     }
 
     private static SimulationProtocol create(
             HttpScheme scheme,
             ProxyServer proxy,
-            NetworkAddress target
+            HttpBaseUrl upstream
     ) {
         return SimulationProtocol.create()
                 .baseUrl(HttpBaseUrl.of(scheme, proxy.address()))
-                .header(TARGET_HEADER, target.value());
+                .header(TARGET_HEADER, upstream.value());
     }
 }

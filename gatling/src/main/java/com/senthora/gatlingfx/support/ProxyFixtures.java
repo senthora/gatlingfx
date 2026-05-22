@@ -1,6 +1,8 @@
 package com.senthora.gatlingfx.support;
 
+import com.senthora.gatlingfx.http.api.HttpBaseUrl;
 import com.senthora.gatlingfx.http.api.HttpHost;
+import com.senthora.gatlingfx.http.api.HttpScheme;
 import com.senthora.gatlingfx.http.api.NetworkAddress;
 import com.senthora.gatlingfx.proxy.ProxyServer;
 
@@ -21,17 +23,24 @@ public final class ProxyFixtures {
      */
     public static final ProxyServer HTTPS_PROXY =
             ProxyServer.of(new NetworkAddress(HttpHost.LOCALHOST, 8443));
+
     /**
      * Coffee upstream target used for
      * proxy routing verification.
      */
-    public static final NetworkAddress COFFEE = NetworkAddress.of("coffee", 5678);
+    public static final HttpBaseUrl COFFEE = HttpBaseUrl.of(
+            HttpScheme.HTTP,
+            NetworkAddress.of("coffee", 5678)
+    );
 
     /**
      * Tea upstream target used for
      * proxy routing verification.
      */
-    public static final NetworkAddress TEA = NetworkAddress.of("tea", 5678);
+    public static final HttpBaseUrl TEA = HttpBaseUrl.of(
+            HttpScheme.HTTP,
+            NetworkAddress.of("tea", 5678)
+    );
 
     private ProxyFixtures() {}
 }
