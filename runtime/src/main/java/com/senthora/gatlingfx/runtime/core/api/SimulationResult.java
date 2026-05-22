@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.runtime.api;
+package com.senthora.gatlingfx.runtime.core.api;
 
 /**
  * Result of a GatlingFx simulation execution.

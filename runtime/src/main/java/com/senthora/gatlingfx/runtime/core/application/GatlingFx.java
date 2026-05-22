@@ -1,7 +1,7 @@
-package com.senthora.gatlingfx.runtime.application;
+package com.senthora.gatlingfx.runtime.core.application;
 
-import com.senthora.gatlingfx.runtime.api.SimulationRunner;
-import com.senthora.gatlingfx.runtime.api.SimulationScanner;
+import com.senthora.gatlingfx.runtime.core.api.SimulationRunner;
+import com.senthora.gatlingfx.runtime.core.api.SimulationScanner;
 
 /**
  * GatlingFx application entrypoint.

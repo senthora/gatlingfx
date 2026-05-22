@@ -1,8 +1,8 @@
-package com.senthora.gatlingfx.runtime.internal;
+package com.senthora.gatlingfx.runtime.core.internal;
 
-import com.senthora.gatlingfx.runtime.api.SimulationExecutionResult;
-import com.senthora.gatlingfx.runtime.api.SimulationResult;
-import com.senthora.gatlingfx.runtime.api.SimulationRunResult;
+import com.senthora.gatlingfx.runtime.core.api.SimulationExecutionResult;
+import com.senthora.gatlingfx.runtime.core.api.SimulationResult;
+import com.senthora.gatlingfx.runtime.core.api.SimulationRunResult;
 
 import java.util.List;
 import java.util.Objects;

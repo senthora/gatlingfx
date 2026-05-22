@@ -1,6 +1,6 @@
-package com.senthora.gatlingfx.runtime.api;
+package com.senthora.gatlingfx.runtime.core.api;
 
-import com.senthora.gatlingfx.runtime.internal.ClasspathSimulationScanner;
+import com.senthora.gatlingfx.runtime.core.internal.ClasspathSimulationScanner;
 
 import java.util.List;
 

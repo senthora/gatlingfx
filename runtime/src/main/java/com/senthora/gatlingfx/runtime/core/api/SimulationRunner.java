@@ -1,6 +1,6 @@
-package com.senthora.gatlingfx.runtime.api;
+package com.senthora.gatlingfx.runtime.core.api;
 
-import com.senthora.gatlingfx.runtime.internal.DefaultSimulationRunner;
+import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationRunner;
 
 import java.util.List;
 

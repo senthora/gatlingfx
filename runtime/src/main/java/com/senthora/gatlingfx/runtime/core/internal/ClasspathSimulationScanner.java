@@ -1,7 +1,7 @@
-package com.senthora.gatlingfx.runtime.internal;
+package com.senthora.gatlingfx.runtime.core.internal;
 
-import com.senthora.gatlingfx.runtime.api.GatlingSimulation;
-import com.senthora.gatlingfx.runtime.api.SimulationScanner;
+import com.senthora.gatlingfx.runtime.core.api.GatlingSimulation;
+import com.senthora.gatlingfx.runtime.core.api.SimulationScanner;
 
 import io.github.classgraph.ClassGraph;
 
