@@ -1,5 +1,5 @@
 compose-base := "./docker-compose.yml"
-compose-proxy := "./docker-compose.yml:./docker-compose.proxy.yml"
+compose-proxy := "./proxy/docker-compose.yml"
 
 # Execute docker compose using base topology
 compose +args:

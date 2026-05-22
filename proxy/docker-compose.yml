@@ -1,6 +1,6 @@
 services:
   proxy:
-    build: ../docker/proxy
+    build: .
     image: gatlingfx-proxy:dev
     container_name: proxy
     ports:
