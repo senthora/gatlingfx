@@ -11,7 +11,7 @@ import java.util.List;
  * Internal runtime classpath scanner
  * used by {@link SimulationScanner}.
  */
-public final class DefaultSimulationScanner implements SimulationScanner {
+public final class ClasspathSimulationScanner implements SimulationScanner {
 
     private static final ClassGraph CLASS_GRAPH = classGraph();
     private static final String ANNOTATION_NAME = GatlingSimulation.class.getName();

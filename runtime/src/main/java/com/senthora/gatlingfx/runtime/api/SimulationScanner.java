@@ -1,6 +1,6 @@
 package com.senthora.gatlingfx.runtime.api;
 
-import com.senthora.gatlingfx.runtime.internal.DefaultSimulationScanner;
+import com.senthora.gatlingfx.runtime.internal.ClasspathSimulationScanner;
 
 import java.util.List;
 
@@ -25,6 +25,6 @@ public interface SimulationScanner {
      * or an empty list if no simulations were discovered
      */
     static List<Class<?>> scan() {
-        return DefaultSimulationScanner.scan();
+        return ClasspathSimulationScanner.scan();
     }
 }
