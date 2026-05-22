@@ -10,3 +10,22 @@ dependencies {
     implementation libs.gatling.charts
     implementation "io.gatling.highcharts:gatling-charts-highcharts:3.15.0"
 }
+
+testing {
+    suites {
+        integrationTest(JvmTestSuite) {
+            dependencies {
+                implementation libs.junit.platform.testkit
+            }
+            targets {
+                all {
+                    testTask.configure {
+                        useJUnitPlatform {
+                            excludeEngines("gatlingfx")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
