@@ -1,14 +1,12 @@
 services:
   coffee:
     image: hashicorp/http-echo:1.0.0
-    container_name: coffee
     command: -status-code=201
     expose:
       - "5678"
 
   tea:
     image: hashicorp/http-echo:1.0.0
-    container_name: tea
     command: -status-code=418
     expose:
       - "5678"
