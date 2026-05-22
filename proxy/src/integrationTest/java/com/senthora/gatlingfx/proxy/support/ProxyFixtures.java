@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.support;
+package com.senthora.gatlingfx.proxy.support;
 
 import com.senthora.gatlingfx.http.api.HttpBaseUrl;
 import com.senthora.gatlingfx.http.api.HttpHost;

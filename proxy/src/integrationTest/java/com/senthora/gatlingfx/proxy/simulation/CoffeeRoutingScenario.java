@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.proxy;
+package com.senthora.gatlingfx.proxy.simulation;
 
 import com.senthora.gatlingfx.simulation.api.SimulationScenario;
 
@@ -7,12 +7,12 @@ import io.gatling.javaapi.core.ScenarioBuilder;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
-final class TeaRoutingScenario implements SimulationScenario {
+final class CoffeeRoutingScenario implements SimulationScenario {
 
     @Override
     public ScenarioBuilder build() {
-        return scenario("Tea routing").exec(get("/")
-                .check(status().is(418))
+        return scenario("Coffee routing").exec(get("/")
+                .check(status().is(201))
         );
     }
 }

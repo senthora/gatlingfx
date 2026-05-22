@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.proxy;
+package com.senthora.gatlingfx.proxy.simulation;
 
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 import com.senthora.gatlingfx.simulation.api.SimulationProtocol;
