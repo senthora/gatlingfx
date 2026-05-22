@@ -1,10 +1,10 @@
 package com.senthora.gatlingfx.proxy.simulation;
 
+import com.senthora.gatlingfx.proxy.ProxyProtocols;
+import com.senthora.gatlingfx.proxy.support.ProxyFixtures;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 import com.senthora.gatlingfx.simulation.api.SimulationProtocol;
 import com.senthora.gatlingfx.simulation.api.SimulationScenario;
-
-import com.senthora.gatlingfx.support.ProxyFixtures;
 
 import java.util.List;
 
