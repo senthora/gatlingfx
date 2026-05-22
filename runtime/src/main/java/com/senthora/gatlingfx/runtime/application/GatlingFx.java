@@ -1,23 +1,27 @@
 package com.senthora.gatlingfx.runtime.application;
 
-import com.senthora.gatlingfx.runtime.internal.DefaultSimulationRunner;
+import com.senthora.gatlingfx.runtime.api.SimulationRunner;
+import com.senthora.gatlingfx.runtime.api.SimulationScanner;
 
 /**
  * GatlingFx application entrypoint.
  * <p>
- * This bootstrap class executes all discovered GatlingFx simulations
- * using the default simulation runner and terminates the JVM with a
- * non-zero exit code when at least one simulation fails.
+ * This bootstrap class executes all discovered GatlingFx
+ * simulations using the default simulation runner and terminates
+ * the JVM with a non-zero exit code when at least one simulation fails.
  * <p>
+ * <strong>API Note:</strong>
  * Intended for command-line execution, Gradle integration,
  * CI pipelines, and IDE run configurations.
  */
 public final class GatlingFx {
 
+    private GatlingFx() {}
+
     public static void main(String[] args) {
-        var result = new DefaultSimulationRunner().runAll();
-        if (!result.success()) {
-            System.exit(1);
-        }
+        var simulationClasses = SimulationScanner.scan();
+        var result = SimulationRunner.create().run(simulationClasses);
+
+        System.exit(result.success() ? 0 : 1);
     }
 }
