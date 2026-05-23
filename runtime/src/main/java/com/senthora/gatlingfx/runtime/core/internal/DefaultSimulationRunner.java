@@ -23,6 +23,9 @@ public final class DefaultSimulationRunner implements SimulationRunner {
 
     @Override
     public SimulationRunResult run(List<Class<?>> simulationClasses) {
+        if (simulationClasses.isEmpty()) {
+            return new DefaultSimulationRunResult(List.of());
+        }
         var results = runtime.execute(simulationClasses);
         return new DefaultSimulationRunResult(results);
     }
