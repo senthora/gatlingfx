@@ -1,107 +1,29 @@
 package com.senthora.gatlingfx.runtime.core.internal;
 
-import com.senthora.gatlingfx.runtime.core.api.SimulationExecutionResult;
-import com.senthora.gatlingfx.runtime.core.api.SimulationResult;
-import com.senthora.gatlingfx.runtime.core.api.SimulationRunResult;
-import com.senthora.gatlingfx.runtime.core.api.SimulationRunner;
+import com.senthora.gatlingfx.runtime.core.api.*;
 
-import io.gatling.app.RunResult;
-import io.gatling.app.RunResultProcessor;
-import io.gatling.app.Runner;
-import io.gatling.app.cli.StatusCode;
-import io.gatling.core.actor.ActorSystem;
-import io.gatling.core.cli.GatlingArgs;
-import io.gatling.core.config.GatlingConfiguration;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.epoll.EpollEventLoopGroup;
-import scala.Option;
-
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Objects;
 
 /**
  * Default {@link SimulationRunner} implementation.
  */
 public final class DefaultSimulationRunner implements SimulationRunner {
 
-    private final GatlingConfiguration gatlingConfig = loadConfiguration();
+    private final SimulationRuntime runtime;
+
+    public DefaultSimulationRunner(SimulationRuntime runtime) {
+        this.runtime = Objects.requireNonNull(runtime, "runtime must not be null");
+    }
 
     @Override
     public SimulationRunResult run(Class<?> simulationClass) {
-        var results = runInternal(List.of(simulationClass));
-        return new DefaultSimulationRunResult(results);
+        return run(List.of(simulationClass));
     }
 
     @Override
     public SimulationRunResult run(List<Class<?>> simulationClasses) {
-        var results = runInternal(simulationClasses);
+        var results = runtime.execute(simulationClasses);
         return new DefaultSimulationRunResult(results);
     }
-
-    private List<SimulationExecutionResult> runInternal(List<Class<?>> simulationClasses) {
-        List<SimulationExecutionResult> results = new ArrayList<>();
-
-        try (var actorSystem = new ActorSystem()) {
-            var eventLoopGroup = new EpollEventLoopGroup();
-            var startupContext = new RunnerStartupContext(actorSystem, eventLoopGroup);
-            try {
-                for (Class<?> clazz : simulationClasses) {
-                    var statusCode = runSimulation(clazz, startupContext);
-                    var result = simulationResult(statusCode);
-
-                    results.add(new DefaultSimulationExecutionResult(clazz, result));
-                }
-            }
-            finally {
-                shutdownGracefully(eventLoopGroup);
-            }
-        }
-        return results;
-    }
-
-    private StatusCode runSimulation(Class<?> simulationClass, RunnerStartupContext context) {
-        var gatlingArgs = GatlingArgs.apply(
-                Option.apply(simulationClass.getName()),
-                Option.empty(),
-                false,
-                Option.empty(),
-                Option.apply(Path.of("build/gatling")),
-                Option.empty(),
-                Option.empty()
-        );
-        var runner = Runner.apply(
-                context.actorSystem,
-                context.eventLoopGroup,
-                gatlingArgs,
-                gatlingConfig
-        );
-        RunResult runResult = runner.run();
-        return new RunResultProcessor(gatlingArgs, gatlingConfig)
-                .processRunResult(runResult);
-    }
-
-    private static GatlingConfiguration loadConfiguration() {
-        System.setProperty(
-                "logback.configurationFile",
-                "src/resources/logback-test.xml"
-        );
-        return GatlingConfiguration.load();
-    }
-
-    private static void shutdownGracefully(EventLoopGroup loopGroup) {
-        loopGroup.shutdownGracefully(0, 0, TimeUnit.SECONDS)
-                .syncUninterruptibly();
-    }
-
-    private static SimulationResult simulationResult(StatusCode status) {
-        return status == StatusCode.Success$.MODULE$ ?
-                SimulationResult.SUCCESS : SimulationResult.FAILURE;
-    }
-
-    private record RunnerStartupContext(
-            ActorSystem actorSystem,
-            EventLoopGroup eventLoopGroup
-    ) {}
 }
