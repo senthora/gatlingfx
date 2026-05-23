@@ -9,7 +9,7 @@ dependencies {
     testImplementation platform(libs.mockito.bom)
     testImplementation libs.mockito.core
 
-    testFixturesImplementation libs.mockwebserver
+    testFixturesApi libs.mockwebserver
     testFixturesImplementation platform(libs.junit.bom)
     testFixturesImplementation libs.junit.jupiter.api
 }
