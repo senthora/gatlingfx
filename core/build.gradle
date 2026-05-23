@@ -8,26 +8,8 @@ dependencies {
 
     testImplementation platform(libs.mockito.bom)
     testImplementation libs.mockito.core
-}
 
-testing {
-    suites {
-        integrationTest(JvmTestSuite) {
-            dependencies {
-                implementation projects.core
-
-                implementation platform(libs.junit.bom)
-                implementation libs.junit.jupiter
-                implementation libs.mockwebserver
-                implementation libs.assertj.core
-            }
-            targets {
-                all {
-                    testTask.configure {
-                        shouldRunAfter(tasks.test)
-                    }
-                }
-            }
-        }
-    }
+    testFixturesImplementation libs.mockwebserver
+    testFixturesImplementation platform(libs.junit.bom)
+    testFixturesImplementation libs.junit.jupiter.api
 }
