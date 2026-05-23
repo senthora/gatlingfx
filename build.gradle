@@ -48,6 +48,31 @@ subprojects {
         }
     }
 
+    testing {
+        suites {
+            integrationTest(JvmTestSuite) {
+                dependencies {
+                    implementation projects.core
+                    implementation projects.runtime
+
+                    implementation testFixtures(project(':core'))
+
+                    implementation platform(libs.junit.bom)
+                    implementation libs.junit.jupiter
+                    implementation libs.assertj.core
+                }
+                targets {
+                    all {
+                        testTask.configure {
+                            shouldRunAfter(tasks.test)
+                            jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     dependencies {
         testImplementation platform(libs.junit.bom)
         testImplementation libs.junit.jupiter
