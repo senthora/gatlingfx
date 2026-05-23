@@ -16,6 +16,9 @@ import com.senthora.gatlingfx.runtime.core.api.SimulationScanner;
  */
 public final class GatlingFx {
 
+    // TODO: implement support for arguments;
+    //      - execute single simulation (--simulation flag)
+    //      - fail-fast on first simulation fail (--fail-fast flag)
     private GatlingFx() {}
 
     public static void main(String[] args) {
