@@ -44,4 +44,17 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
                 .extracting(SimulationExecutionResult::result)
                 .isEqualTo(SimulationResult.FAILURE);
     }
+
+    @Test
+    @DisplayName("Should continue executing remaining simulations when simulation fails")
+    void should_ContinueExecutingRemainingSimulations_when_SimulationFails() {
+        var runtime = new DefaultSimulationRuntime();
+        List<Class<?>> simulationClasses = List.of(
+                FailedSimulation.class,
+                SuccessfulSimulation.class
+        );
+        assertThat(runtime.execute(simulationClasses))
+                .extracting(SimulationExecutionResult::result)
+                .containsExactly(SimulationResult.FAILURE, SimulationResult.SUCCESS);
+    }
 }
