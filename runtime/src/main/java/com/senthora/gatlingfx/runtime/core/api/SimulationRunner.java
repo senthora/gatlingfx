@@ -34,14 +34,24 @@ public interface SimulationRunner {
      *
      * @param simulationClass class of the simulation to run
      * @return result of simulation execution
+     *
+     * @throws NullPointerException if {@code simulationClass} is null
      */
     SimulationRunResult run(Class<?> simulationClass);
 
     /**
      * Executes multiple Gatling simulations.
+     * <p>
+     * <strong>API Note:</strong>
+     * Simulation execution order is delegated
+     * to Gatling and cannot be guaranteed.
      *
      * @param simulationClasses classes of simulations to run
-     * @return result of simulation executions
+     * @return result of simulation executions,
+     * or an empty successful result if no simulations are provided
+     *
+     * @throws NullPointerException if {@code simulationClasses}
+     * is null or contains null elements
      */
     SimulationRunResult run(List<Class<?>> simulationClasses);
 }
