@@ -32,4 +32,8 @@ public abstract class MockWebServerTest {
     static void teardownMockWebServerTest() throws IOException {
         server.shutdown();
     }
+
+    public static HttpBaseUrl baseUrl() {
+        return baseUrl;
+    }
 }
