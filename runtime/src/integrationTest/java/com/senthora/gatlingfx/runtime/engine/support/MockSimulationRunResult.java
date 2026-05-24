@@ -3,7 +3,6 @@ package com.senthora.gatlingfx.runtime.engine.support;
 import com.senthora.gatlingfx.runtime.core.api.SimulationExecutionResult;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRunResult;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public final class MockSimulationRunResult implements SimulationRunResult {
@@ -33,25 +32,5 @@ public final class MockSimulationRunResult implements SimulationRunResult {
     @Override
     public boolean success() {
         return success;
-    }
-
-    public static class Builder {
-
-        private List<SimulationExecutionResult> simulations = new ArrayList<>();
-        private boolean success = false;
-
-        public Builder withSimulations(List<SimulationExecutionResult> simulations) {
-            this.simulations = simulations;
-            return this;
-        }
-
-        public Builder withSuccess(boolean success) {
-            this.success = success;
-            return this;
-        }
-
-        public MockSimulationRunResult build() {
-            return new MockSimulationRunResult(simulations, success);
-        }
     }
 }
