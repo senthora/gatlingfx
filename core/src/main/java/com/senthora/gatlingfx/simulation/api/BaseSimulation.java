@@ -39,9 +39,6 @@ public abstract class BaseSimulation extends Simulation {
         try {
             verify();
         }
-        catch (Throwable t) {
-            throw new RuntimeException("Failed verifying simulation", t);
-        }
         finally {
             backend().teardown();
         }
