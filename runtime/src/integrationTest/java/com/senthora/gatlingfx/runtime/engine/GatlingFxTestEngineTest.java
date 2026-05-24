@@ -28,52 +28,49 @@ class GatlingFxTestEngineTest {
     @Test
     @DisplayName("Should report successful simulation when simulation succeeds")
     void should_ReportSuccessfulSimulation_when_SimulationSucceeds() {
-        SimulationExecutor.setRunner(() -> MockSimulationRunner.with(
-                MockSimulationRunResult.ALWAYS_SUCCESS
-        ));
-        var results = GatlingFxEngineKit.engine()
-                .select(TestSimulations.SuccessfulSimulation.class)
-                .execute();
+        MockSimulationRunner.with(MockSimulationRunResult.ALWAYS_SUCCESS, () -> {
+            var results = GatlingFxEngineKit.engine()
+                    .select(TestSimulations.SuccessfulSimulation.class)
+                    .execute();
 
-        results.testEvents().assertStatistics(stats -> stats
-                .started(1)
-                .succeeded(1)
-                .failed(0));
+            results.testEvents().assertStatistics(stats -> stats
+                    .started(1)
+                    .succeeded(1)
+                    .failed(0));
+        });
     }
 
     @Test
     @DisplayName("Should report failed simulation when simulation fails")
     void should_ReportFailedSimulation_when_SimulationFails() {
-        SimulationExecutor.setRunner(() -> MockSimulationRunner.with(
-                MockSimulationRunResult.ALWAYS_FAIL
-        ));
-        var results = GatlingFxEngineKit.engine()
-                .select(TestSimulations.FailedSimulation.class)
-                .execute();
+        MockSimulationRunner.with(MockSimulationRunResult.ALWAYS_FAIL, () -> {
+            var results = GatlingFxEngineKit.engine()
+                    .select(TestSimulations.FailedSimulation.class)
+                    .execute();
 
-        results.testEvents().assertStatistics(stats -> stats
-                .started(1)
-                .succeeded(0)
-                .failed(1));
+            results.testEvents().assertStatistics(stats -> stats
+                    .started(1)
+                    .succeeded(0)
+                    .failed(1));
+        });
     }
 
     @Test
     @DisplayName("Should continue executing remaining simulations after simulation failure")
     void should_ContinueExecutingRemainingSimulations_when_SimulationFails() {
-        SimulationExecutor.setRunner(() -> MockSimulationRunner.with(
-                MockSimulationRunResult.ALWAYS_FAIL
-        ));
-        List<Class<?>> selection = List.of(
-                TestSimulations.FailedSimulation.class,
-                TestSimulations.SuccessfulSimulation.class
-        );
-        var results = GatlingFxEngineKit.engine()
-                .select(selection)
-                .execute();
+        MockSimulationRunner.with(MockSimulationRunResult.ALWAYS_FAIL, () -> {
+            List<Class<?>> selection = List.of(
+                    TestSimulations.FailedSimulation.class,
+                    TestSimulations.SuccessfulSimulation.class
+            );
+            var results = GatlingFxEngineKit.engine()
+                    .select(selection)
+                    .execute();
 
-        results.testEvents().assertStatistics(stats -> stats
-                .started(2)
-                .succeeded(0)
-                .failed(2));
+            results.testEvents().assertStatistics(stats -> stats
+                    .started(2)
+                    .succeeded(0)
+                    .failed(2));
+        });
     }
 }

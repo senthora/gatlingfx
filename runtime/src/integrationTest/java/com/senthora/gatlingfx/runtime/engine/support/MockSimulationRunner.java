@@ -3,27 +3,23 @@ package com.senthora.gatlingfx.runtime.engine.support;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRunResult;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRunner;
 
+import org.mockito.Mockito;
+
 import java.util.List;
 
-public final class MockSimulationRunner implements SimulationRunner {
+public final class MockSimulationRunner {
 
-    private final SimulationRunResult result;
+    private MockSimulationRunner() {}
 
-    private MockSimulationRunner(SimulationRunResult result) {
-        this.result = result;
-    }
+    public static void with(SimulationRunResult result, Runnable runnable) {
+        var runner = Mockito.mock(SimulationRunner.class);
 
-    public static MockSimulationRunner with(SimulationRunResult result) {
-        return new MockSimulationRunner(result);
-    }
+        Mockito.when(runner.run(Mockito.any(Class.class))).thenReturn(result);
+        Mockito.when(runner.run(Mockito.anyList())).thenReturn(result);
 
-    @Override
-    public SimulationRunResult run(Class<?> simulationClass) {
-        return result;
-    }
-
-    @Override
-    public SimulationRunResult run(List<Class<?>> simulationClasses) {
-        return result;
+        try (var mocked = Mockito.mockStatic(SimulationRunner.class)) {
+            mocked.when(SimulationRunner::create).thenReturn(runner);
+            runnable.run();
+        }
     }
 }

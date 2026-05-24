@@ -7,8 +7,6 @@ import org.junit.platform.engine.ExecutionRequest;
 import org.junit.platform.engine.TestExecutionResult;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Supplier;
 
 /**
  * Internal utility that executes discovered
@@ -17,13 +15,7 @@ import java.util.function.Supplier;
  */
 final class SimulationExecutor {
 
-    private static Supplier<SimulationRunner> runnerSupplier = SimulationRunner::create;
-
     private SimulationExecutor() {}
-
-    static void setRunner(Supplier<SimulationRunner> supplier) {
-        runnerSupplier = Objects.requireNonNull(supplier, "supplier must not be null");
-    }
 
     /**
      * Executes all simulation descriptors
@@ -63,9 +55,7 @@ final class SimulationExecutor {
 
     private static void execute(SimulationDescriptor descriptor) {
         var simulationClass = descriptor.simulationClass();
-
-        var runner = runnerSupplier.get();
-        var result = runner.run(List.of(simulationClass));
+        var result = SimulationRunner.create().run(List.of(simulationClass));
 
         if (!result.success()) {
             var message = "Simulation failed: " + simulationClass.getName();

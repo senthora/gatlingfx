@@ -17,6 +17,9 @@ testing {
             dependencies {
                 implementation libs.junit.platform.testkit
                 implementation libs.gatling.app
+
+                implementation platform(libs.mockito.bom)
+                implementation libs.mockito.core
             }
             targets {
                 all {
