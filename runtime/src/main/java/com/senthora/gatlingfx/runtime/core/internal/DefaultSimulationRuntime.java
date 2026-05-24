@@ -24,9 +24,12 @@ import java.util.concurrent.TimeUnit;
  */
 public final class DefaultSimulationRuntime implements SimulationRuntime {
 
+    private final GatlingRunner gatlingRunner;
     private final GatlingConfiguration gatlingConfig;
 
-    public DefaultSimulationRuntime() {
+    public DefaultSimulationRuntime(GatlingRunner gatlingRunner) {
+        Objects.requireNonNull(gatlingRunner, "gatlingRunner must not be null");
+        this.gatlingRunner = gatlingRunner;
         this.gatlingConfig = loadConfiguration();
     }
 
@@ -39,11 +42,7 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
             var eventLoopGroup = new EpollEventLoopGroup();
             try {
                 for (var simulationClass : simulationClasses) {
-                    var result = execute(
-                            simulationClass,
-                            actorSystem,
-                            eventLoopGroup
-                    );
+                    var result = execute(simulationClass, actorSystem, eventLoopGroup);
                     results.add(result);
                 }
             }
@@ -79,14 +78,29 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
                 gatlingArgs,
                 gatlingConfig
         );
-        var runResult = runner.run();
-
-        var processor = new RunResultProcessor(gatlingArgs, gatlingConfig);
-        var status = processor.processRunResult(runResult);
-
-        var result = simulationResult(status);
+        var statusCode = run(gatlingArgs, runner);
+        var result = statusCode == StatusCode.Success$.MODULE$
+                ? SimulationResult.SUCCESS
+                : SimulationResult.FAILURE;
 
         return new DefaultSimulationExecutionResult(simulationClass, result);
+    }
+
+    private StatusCode run(GatlingArgs gatlingArgs, Runner runner) {
+        try {
+            var runResult = gatlingRunner.run(gatlingArgs, runner);
+            var processor = new RunResultProcessor(gatlingArgs, gatlingConfig);
+
+            return processor.processRunResult(runResult);
+        }
+        catch (AssertionError e) {
+            e.printStackTrace();
+            return StatusCode.AssertionsFailed$.MODULE$;
+        }
+        catch (Throwable e) {
+            var message = "Failed executing simulation runtime";
+            throw new DefaultSimulationRuntimeException(message, e);
+        }
     }
 
     private static GatlingConfiguration loadConfiguration() {
@@ -95,11 +109,5 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
                 "src/resources/logback-test.xml"
         );
         return GatlingConfiguration.load();
-    }
-
-    private static SimulationResult simulationResult(StatusCode status) {
-        return status == StatusCode.Success$.MODULE$
-                ? SimulationResult.SUCCESS
-                : SimulationResult.FAILURE;
     }
 }

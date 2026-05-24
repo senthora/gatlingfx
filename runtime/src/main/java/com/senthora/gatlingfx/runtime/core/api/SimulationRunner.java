@@ -1,5 +1,6 @@
 package com.senthora.gatlingfx.runtime.core.api;
 
+import com.senthora.gatlingfx.runtime.core.internal.DefaultGatlingRunner;
 import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationRunner;
 import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationRuntime;
 
@@ -26,7 +27,10 @@ public interface SimulationRunner {
      * Creates a new simulation runner.
      */
     static SimulationRunner create() {
-        return new DefaultSimulationRunner(new DefaultSimulationRuntime());
+        var gatlingRunner = new DefaultGatlingRunner();
+        var runtime = new DefaultSimulationRuntime(gatlingRunner);
+
+        return new DefaultSimulationRunner(runtime);
     }
 
     /**

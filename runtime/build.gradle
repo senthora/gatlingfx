@@ -16,6 +16,7 @@ testing {
         integrationTest(JvmTestSuite) {
             dependencies {
                 implementation libs.junit.platform.testkit
+                implementation libs.gatling.app
             }
             targets {
                 all {
