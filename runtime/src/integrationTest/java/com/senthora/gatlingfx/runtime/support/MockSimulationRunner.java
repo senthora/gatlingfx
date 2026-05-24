@@ -1,11 +1,9 @@
-package com.senthora.gatlingfx.runtime.engine.support;
+package com.senthora.gatlingfx.runtime.support;
 
 import com.senthora.gatlingfx.runtime.core.api.SimulationRunResult;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRunner;
 
 import org.mockito.Mockito;
-
-import java.util.List;
 
 public final class MockSimulationRunner {
 

@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.runtime.engine.support;
+package com.senthora.gatlingfx.runtime.support;
 
 import com.senthora.gatlingfx.runtime.core.api.SimulationExecutionResult;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRunResult;
