@@ -1,7 +1,5 @@
 package com.senthora.gatlingfx.wiremock.api;
 
-import com.senthora.gatlingfx.http.api.HttpMethod;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +24,7 @@ class StubMappingTest {
     @DisplayName("Should throw NullPointerException when response is null")
     void should_ThrowNullPointerException_when_ResponseIsNull() {
         var request = new StubRequest(
-                HttpMethod.GET,
+                "GET",
                 new StubRequest.ExactUrl("/requests"),
                 List.of()
         );

@@ -1,7 +1,5 @@
 package com.senthora.gatlingfx.wiremock.internal;
 
-import com.senthora.gatlingfx.http.api.HttpMethod;
-
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
@@ -23,11 +21,14 @@ record WireMockStubRequest(
      * Creates a WireMock stub request payload.
      *
      * @throws NullPointerException if {@code method} is null
-     * @throws IllegalArgumentException if neither or both {@code url}
-     * and {@code urlPattern} are provided
+     * @throws IllegalArgumentException if {@code method} is blank or,
+     * if neither or both {@code url} and {@code urlPattern} are provided
      */
     WireMockStubRequest {
         Objects.requireNonNull(method, "method must not be null");
+        if (method.isBlank()) {
+            throw new IllegalArgumentException("method must not be blank");
+        }
         if ((url == null) == (urlPattern == null)) {
             throw new IllegalArgumentException("either url or urlPattern must be provided");
         }
@@ -45,8 +46,8 @@ record WireMockStubRequest(
      * @throws NullPointerException if {@code method} is null
      * @throws IllegalArgumentException if {@code url} is null
      */
-    static WireMockStubRequest exact(HttpMethod method, String url) {
-        return new WireMockStubRequest(method.name(), url, null);
+    static WireMockStubRequest exact(String method, String url) {
+        return new WireMockStubRequest(method, url, null);
     }
 
     /**
@@ -61,7 +62,7 @@ record WireMockStubRequest(
      * @throws NullPointerException if {@code method} is null
      * @throws IllegalArgumentException if {@code urlPattern} is null
      */
-    static WireMockStubRequest pattern(HttpMethod method, String urlPattern) {
-        return new WireMockStubRequest(method.name(), null, urlPattern);
+    static WireMockStubRequest pattern(String method, String urlPattern) {
+        return new WireMockStubRequest(method, null, urlPattern);
     }
 }

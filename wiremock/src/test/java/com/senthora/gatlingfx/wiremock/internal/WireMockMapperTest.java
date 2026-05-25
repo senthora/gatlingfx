@@ -1,6 +1,5 @@
 package com.senthora.gatlingfx.wiremock.internal;
 
-import com.senthora.gatlingfx.http.api.HttpMethod;
 import com.senthora.gatlingfx.support.TestHeaders;
 import com.senthora.gatlingfx.wiremock.api.*;
 
@@ -68,7 +67,7 @@ class WireMockMapperTest {
         void should_MapExactUrlStub_when_RequestUsesExactUrl() {
             var headers = List.of(TestHeaders.jsonContentTypeHeader());
             var request = new StubRequest(
-                    HttpMethod.GET,
+                    "GET",
                     new StubRequest.ExactUrl("/test"),
                     List.of()
             );
@@ -81,7 +80,7 @@ class WireMockMapperTest {
             var result = WireMockMapper.toStub(mapping);
 
             assertThat(result.request()).isEqualTo(
-                    WireMockStubRequest.exact(HttpMethod.GET, "/test")
+                    WireMockStubRequest.exact("GET", "/test")
             );
             assertThat(result.response()).isEqualTo(responseOk(headers));
         }
@@ -91,7 +90,7 @@ class WireMockMapperTest {
         void should_MapUrlPatternStub_when_RequestUsesUrlPattern() {
             var headers = List.of(TestHeaders.jsonContentTypeHeader());
             var request = new StubRequest(
-                    HttpMethod.GET,
+                    "GET",
                     new StubRequest.UrlPattern("/test/.*"),
                     List.of()
             );
@@ -104,7 +103,7 @@ class WireMockMapperTest {
             var result = WireMockMapper.toStub(mapping);
 
             assertThat(result.request()).isEqualTo(
-                    WireMockStubRequest.pattern(HttpMethod.GET, "/test/.*")
+                    WireMockStubRequest.pattern("GET", "/test/.*")
             );
             assertThat(result.response()).isEqualTo(responseOk(headers));
         }

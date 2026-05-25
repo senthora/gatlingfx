@@ -1,7 +1,5 @@
 package com.senthora.gatlingfx.wiremock.internal;
 
-import com.senthora.gatlingfx.http.api.HttpMethod;
-
 import com.senthora.gatlingfx.support.TestHeaders;
 
 import org.junit.jupiter.api.DisplayName;
@@ -15,7 +13,7 @@ class WireMockStubTest {
     @Test
     @DisplayName("Should create stub when request and response are provided")
     void should_CreateStub_when_RequestAndResponseAreProvided() {
-        var request = WireMockStubRequest.exact(HttpMethod.GET, "/test");
+        var request = WireMockStubRequest.exact("GET", "/test");
         var response = new WireMockStubResponse(
                 200,
                 "{\"status\":\"ok\"}",
@@ -44,7 +42,7 @@ class WireMockStubTest {
     @SuppressWarnings("DataFlowIssue")
     @DisplayName("Should throw NullPointerException when response is null")
     void should_ThrowNullPointerException_when_ResponseIsNull() {
-        var request = WireMockStubRequest.exact(HttpMethod.GET, "/test");
+        var request = WireMockStubRequest.exact("GET", "/test");
 
         assertThatThrownBy(() -> new WireMockStub(request, null))
                 .isInstanceOf(NullPointerException.class);

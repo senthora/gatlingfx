@@ -28,7 +28,7 @@ class DefaultWireMockBackendTest {
         @DisplayName("Should throw NullPointerException when HTTP client is null")
         void should_ThrowNullPointerException_when_HttpClientIsNull() {
             var request = new StubRequest(
-                    HttpMethod.GET,
+                    "GET",
                     new StubRequest.ExactUrl("/test"),
                     List.of()
             );
@@ -64,7 +64,7 @@ class DefaultWireMockBackendTest {
             var wireMockClient = new DefaultWireMockBackend(httpClient);
 
             var request = new StubRequest(
-                    HttpMethod.GET,
+                    "GET",
                     new StubRequest.ExactUrl("/test"),
                     List.of()
             );

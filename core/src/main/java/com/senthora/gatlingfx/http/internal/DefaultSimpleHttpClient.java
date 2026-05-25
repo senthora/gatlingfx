@@ -2,7 +2,6 @@ package com.senthora.gatlingfx.http.internal;
 
 import com.senthora.gatlingfx.http.api.SimpleHttpClient;
 import com.senthora.gatlingfx.http.api.HttpBaseUrl;
-import com.senthora.gatlingfx.http.api.HttpMethod;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
@@ -38,7 +37,7 @@ public final class DefaultSimpleHttpClient implements SimpleHttpClient {
                 .GET()
                 .build();
 
-        return send(request, HttpMethod.GET);
+        return send(request, "GET");
     }
 
     @Override
@@ -58,7 +57,7 @@ public final class DefaultSimpleHttpClient implements SimpleHttpClient {
         return baseUrl;
     }
 
-    private HttpResponse<String> send(HttpRequest request, HttpMethod method) {
+    private HttpResponse<String> send(HttpRequest request, String method) {
         try {
             return client.send(request, HttpResponse.BodyHandlers.ofString());
         }
@@ -82,6 +81,6 @@ public final class DefaultSimpleHttpClient implements SimpleHttpClient {
             builder.header("Content-Type", "application/json");
         }
         var request = builder.build();
-        return send(request, HttpMethod.POST);
+        return send(request, "POST");
     }
 }

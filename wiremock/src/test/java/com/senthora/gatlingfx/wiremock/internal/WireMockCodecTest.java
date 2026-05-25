@@ -1,6 +1,5 @@
 package com.senthora.gatlingfx.wiremock.internal;
 
-import com.senthora.gatlingfx.http.api.HttpMethod;
 import com.senthora.gatlingfx.support.TestHeaders;
 import com.senthora.gatlingfx.wiremock.api.LoggedRequest;
 
@@ -24,7 +23,7 @@ class WireMockCodecTest {
         @DisplayName("Should serialize stub when stub payload is valid")
         void should_SerializeStub_when_StubPayloadIsValid() throws Exception {
             var stub = new WireMockStub(
-                    WireMockStubRequest.exact(HttpMethod.GET, "/test"),
+                    WireMockStubRequest.exact("GET", "/test"),
                     responseOk(TestHeaders.jsonContentTypeHeaders())
             );
             var result = WireMockCodec.serialize(stub);

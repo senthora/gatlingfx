@@ -1,7 +1,6 @@
 package com.senthora.gatlingfx.wiremock.api;
 
 import com.senthora.gatlingfx.http.api.HttpHeader;
-import com.senthora.gatlingfx.http.api.HttpMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.Objects;
 /**
  * Defines a request matcher for a WireMock stub.
  */
-public record StubRequest(HttpMethod method, UrlMatcher url, List<HttpHeader> headers) {
+public record StubRequest(String method, UrlMatcher url, List<HttpHeader> headers) {
 
     /**
      * Creates a new stub request matcher.
@@ -26,6 +25,9 @@ public record StubRequest(HttpMethod method, UrlMatcher url, List<HttpHeader> he
         Objects.requireNonNull(url, "url matcher must not be null");
         Objects.requireNonNull(headers, "headers must not be null");
 
+        if (method.isBlank()) {
+            throw new IllegalArgumentException("method must not be null");
+        }
         for (HttpHeader header : headers) {
             Objects.requireNonNull(header, "header must not be null");
         }
@@ -43,7 +45,7 @@ public record StubRequest(HttpMethod method, UrlMatcher url, List<HttpHeader> he
      * @return request matcher
      */
     public static StubRequest any() {
-        return requestMatching(HttpMethod.ANY, ".*");
+        return requestMatching("ANY", ".*");
     }
 
     /**
@@ -54,7 +56,7 @@ public record StubRequest(HttpMethod method, UrlMatcher url, List<HttpHeader> he
      *
      * @return request matcher
      */
-    public static StubRequest request(HttpMethod method, String path) {
+    public static StubRequest request(String method, String path) {
         return new StubRequest(method, new ExactUrl(path), List.of());
     }
 
@@ -66,7 +68,7 @@ public record StubRequest(HttpMethod method, UrlMatcher url, List<HttpHeader> he
      *
      * @return request matcher
      */
-    public static StubRequest requestMatching(HttpMethod method, String pattern) {
+    public static StubRequest requestMatching(String method, String pattern) {
         return new StubRequest(method, new UrlPattern(pattern), List.of());
     }
 

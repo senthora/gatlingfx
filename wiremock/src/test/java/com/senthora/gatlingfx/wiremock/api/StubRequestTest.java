@@ -1,7 +1,6 @@
 package com.senthora.gatlingfx.wiremock.api;
 
 import com.senthora.gatlingfx.http.api.HttpHeader;
-import com.senthora.gatlingfx.http.api.HttpMethod;
 
 import com.senthora.gatlingfx.support.TestHeaders;
 
@@ -32,10 +31,19 @@ class StubRequestTest {
         }
 
         @Test
+        @DisplayName("Should throw IllegalArgumentException when method is blank")
+        void should_ThrowIllegalArgumentException_when_MethodIsBlank() {
+            var url = new StubRequest.ExactUrl("/requests");
+
+            assertThatThrownBy(() -> new StubRequest(" ", url, List.of()))
+                    .isInstanceOf(IllegalArgumentException.class);
+        }
+
+        @Test
         @SuppressWarnings("DataFlowIssue")
         @DisplayName("Should throw NullPointerException when URL matcher is null")
         void should_ThrowNullPointerException_when_UrlMatcherIsNull() {
-            assertThatThrownBy(() -> new StubRequest(HttpMethod.GET, null, List.of()))
+            assertThatThrownBy(() -> new StubRequest("GET", null, List.of()))
                     .isInstanceOf(NullPointerException.class);
         }
 
@@ -45,7 +53,7 @@ class StubRequestTest {
         void should_ThrowNullPointerException_when_HeadersAreNull() {
             var url = new StubRequest.ExactUrl("/requests");
 
-            assertThatThrownBy(() -> new StubRequest(HttpMethod.GET, url, null))
+            assertThatThrownBy(() -> new StubRequest("GET", url, null))
                     .isInstanceOf(NullPointerException.class);
         }
 
@@ -56,7 +64,7 @@ class StubRequestTest {
             var headers = new ArrayList<HttpHeader>();
             headers.add(null);
 
-            assertThatThrownBy(() -> new StubRequest(HttpMethod.GET, url, headers))
+            assertThatThrownBy(() -> new StubRequest("GET", url, headers))
                     .isInstanceOf(NullPointerException.class);
         }
 
@@ -67,7 +75,7 @@ class StubRequestTest {
             var headers = new ArrayList<>(List.of(originalHeader));
             var url = new StubRequest.ExactUrl("/requests");
 
-            var stubRequest = new StubRequest(HttpMethod.GET, url, headers);
+            var stubRequest = new StubRequest("GET", url, headers);
 
             headers.add(TestHeaders.jsonContentTypeHeader());
 
@@ -79,7 +87,7 @@ class StubRequestTest {
         void should_ReturnImmutableHeaders_when_HeadersAreAccessed() {
             var url = new StubRequest.ExactUrl("/requests");
             var headers = List.of(TestHeaders.authorizationHeader());
-            var stubRequest = new StubRequest(HttpMethod.GET, url, headers);
+            var stubRequest = new StubRequest("GET", url, headers);
 
             assertThatThrownBy(() -> stubRequest.headers()
                     .add(TestHeaders.jsonContentTypeHeader()))
@@ -96,7 +104,7 @@ class StubRequestTest {
         void should_ReturnMatcherForAnyMethodAndUrl_when_AnyIsCalled() {
             var stubRequest = StubRequest.any();
 
-            assertThat(stubRequest.method()).isEqualTo(HttpMethod.ANY);
+            assertThat(stubRequest.method()).isEqualTo("ANY");
             assertThat(stubRequest.url()).isEqualTo(new StubRequest.UrlPattern(".*"));
         }
     }
@@ -109,11 +117,18 @@ class StubRequestTest {
         @DisplayName("Should return matcher for exact URL when request is called")
         void should_ReturnMatcherForExactUrl_when_RequestIsCalled() {
             var path = "/requests";
-            var stubRequest = StubRequest.request(HttpMethod.GET, path);
+            var stubRequest = StubRequest.request("GET", path);
 
-            assertThat(stubRequest.method()).isEqualTo(HttpMethod.GET);
+            assertThat(stubRequest.method()).isEqualTo("GET");
             assertThat(stubRequest.url()).isEqualTo(new StubRequest.ExactUrl(path));
             assertThat(stubRequest.headers()).isEmpty();
+        }
+
+        @Test
+        @DisplayName("Should throw IllegalArgumentException when method is blank")
+        void should_ThrowIllegalArgumentException_when_MethodIsBlank() {
+            assertThatThrownBy(() -> StubRequest.request(" ", "/requests"))
+                    .isInstanceOf(IllegalArgumentException.class);
         }
     }
 
@@ -125,11 +140,18 @@ class StubRequestTest {
         @DisplayName("Should return matcher for URL pattern when request is called")
         void should_ReturnMatcherForUrlPattern_when_RequestMatchingIsCalled() {
             var pattern = "/requests/.*";
-            var stubRequest = StubRequest.requestMatching(HttpMethod.GET, pattern);
+            var stubRequest = StubRequest.requestMatching("GET", pattern);
 
-            assertThat(stubRequest.method()).isEqualTo(HttpMethod.GET);
+            assertThat(stubRequest.method()).isEqualTo("GET");
             assertThat(stubRequest.url()).isEqualTo(new StubRequest.UrlPattern(pattern));
             assertThat(stubRequest.headers()).isEmpty();
+        }
+
+        @Test
+        @DisplayName("Should throw IllegalArgumentException when method is blank")
+        void should_ThrowIllegalArgumentException_when_MethodIsBlank() {
+            assertThatThrownBy(() -> StubRequest.requestMatching(" ", "/requests/.*"))
+                    .isInstanceOf(IllegalArgumentException.class);
         }
     }
 
@@ -141,7 +163,7 @@ class StubRequestTest {
         @SuppressWarnings("DataFlowIssue")
         @DisplayName("Should throw NullPointerException when header is null")
         void should_ThrowNullPointerException_when_HeaderIsNull() {
-            var stubRequest = StubRequest.request(HttpMethod.GET, "/requests");
+            var stubRequest = StubRequest.request("GET", "/requests");
 
             assertThatThrownBy(() -> stubRequest.withHeader(null))
                     .isInstanceOf(NullPointerException.class);
@@ -151,7 +173,7 @@ class StubRequestTest {
         @DisplayName("Should return request containing added header when header is added")
         void should_ReturnRequestContainingAddedHeader_when_HeaderIsAdded() {
             var header = TestHeaders.authorizationHeader();
-            var stubRequest = StubRequest.request(HttpMethod.GET, "/requests");
+            var stubRequest = StubRequest.request("GET", "/requests");
             var actualRequest = stubRequest.withHeader(header);
 
             assertThat(actualRequest.headers()).containsExactly(header);
@@ -161,7 +183,7 @@ class StubRequestTest {
         @DisplayName("Should not mutate original request when header is added")
         void should_NotMutateOriginalRequest_when_HeaderIsAdded() {
             var header = TestHeaders.authorizationHeader();
-            var stubRequest = StubRequest.request(HttpMethod.GET, "/requests");
+            var stubRequest = StubRequest.request("GET", "/requests");
 
             stubRequest.withHeader(header);
 
@@ -176,7 +198,7 @@ class StubRequestTest {
         @Test
         @DisplayName("Should create stub mapping with configured response when method is called")
         void should_CreateStubMappingWithConfiguredResponse_when_WillReturnIsCalled() {
-            var stubRequest = StubRequest.request(HttpMethod.GET, "/requests");
+            var stubRequest = StubRequest.request("GET", "/requests");
 
             var actualMapping = stubRequest.willReturn(200);
             var expectedResponse = new StubResponse(200, "", List.of());
@@ -192,7 +214,7 @@ class StubRequestTest {
         @Test
         @DisplayName("Should create JSON response with JSON content type header")
         void should_CreateJsonResponse_when_WillReturnJsonIsCalled() {
-            var stubRequest = StubRequest.request(HttpMethod.GET, "/requests");
+            var stubRequest = StubRequest.request("GET", "/requests");
             var jsonBody = "{\"status\":\"ok\"}";
 
             var actualMapping = stubRequest.willReturnJson(200, jsonBody);
@@ -210,7 +232,7 @@ class StubRequestTest {
         @Test
         @DisplayName("Should create plain text response with text content type header")
         void should_CreatePlainTextResponse_when_WillReturnTextIsCalled() {
-            var stubRequest = StubRequest.request(HttpMethod.GET, "/requests");
+            var stubRequest = StubRequest.request("GET", "/requests");
             var textBody = "ok";
 
             var actualMapping = stubRequest.willReturnText(200, textBody);
