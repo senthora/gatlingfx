@@ -13,7 +13,7 @@ public abstract class TeaShopSimulation extends BaseSimulation {
 
     private static final HttpBaseUrl BASE_URL = HttpBaseUrl.of(
             HttpScheme.HTTP,
-            new NetworkAddress("localhost", 4180)
+            NetworkAddress.localhost(4180)
     );
 
     @Override

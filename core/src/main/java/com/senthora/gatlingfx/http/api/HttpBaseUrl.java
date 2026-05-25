@@ -50,7 +50,7 @@ public record HttpBaseUrl(HttpScheme scheme, NetworkAddress address) {
             case HTTP -> 80;
             case HTTPS -> 443;
         };
-        var address = new NetworkAddress(host, port);
+        var address = NetworkAddress.of(host, port);
         return new HttpBaseUrl(scheme, address);
     }
 

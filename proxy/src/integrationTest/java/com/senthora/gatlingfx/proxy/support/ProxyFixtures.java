@@ -15,13 +15,13 @@ public final class ProxyFixtures {
      * Default local HTTP proxy server.
      */
     public static final ProxyServer HTTP_PROXY =
-            ProxyServer.of(new NetworkAddress("localhost", 8080));
+            ProxyServer.of(NetworkAddress.localhost( 8080));
 
     /**
      * Default local HTTPS proxy server.
      */
     public static final ProxyServer HTTPS_PROXY =
-            ProxyServer.of(new NetworkAddress("localhost", 8443));
+            ProxyServer.of(NetworkAddress.localhost( 8443));
 
     /**
      * Coffee upstream target used for
