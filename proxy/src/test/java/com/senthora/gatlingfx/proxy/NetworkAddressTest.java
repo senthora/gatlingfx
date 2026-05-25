@@ -24,6 +24,13 @@ class NetworkAddressTest {
         }
 
         @Test
+        @DisplayName("Should throw IllegalArgumentException when host is blank")
+        void should_ThrowIllegalArgumentException_when_HostIsBlank() {
+            assertThatThrownBy(() -> new NetworkAddress("", 8080))
+                    .isInstanceOf(IllegalArgumentException.class);
+        }
+
+        @Test
         @DisplayName("Should throw IllegalArgumentException when port is not positive")
         void should_ThrowIllegalArgumentException_when_PortIsNotPositive() {
             assertThatThrownBy(() -> NetworkAddress.localhost( 0))
@@ -59,6 +66,13 @@ class NetworkAddressTest {
         void should_ThrowNullPointerException_when_HostIsNull() {
             assertThatThrownBy(() -> NetworkAddress.of(null, 8080))
                     .isInstanceOf(NullPointerException.class);
+        }
+
+        @Test
+        @DisplayName("Should throw IllegalArgumentException when host is blank")
+        void should_ThrowIllegalArgumentException_when_HostIsBlank() {
+            assertThatThrownBy(() -> NetworkAddress.of("", 8080))
+                    .isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test

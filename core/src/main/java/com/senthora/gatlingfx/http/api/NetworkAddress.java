@@ -18,10 +18,13 @@ public record NetworkAddress(String host, int port) {
      * @param port network port
      *
      * @throws NullPointerException if {@code host} is null
-     * @throws IllegalArgumentException if {@code port} is not positive
+     * @throws IllegalArgumentException if {@code host} is blank or {@code port} is not positive
      */
     public NetworkAddress {
         Objects.requireNonNull(host, "host must not be null");
+        if (host.isBlank()) {
+            throw new IllegalArgumentException("host must not be blank");
+        }
         if (port <= 0) {
             throw new IllegalArgumentException("port must be greater than zero");
         }
@@ -34,7 +37,7 @@ public record NetworkAddress(String host, int port) {
      * @param port network port
      *
      * @throws NullPointerException if {@code host} is null
-     * @throws IllegalArgumentException if {@code port} is not positive
+     * @throws IllegalArgumentException if {@code host} is blank or {@code port} is not positive
      */
     public static NetworkAddress of(String host, int port) {
         return new NetworkAddress(host, port);
