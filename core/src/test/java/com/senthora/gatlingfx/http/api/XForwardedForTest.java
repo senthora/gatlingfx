@@ -44,9 +44,7 @@ class XForwardedForTest {
                     "10.0.0.1",
                     "172.16.0.1"
             );
-            assertThat(forwardedFor.first()).isEqualTo("192.168.0.1");
-            assertThat(forwardedFor.last()).isEqualTo("172.16.0.1");
-            assertThat(forwardedFor.values()).containsExactly(
+            assertThat(forwardedFor.chain()).containsExactly(
                     "192.168.0.1",
                     "10.0.0.1",
                     "172.16.0.1"
@@ -55,28 +53,8 @@ class XForwardedForTest {
     }
 
     @Nested
-    @DisplayName("withIp")
-    class WithIpMethodTests {
-
-        @Test
-        @SuppressWarnings("DataFlowIssue")
-        @DisplayName("Should throw NullPointerException when IP is null")
-        void should_ThrowNullPointerException_when_IpIsNull() {
-            assertThatThrownBy(() -> XForwardedFor.builder().withIp(null))
-                    .isInstanceOf(NullPointerException.class);
-        }
-
-        @Test
-        @DisplayName("Should throw IllegalArgumentException when IP is blank")
-        void should_ThrowIllegalArgumentException_when_IpIsBlank() {
-            assertThatThrownBy(() -> XForwardedFor.builder().withIp(" "))
-                    .isInstanceOf(IllegalArgumentException.class);
-        }
-    }
-
-    @Nested
-    @DisplayName("toHeaderValue")
-    class ToHeaderValueMethodTests {
+    @DisplayName("toHttpHeader")
+    class ToHttpHeaderValueMethodTests {
 
         @Test
         @DisplayName("Should return serialized header value when header value is requested")
@@ -86,23 +64,11 @@ class XForwardedForTest {
                     "10.0.0.1",
                     "172.16.0.1"
             );
-            var expected = "192.168.0.1, 10.0.0.1, 172.16.0.1";
-            assertThat(forwardedFor.toHeaderValue()).isEqualTo(expected);
-        }
-    }
-
-    @Nested
-    @DisplayName("values")
-    class ValuesMethodTests {
-
-        @Test
-        @SuppressWarnings("DataFlowIssue")
-        @DisplayName("Should return immutable values view when values are requested")
-        void should_ReturnImmutableValuesView_when_ValuesAreRequested() {
-            var forwardedFor = XForwardedFor.of("192.168.0.1", "10.0.0.1");
-
-            assertThatThrownBy(() -> forwardedFor.values().add("172.16.0.1"))
-                    .isInstanceOf(UnsupportedOperationException.class);
+            var expected = HttpHeader.of(
+                    XForwardedFor.HEADER_NAME,
+                    "192.168.0.1, 10.0.0.1, 172.16.0.1"
+            );
+            assertThat(forwardedFor.toHttpHeader()).isEqualTo(expected);
         }
     }
 }

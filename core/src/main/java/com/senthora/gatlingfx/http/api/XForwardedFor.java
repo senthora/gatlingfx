@@ -1,6 +1,5 @@
 package com.senthora.gatlingfx.http.api;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -8,11 +7,11 @@ import java.util.Objects;
  * Immutable representation of an
  * {@code X-Forwarded-For} header chain.
  */
-public final class XForwardedFor {
+public record XForwardedFor(List<String> chain) {
 
-    private final List<String> chain;
+    public static final String HEADER_NAME = "X-Forwarded-For";
 
-    private XForwardedFor(List<String> chain) {
+    public XForwardedFor(List<String> chain) {
         Objects.requireNonNull(chain, "chain must not be null");
 
         for (String value : chain) {
@@ -22,13 +21,6 @@ public final class XForwardedFor {
             }
         }
         this.chain = List.copyOf(chain);
-    }
-
-    /**
-     * Creates a new forwarding chain builder.
-     */
-    public static Builder builder() {
-        return new Builder();
     }
 
     /**
@@ -62,70 +54,9 @@ public final class XForwardedFor {
     }
 
     /**
-     * Returns immutable forwarding chain view.
+     * Serializes into {@link HttpHeader}.
      */
-    public List<String> values() {
-        return chain;
-    }
-
-    /**
-     * Serializes the forwarding chain
-     * into HTTP header format.
-     */
-    public String toHeaderValue() {
-        return String.join(", ", chain);
-    }
-
-    /**
-     * Fluent builder for constructing forwarding chains.
-     */
-    public static final class Builder {
-
-        private final List<String> chain = new ArrayList<>();
-
-        /**
-         * Appends IP address to the forwarding chain.
-         *
-         * @param ip IP address
-         *
-         * @throws NullPointerException if {@code ip} is null
-         * @throws IllegalArgumentException if {@code ip} is blank
-         */
-        public Builder withIp(String ip) {
-            Objects.requireNonNull(ip, "ip must not be null");
-            if (ip.isBlank()) {
-                throw new IllegalArgumentException("ip must not be blank");
-            }
-            chain.add(ip);
-            return this;
-        }
-
-        /**
-         * Builds immutable forwarding chain.
-         *
-         * @throws NullPointerException if any address is null
-         * @throws IllegalArgumentException if any address is blank
-         */
-        public XForwardedFor build() {
-            return new XForwardedFor(chain);
-        }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof XForwardedFor that)) {
-            return false;
-        }
-        return chain.equals(that.chain);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(chain);
-    }
-
-    @Override
-    public String toString() {
-        return toHeaderValue();
+    public HttpHeader toHttpHeader() {
+        return HttpHeader.of(HEADER_NAME, String.join(", ", chain));
     }
 }
