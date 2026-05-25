@@ -62,6 +62,14 @@ class HttpBaseUrlTest {
         @SuppressWarnings("DataFlowIssue")
         @DisplayName("Should throw NullPointerException when host is null")
         void should_ThrowNullPointerException_when_HostIsNull() {
+            assertThatThrownBy(() -> HttpBaseUrl.of(HttpScheme.HTTP, (String) null))
+                    .isInstanceOf(NullPointerException.class);
+        }
+
+        @Test
+        @SuppressWarnings("DataFlowIssue")
+        @DisplayName("Should throw NullPointerException when address is null")
+        void should_ThrowNullPointerException_when_AddressIsNull() {
             assertThatThrownBy(() -> HttpBaseUrl.of(HttpScheme.HTTP, (NetworkAddress) null))
                     .isInstanceOf(NullPointerException.class);
         }
