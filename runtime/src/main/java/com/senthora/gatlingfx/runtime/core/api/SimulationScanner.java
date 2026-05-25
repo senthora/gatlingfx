@@ -5,14 +5,11 @@ import com.senthora.gatlingfx.runtime.core.internal.ClasspathSimulationScanner;
 import java.util.List;
 
 /**
- * Discovers GatlingFx simulations
+ * Discovers classes annotated with {@link GatlingSimulation}
  * available on the runtime classpath.
  * <p>
- * A simulation is considered discoverable
- * when annotated with {@link GatlingSimulation}.
- * <p>
- * This component is intended for runtime integrations that
- * need to automatically locate and execute simulations
+ * Intended for runtime integrations that need to
+ * automatically locate and execute simulations
  * without requiring explicit registration.
  */
 public interface SimulationScanner {
