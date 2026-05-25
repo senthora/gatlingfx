@@ -2,6 +2,8 @@ dependencies {
     implementation projects.core
 
     implementation libs.classgraph
+    implementation libs.picocli
+
     implementation platform(libs.junit.bom)
     implementation libs.junit.jupiter.api
     implementation libs.junit.platform.engine

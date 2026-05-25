@@ -4,8 +4,8 @@ assertj = "3.27.7"
 junit = "6.0.3"
 mockito = "5.23.0"
 mockwebserver = "5.3.2"
-jspecify = "1.0.0"
 classgraph = "4.8.184"
+picocli = "4.7.7"
 
 [libraries]
 gatling-core = { module = "io.gatling:gatling-core-java", version.ref = "gatling" }
@@ -13,8 +13,8 @@ gatling-http = { module = "io.gatling:gatling-http-java", version.ref = "gatling
 gatling-app = { module = "io.gatling:gatling-app", version.ref = "gatling" }
 gatling-charts = { module = "io.gatling.highcharts:gatling-charts-highcharts", version.ref = "gatling" }
 
-jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 classgraph = { module = "io.github.classgraph:classgraph", version.ref = "classgraph" }
+picocli = { module = "info.picocli:picocli", version.ref = "picocli" }
 
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
