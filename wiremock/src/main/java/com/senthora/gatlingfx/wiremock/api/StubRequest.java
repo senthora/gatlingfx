@@ -2,7 +2,6 @@ package com.senthora.gatlingfx.wiremock.api;
 
 import com.senthora.gatlingfx.http.api.HttpHeader;
 import com.senthora.gatlingfx.http.api.HttpMethod;
-import com.senthora.gatlingfx.http.api.RequestHeader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +100,7 @@ public record StubRequest(HttpMethod method, UrlMatcher url, List<HttpHeader> he
      * Creates a JSON stub response.
      */
     public StubMapping willReturnJson(int status, String body) {
-        var header = HttpHeader.of(RequestHeader.CONTENT_TYPE, "application/json");
+        var header = HttpHeader.of("Content-Type", "application/json");
         var response = new StubResponse(status, body, List.of(header));
 
         return new StubMapping(this, response);
@@ -111,7 +110,7 @@ public record StubRequest(HttpMethod method, UrlMatcher url, List<HttpHeader> he
      * Creates a plain text stub response.
      */
     public StubMapping willReturnText(int status, String body) {
-        var header = HttpHeader.of(RequestHeader.CONTENT_TYPE, "text/plain");
+        var header = HttpHeader.of("Content-Type", "text/plain");
         var response = new StubResponse(status, body, List.of(header));
 
         return new StubMapping(this, response);

@@ -1,7 +1,5 @@
 package com.senthora.gatlingfx.wiremock.api;
 
-import com.senthora.gatlingfx.http.api.RequestHeader;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Map;
@@ -42,9 +40,9 @@ public record LoggedRequest(String url, Map<String, String> headers) {
      * @return optional containing the first matching header value,
      * or an empty optional if no matching header exists
      */
-    public Optional<String> header(RequestHeader header) {
+    public Optional<String> header(String header) {
         return headers.entrySet().stream()
-                .filter(e -> e.getKey().equalsIgnoreCase(header.headerName()))
+                .filter(e -> e.getKey().equalsIgnoreCase(header))
                 .map(Map.Entry::getValue)
                 .findFirst();
     }

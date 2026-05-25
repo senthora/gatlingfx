@@ -1,7 +1,5 @@
 package com.senthora.gatlingfx.wiremock.api;
 
-import com.senthora.gatlingfx.http.api.RequestHeader;
-
 import com.senthora.gatlingfx.support.TestHeaders;
 
 import org.junit.jupiter.api.DisplayName;
@@ -50,7 +48,7 @@ class LoggedRequestTest {
         @DisplayName("Should throw NullPointerException when header value is null")
         void should_ThrowNullPointerException_when_HeaderValueIsNull() {
             var headers = new HashMap<String, String>();
-            headers.put(RequestHeader.CONTENT_TYPE.headerName(), null);
+            headers.put("Content-Type", null);
 
             assertThatThrownBy(() -> new LoggedRequest("/requests", headers))
                     .isInstanceOf(NullPointerException.class);
@@ -59,16 +57,13 @@ class LoggedRequestTest {
         @Test
         @DisplayName("Should store immutable defensive copy of headers")
         void should_StoreImmutableDefensiveCopy_when_Constructed() {
-            var originalHeader = Map.entry(
-                    RequestHeader.CONTENT_TYPE.headerName(),
-                    "application/json"
-            );
+            var originalHeader = Map.entry("Content-Type", "application/json");
             var headers = new HashMap<String, String>();
             headers.put(originalHeader.getKey(), originalHeader.getValue());
 
             var loggedRequest = new LoggedRequest("/requests", headers);
 
-            headers.put(RequestHeader.AUTHORIZATION.headerName(), "Bearer token");
+            headers.put("Authorization", "Bearer token");
 
             assertThat(loggedRequest.headers()).containsExactly(originalHeader);
             assertThatThrownBy(() -> loggedRequest.headers().put("Accept", "application/json"))
@@ -86,8 +81,8 @@ class LoggedRequestTest {
             var headers = TestHeaders.authorizationHeaders();
             var loggedRequest = new LoggedRequest("/requests", headers);
 
-            assertThat(loggedRequest.header(RequestHeader.AUTHORIZATION))
-                    .contains("Bearer token");
+            var requestHeader = loggedRequest.header("Authorization");
+            assertThat(requestHeader).contains("Bearer token");
         }
 
         @Test
@@ -96,17 +91,17 @@ class LoggedRequestTest {
             var headers = TestHeaders.authorizationHeaders();
             var loggedRequest = new LoggedRequest("/requests", headers);
 
-            assertThat(loggedRequest.header(RequestHeader.AUTHORIZATION))
-                    .contains("Bearer token");
+            var requestHeader = loggedRequest.header("Authorization");
+            assertThat(requestHeader).contains("Bearer token");
         }
 
         @Test
         @DisplayName("Should return empty optional when header does not exist")
         void should_ReturnEmptyOptional_when_HeaderDoesNotExist() {
-            var headers = Map.of(RequestHeader.CONTENT_TYPE.headerName(), "application/json");
+            var headers = Map.of("Content-Type", "application/json");
             var loggedRequest = new LoggedRequest("/requests", headers);
 
-            assertThat(loggedRequest.header(RequestHeader.AUTHORIZATION)).isEmpty();
+            assertThat(loggedRequest.header("Authorization")).isEmpty();
         }
     }
 }

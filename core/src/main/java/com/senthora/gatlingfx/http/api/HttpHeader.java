@@ -33,8 +33,8 @@ public record HttpHeader(String name, String value) {
      *
      * @throws NullPointerException if {@code header} or {@code value} is null
      */
-    public static HttpHeader of(RequestHeader header, String value) {
+    public static HttpHeader of(String header, String value) {
         Objects.requireNonNull(header, "header must not be null");
-        return new HttpHeader(header.headerName(), value);
+        return new HttpHeader(header, value);
     }
 }

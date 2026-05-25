@@ -3,7 +3,6 @@ package com.senthora.gatlingfx.http.internal;
 import com.senthora.gatlingfx.http.api.SimpleHttpClient;
 import com.senthora.gatlingfx.http.api.HttpBaseUrl;
 import com.senthora.gatlingfx.http.api.HttpMethod;
-import com.senthora.gatlingfx.http.api.RequestHeader;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
@@ -80,8 +79,7 @@ public final class DefaultSimpleHttpClient implements SimpleHttpClient {
                 .POST(body);
 
         if (body.contentLength() > 0) {
-            var headerName = RequestHeader.CONTENT_TYPE.headerName();
-            builder.header(headerName, "application/json");
+            builder.header("Content-Type", "application/json");
         }
         var request = builder.build();
         return send(request, HttpMethod.POST);
