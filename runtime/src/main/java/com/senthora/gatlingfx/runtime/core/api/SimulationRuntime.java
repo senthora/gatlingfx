@@ -1,15 +1,17 @@
 package com.senthora.gatlingfx.runtime.core.api;
 
+import com.senthora.gatlingfx.simulation.api.BaseSimulation;
+
 import java.util.List;
 
 /**
  * Internal runtime responsible for
- * executing Gatling simulations inside the JVM.
+ * executing GatlingFx simulations inside the JVM.
  */
 public interface SimulationRuntime {
 
     /**
-     * Executes the provided Gatling simulations.
+     * Executes the provided GatlingFx simulations.
      * <p>
      * Simulation execution does not short-circuit when
      * individual simulations fail. All provided simulations
@@ -27,5 +29,5 @@ public interface SimulationRuntime {
      * @throws SimulationRuntimeException if an unexpected
      * failure occurs during simulation execution
      */
-    List<SimulationExecutionResult> execute(List<Class<?>> simulationClasses);
+    List<SimulationExecutionResult> execute(List<Class<? extends BaseSimulation>> simulationClasses);
 }

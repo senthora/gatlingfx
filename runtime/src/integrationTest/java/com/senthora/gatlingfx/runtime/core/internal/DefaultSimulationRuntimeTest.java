@@ -5,6 +5,7 @@ import com.senthora.gatlingfx.runtime.core.api.SimulationResult;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRuntimeException;
 import com.senthora.gatlingfx.runtime.core.internal.support.FailedSimulation;
 import com.senthora.gatlingfx.runtime.core.internal.support.SuccessfulSimulation;
+import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 import com.senthora.gatlingfx.support.MockWebServerTest;
 
 import okhttp3.mockwebserver.MockResponse;
@@ -55,7 +56,7 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
         var gatlingRunner = new DefaultGatlingRunner();
         var runtime = new DefaultSimulationRuntime(gatlingRunner);
 
-        List<Class<?>> simulationClasses = List.of(
+        List<Class<? extends BaseSimulation>> simulationClasses = List.of(
                 FailedSimulation.class,
                 SuccessfulSimulation.class
         );

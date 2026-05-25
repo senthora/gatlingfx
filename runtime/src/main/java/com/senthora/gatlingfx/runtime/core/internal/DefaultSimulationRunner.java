@@ -1,6 +1,7 @@
 package com.senthora.gatlingfx.runtime.core.internal;
 
 import com.senthora.gatlingfx.runtime.core.api.*;
+import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,12 +18,12 @@ public final class DefaultSimulationRunner implements SimulationRunner {
     }
 
     @Override
-    public SimulationRunResult run(Class<?> simulationClass) {
+    public SimulationRunResult run(Class<? extends BaseSimulation> simulationClass) {
         return run(List.of(simulationClass));
     }
 
     @Override
-    public SimulationRunResult run(List<Class<?>> simulationClasses) {
+    public SimulationRunResult run(List<Class<? extends BaseSimulation>> simulationClasses) {
         if (simulationClasses.isEmpty()) {
             return new DefaultSimulationRunResult(List.of());
         }

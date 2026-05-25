@@ -1,14 +1,13 @@
 package com.senthora.gatlingfx.runtime.core.internal.support;
 
+import com.senthora.gatlingfx.runtime.support.TestBaseSimulation;
 import com.senthora.gatlingfx.support.MockWebServerTest;
-
-import io.gatling.javaapi.core.Simulation;
 
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
-public final class SuccessfulSimulation extends Simulation {
+public final class SuccessfulSimulation extends TestBaseSimulation {
 
     public SuccessfulSimulation() {
         var baseUrl = MockWebServerTest.baseUrl();

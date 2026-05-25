@@ -2,6 +2,7 @@ package com.senthora.gatlingfx.runtime.engine;
 
 import com.senthora.gatlingfx.runtime.core.api.GatlingSimulation;
 import com.senthora.gatlingfx.runtime.core.api.SimulationScanner;
+import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 
 import org.junit.platform.engine.EngineDiscoveryRequest;
 import org.junit.platform.engine.UniqueId;
@@ -9,7 +10,7 @@ import org.junit.platform.engine.discovery.ClassSelector;
 
 /**
  * Internal utility that discovers
- * Gatling simulations and converts
+ * GatlingFx simulations and converts
  * them to JUnit test descriptors.
  */
 final class SimulationDiscovery {
@@ -17,7 +18,7 @@ final class SimulationDiscovery {
     private SimulationDiscovery() {}
 
     /**
-     * Discovers Gatling simulations and returns
+     * Discovers GatlingFx simulations and returns
      * the root JUnit engine descriptor that contains
      * all discovered simulation descriptors.
      *
@@ -52,11 +53,14 @@ final class SimulationDiscovery {
             UniqueId id,
             Class<?> simulationClass
     ) {
+        if (!BaseSimulation.class.isAssignableFrom(simulationClass)) {
+            return;
+        }
         var simulationId = id.append("simulation", simulationClass.getName());
 
         var simulationDescriptor = new SimulationDescriptor(
                 simulationId,
-                simulationClass
+                simulationClass.asSubclass(BaseSimulation.class)
         );
         engineDescriptor.addChild(simulationDescriptor);
     }

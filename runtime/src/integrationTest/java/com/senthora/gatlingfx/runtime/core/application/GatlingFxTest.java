@@ -4,6 +4,7 @@ import com.senthora.gatlingfx.runtime.core.api.SimulationRunResult;
 import com.senthora.gatlingfx.runtime.core.internal.support.SuccessfulSimulation;
 import com.senthora.gatlingfx.runtime.support.MockSimulationRunner;
 import com.senthora.gatlingfx.runtime.support.MockSimulationScanner;
+import com.senthora.gatlingfx.runtime.support.TestBaseSimulation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +40,7 @@ class GatlingFxTest {
 
         Mockito.when(result.success()).thenReturn(true);
 
-        var simulationClasses = List.of(
+        List<Class<?>> simulationClasses = List.of(
                 FirstSimulation.class,
                 SecondSimulation.class
         );
@@ -50,6 +51,6 @@ class GatlingFxTest {
         );
     }
 
-    static class FirstSimulation {}
-    static class SecondSimulation {}
+    static class FirstSimulation extends TestBaseSimulation {}
+    static class SecondSimulation extends TestBaseSimulation {}
 }

@@ -3,9 +3,12 @@ package com.senthora.gatlingfx.runtime.core.application;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRunResult;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRunner;
 import com.senthora.gatlingfx.runtime.core.api.SimulationScanner;
+import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 
-import io.gatling.javaapi.core.Simulation;
 import picocli.CommandLine;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * GatlingFx application entrypoint.
@@ -36,30 +39,38 @@ public final class GatlingFx {
 
         var simulationClassName = arguments.simulationClassName();
         if (simulationClassName.isPresent()) {
-            var simulationClass = resolveSimulationClass(simulationClassName.get());
-            result = runner.run(simulationClass);
+            var gatlingSimulation = resolveSimulationClass(simulationClassName.get());
+            result = runner.run(gatlingSimulation);
         }
         else {
             var simulationClasses = SimulationScanner.scan();
-            result = runner.run(simulationClasses);
+            result = runner.run(asSimulations(simulationClasses));
         }
         return result.success() ? 0 : 1;
     }
 
-    private static Class<? extends Simulation> resolveSimulationClass(String className) {
+    private static Class<? extends BaseSimulation> resolveSimulationClass(String className) {
         try {
-            var simulationClass = Class.forName(className);
-
-            if (!Simulation.class.isAssignableFrom(simulationClass)) {
-                var message = "Class is not a Gatling simulation: " + className;
-                throw new IllegalArgumentException(message);
-            }
-            return simulationClass.asSubclass(Simulation.class);
+            return asSimulation(Class.forName(className));
         }
         catch (ClassNotFoundException e) {
             var message = "Simulation class not found: " + className;
             throw new IllegalArgumentException(message, e);
         }
+    }
+
+    private static Class<? extends BaseSimulation> asSimulation(Class<?> clazz) {
+        if (!BaseSimulation.class.isAssignableFrom(clazz)) {
+            var message = "Class is not a GatlingFx simulation: " + clazz.getName();
+            throw new IllegalArgumentException(message);
+        }
+        return clazz.asSubclass(BaseSimulation.class);
+    }
+
+    private static List<Class<? extends BaseSimulation>> asSimulations(List<Class<?>> classes) {
+        return classes.stream()
+                .map(GatlingFx::asSimulation)
+                .collect(Collectors.toList());
     }
 
     private static GatlingFxArguments parseArgs(String[] args) {

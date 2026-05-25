@@ -3,14 +3,15 @@ package com.senthora.gatlingfx.runtime.core.api;
 import com.senthora.gatlingfx.runtime.core.internal.DefaultGatlingRunner;
 import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationRunner;
 import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationRuntime;
+import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 
 import java.util.List;
 
 /**
- * Executes Gatling simulations.
+ * Executes GatlingFx simulations.
  * <p>
  * The runner does not automatically discover
- * Gatling simulation classes. See {@link SimulationScanner}
+ * GatlingFx simulation classes. See {@link SimulationScanner}
  * for more information on discovering simulations
  * available on the runtime classpath.
  * <p>
@@ -34,28 +35,28 @@ public interface SimulationRunner {
     }
 
     /**
-     * Executes a single Gatling simulation.
+     * Executes a single GatlingFx simulation.
      *
      * @param simulationClass class of the simulation to run
-     * @return result of simulation execution
+     * @return result of executing the provided simulation
      *
      * @throws NullPointerException if {@code simulationClass} is null
      */
-    SimulationRunResult run(Class<?> simulationClass);
+    SimulationRunResult run(Class<? extends BaseSimulation> simulationClass);
 
     /**
-     * Executes multiple Gatling simulations.
+     * Executes multiple GatlingFx simulations.
      * <p>
      * <strong>API Note:</strong>
      * Simulation execution order is delegated
      * to Gatling and cannot be guaranteed.
      *
      * @param simulationClasses classes of simulations to run
-     * @return result of simulation executions,
+     * @return result of executing the provided simulations,
      * or an empty successful result if no simulations are provided
      *
      * @throws NullPointerException if {@code simulationClasses}
      * is null or contains null elements
      */
-    SimulationRunResult run(List<Class<?>> simulationClasses);
+    SimulationRunResult run(List<Class<? extends BaseSimulation>> simulationClasses);
 }

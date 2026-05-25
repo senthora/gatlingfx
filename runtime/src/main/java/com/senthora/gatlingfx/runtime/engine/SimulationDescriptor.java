@@ -1,16 +1,18 @@
 package com.senthora.gatlingfx.runtime.engine;
 
+import com.senthora.gatlingfx.simulation.api.BaseSimulation;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.platform.engine.UniqueId;
 import org.junit.platform.engine.support.descriptor.AbstractTestDescriptor;
 
 /**
  * JUnit test descriptor representing a single
- * Gatling simulation scheduled for execution.
+ * GatlingFx simulation scheduled for execution.
  */
 public final class SimulationDescriptor extends AbstractTestDescriptor {
 
-    private final Class<?> simulationClass;
+    private final Class<? extends BaseSimulation> simulationClass;
 
     /**
      * Creates a new simulation descriptor.
@@ -18,7 +20,7 @@ public final class SimulationDescriptor extends AbstractTestDescriptor {
      * @param id descriptor unique identifier
      * @param simulationClass simulation class represented by this descriptor
      */
-    public SimulationDescriptor(UniqueId id, Class<?> simulationClass) {
+    public SimulationDescriptor(UniqueId id, Class<? extends BaseSimulation> simulationClass) {
         super(id, displayName(simulationClass));
         this.simulationClass = simulationClass;
     }
@@ -27,7 +29,7 @@ public final class SimulationDescriptor extends AbstractTestDescriptor {
      * Returns the simulation class
      * represented by this descriptor.
      */
-    public Class<?> simulationClass() {
+    public Class<? extends BaseSimulation> simulationClass() {
         return simulationClass;
     }
 

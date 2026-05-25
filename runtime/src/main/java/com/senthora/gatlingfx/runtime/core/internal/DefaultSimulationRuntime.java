@@ -3,6 +3,7 @@ package com.senthora.gatlingfx.runtime.core.internal;
 import com.senthora.gatlingfx.runtime.core.api.SimulationExecutionResult;
 import com.senthora.gatlingfx.runtime.core.api.SimulationResult;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRuntime;
+import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 
 import io.gatling.app.RunResultProcessor;
 import io.gatling.app.Runner;
@@ -34,7 +35,9 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
     }
 
     @Override
-    public List<SimulationExecutionResult> execute(List<Class<?>> simulationClasses) {
+    public List<SimulationExecutionResult> execute(
+            List<Class<? extends BaseSimulation>> simulationClasses
+    ) {
         Objects.requireNonNull(simulationClasses, "simulationClasses must not be null");
         List<SimulationExecutionResult> results = new ArrayList<>();
 
