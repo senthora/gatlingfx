@@ -1,3 +1,28 @@
 dependencies {
     implementation project(':core')
+
+    testImplementation(testFixtures(project(':core')))
+
+    testImplementation platform(libs.junit.bom)
+    testImplementation libs.junit.jupiter
+    testRuntimeOnly libs.junit.platform.launcher
+
+    testImplementation libs.assertj.core
+}
+
+testing {
+    suites {
+        integrationTest(JvmTestSuite) {
+            dependencies {
+                implementation projects.runtime
+                implementation projects.proxy
+
+                implementation testFixtures(project(':core'))
+
+                implementation platform(libs.junit.bom)
+                implementation libs.junit.jupiter
+                implementation libs.assertj.core
+            }
+        }
+    }
 }

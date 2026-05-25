@@ -2,6 +2,13 @@ dependencies {
     implementation project(':core')
 
     testImplementation(testFixtures(project(':core')))
+
+    testImplementation platform(libs.junit.bom)
+    testImplementation libs.junit.jupiter
+    testRuntimeOnly libs.junit.platform.launcher
+
+    testImplementation libs.assertj.core
+
     testImplementation platform(libs.mockito.bom)
     testImplementation libs.mockito.core
 }

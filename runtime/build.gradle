@@ -11,14 +11,27 @@ dependencies {
     implementation libs.gatling.app
     implementation libs.gatling.charts
     implementation "io.gatling.highcharts:gatling-charts-highcharts:3.15.0"
+
+    testImplementation platform(libs.junit.bom)
+    testImplementation libs.junit.jupiter
+    testRuntimeOnly libs.junit.platform.launcher
+
+    testImplementation libs.assertj.core
 }
 
 testing {
     suites {
         integrationTest(JvmTestSuite) {
             dependencies {
-                implementation libs.junit.platform.testkit
+                implementation projects.runtime
+                implementation testFixtures(project(':core'))
+
                 implementation libs.gatling.app
+
+                implementation platform(libs.junit.bom)
+                implementation libs.junit.platform.testkit
+
+                implementation libs.assertj.core
 
                 implementation platform(libs.mockito.bom)
                 implementation libs.mockito.core

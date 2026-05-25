@@ -6,10 +6,32 @@ dependencies {
     api libs.gatling.core
     api libs.gatling.http
 
+    testImplementation platform(libs.junit.bom)
+    testImplementation libs.junit.jupiter
+    testRuntimeOnly libs.junit.platform.launcher
+
+    testImplementation libs.assertj.core
+
     testImplementation platform(libs.mockito.bom)
     testImplementation libs.mockito.core
 
     testFixturesApi libs.mockwebserver
     testFixturesImplementation platform(libs.junit.bom)
     testFixturesImplementation libs.junit.jupiter.api
+}
+
+testing {
+    suites {
+        integrationTest(JvmTestSuite) {
+            dependencies {
+                implementation projects.runtime
+
+                implementation testFixtures(project(':core'))
+
+                implementation platform(libs.junit.bom)
+                implementation libs.junit.jupiter
+                implementation libs.assertj.core
+            }
+        }
+    }
 }

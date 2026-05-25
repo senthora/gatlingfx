@@ -51,16 +51,6 @@ subprojects {
     testing {
         suites {
             integrationTest(JvmTestSuite) {
-                dependencies {
-                    implementation projects.core
-                    implementation projects.runtime
-
-                    implementation testFixtures(project(':core'))
-
-                    implementation platform(libs.junit.bom)
-                    implementation libs.junit.jupiter
-                    implementation libs.assertj.core
-                }
                 targets {
                     all {
                         testTask.configure {
@@ -71,14 +61,6 @@ subprojects {
                 }
             }
         }
-    }
-
-    dependencies {
-        testImplementation platform(libs.junit.bom)
-        testImplementation libs.junit.jupiter
-        testRuntimeOnly libs.junit.platform.launcher
-
-        testImplementation libs.assertj.core
     }
 }
 
