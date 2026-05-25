@@ -4,10 +4,61 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class XForwardedForTest {
+
+    @Nested
+    @DisplayName("constructor")
+    class ConstructorTests {
+
+        @Test
+        @SuppressWarnings("DataFlowIssue")
+        @DisplayName("Should throw NullPointerException when chain is null")
+        void should_ThrowNullPointerException_when_ChainIsNull() {
+            assertThatThrownBy(() -> new XForwardedFor(null))
+                    .isInstanceOf(NullPointerException.class);
+        }
+
+        @Test
+        @SuppressWarnings("DataFlowIssue")
+        @DisplayName("Should throw NullPointerException when chain entry is null")
+        void should_ThrowNullPointerException_when_ChainEntryIsNull() {
+            assertThatThrownBy(() -> new XForwardedFor(List.of("192.168.0.1", null)))
+                    .isInstanceOf(NullPointerException.class);
+        }
+
+        @Test
+        @DisplayName("Should throw IllegalArgumentException when chain entry is blank")
+        void should_ThrowIllegalArgumentException_when_ChainEntryIsBlank() {
+            assertThatThrownBy(() -> new XForwardedFor(List.of("192.168.0.1", " ")))
+                    .isInstanceOf(IllegalArgumentException.class);
+        }
+
+        @Test
+        @DisplayName("Should store defensive copy when forwarding chain is created")
+        void should_StoreDefensiveCopy_when_ForwardingChainIsCreated() {
+            var chain = new ArrayList<>(List.of("192.168.0.1"));
+            var forwardedFor = new XForwardedFor(chain);
+
+            chain.add("10.0.0.1");
+
+            assertThat(forwardedFor.chain()).containsExactly("192.168.0.1");
+        }
+
+        @Test
+        @DisplayName("Should return immutable chain when chain is accessed")
+        void should_ReturnImmutableChain_when_ChainIsAccessed() {
+            var forwardedFor = new XForwardedFor(List.of("192.168.0.1"));
+
+            assertThatThrownBy(() -> forwardedFor.chain().add("10.0.0.1"))
+                    .isInstanceOf(UnsupportedOperationException.class);
+        }
+    }
 
     @Nested
     @DisplayName("of")
@@ -49,6 +100,40 @@ class XForwardedForTest {
                     "10.0.0.1",
                     "172.16.0.1"
             );
+        }
+    }
+
+    @Nested
+    @DisplayName("first")
+    class FirstMethodTests {
+
+        @Test
+        @DisplayName("Should return first address in forwarding chain")
+        void should_ReturnFirstAddress_when_FirstAddressIsRequested() {
+            var forwardedFor = XForwardedFor.of(
+                    "192.168.0.1",
+                    "10.0.0.1",
+                    "172.16.0.1"
+            );
+            var first = forwardedFor.first();
+            assertThat(first).isEqualTo("192.168.0.1");
+        }
+    }
+
+    @Nested
+    @DisplayName("last")
+    class LastMethodTests {
+
+        @Test
+        @DisplayName("Should return last address in forwarding chain")
+        void should_ReturnLastAddress_when_LastAddressIsRequested() {
+            var forwardedFor = XForwardedFor.of(
+                    "192.168.0.1",
+                    "10.0.0.1",
+                    "172.16.0.1"
+            );
+            var last = forwardedFor.last();
+            assertThat(last).isEqualTo("172.16.0.1");
         }
     }
 
