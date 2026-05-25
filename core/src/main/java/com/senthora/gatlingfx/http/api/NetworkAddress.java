@@ -53,13 +53,8 @@ public record NetworkAddress(String host, int port) {
         return new NetworkAddress("localhost", port);
     }
 
-    /**
-     * Returns the address in
-     * {@code host:port} format.
-     *
-     * @return formatted network address
-     */
-    public String value() {
+    @Override
+    public String toString() {
         return host + ':' + port;
     }
 }

@@ -13,10 +13,8 @@ public enum HttpScheme {
         this.value = value;
     }
 
-    /**
-     * Returns the raw scheme value.
-     */
-    public String value() {
+    @Override
+    public String toString() {
         return value;
     }
 }

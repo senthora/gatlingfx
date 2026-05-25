@@ -103,17 +103,4 @@ class NetworkAddressTest {
                     .isInstanceOf(IllegalArgumentException.class);
         }
     }
-
-    @Nested
-    @DisplayName("value")
-    class ValueMethodTests {
-
-        @Test
-        @DisplayName("Should return formatted address when value is requested")
-        void should_ReturnFormattedAddress_when_ValueIsRequested() {
-            var address = new NetworkAddress("localhost", 8080);
-
-            assertThat(address.value()).isEqualTo("localhost:8080");
-        }
-    }
 }

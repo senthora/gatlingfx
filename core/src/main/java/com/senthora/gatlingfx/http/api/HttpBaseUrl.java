@@ -80,6 +80,6 @@ public record HttpBaseUrl(HttpScheme scheme, NetworkAddress address) {
 
     @Override
     public String toString() {
-        return scheme.value() + "://" + address.value();
+        return scheme + "://" + address;
     }
 }
