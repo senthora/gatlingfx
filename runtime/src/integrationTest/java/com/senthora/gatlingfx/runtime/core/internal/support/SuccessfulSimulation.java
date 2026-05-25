@@ -17,7 +17,7 @@ public final class SuccessfulSimulation extends Simulation {
                         .check(status().is(200)));
 
         setUp(scenario.injectOpen(atOnceUsers(1)))
-                .protocols(http.baseUrl(baseUrl.value()))
+                .protocols(http.baseUrl(baseUrl.asString()))
                 .assertions(global().failedRequests().count().is(0L));
     }
 }

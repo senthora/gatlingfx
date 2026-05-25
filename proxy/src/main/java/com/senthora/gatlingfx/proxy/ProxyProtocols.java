@@ -45,6 +45,6 @@ public final class ProxyProtocols {
     ) {
         return SimulationProtocol.create()
                 .baseUrl(HttpBaseUrl.of(scheme, proxy.address()))
-                .header(TARGET_HEADER, upstream.value());
+                .header(TARGET_HEADER, upstream.asString());
     }
 }

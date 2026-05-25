@@ -13,6 +13,6 @@ public final class DefaultHttpProtocolFactory implements HttpProtocolFactory {
 
     @Override
     public HttpProtocolBuilder baseUrl(HttpBaseUrl baseUrl) {
-        return http.baseUrl(baseUrl.value());
+        return http.baseUrl(baseUrl.asString());
     }
 }

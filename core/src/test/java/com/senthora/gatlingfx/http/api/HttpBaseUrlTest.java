@@ -104,7 +104,7 @@ class HttpBaseUrlTest {
             var baseUrl = HttpBaseUrl.of(HttpScheme.HTTP, address);
 
             var expected = "http://localhost:8080";
-            assertThat(baseUrl.value()).isEqualTo(expected);
+            assertThat(baseUrl.asString()).isEqualTo(expected);
         }
     }
 

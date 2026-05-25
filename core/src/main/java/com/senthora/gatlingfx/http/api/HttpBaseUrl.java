@@ -67,14 +67,19 @@ public record HttpBaseUrl(HttpScheme scheme, NetworkAddress address) {
         if (!path.startsWith("/")) {
             path = '/' + path;
         }
-        return URI.create(value() + path);
+        return URI.create(toString()).resolve(path);
     }
 
     /**
      * Returns the base URL in
      * {@code scheme://host:port} format.
      */
-    public String value() {
+    public String asString() {
+        return toString();
+    }
+
+    @Override
+    public String toString() {
         return scheme.value() + "://" + address.value();
     }
 }
