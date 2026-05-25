@@ -1,7 +1,6 @@
 package com.senthora.gatlingfx.simulation.api;
 
 import com.senthora.gatlingfx.http.api.HttpBaseUrl;
-import com.senthora.gatlingfx.http.api.HttpHost;
 import com.senthora.gatlingfx.http.api.HttpScheme;
 
 import com.senthora.gatlingfx.simulation.internal.HttpProtocolFactory;
@@ -11,10 +10,8 @@ import org.mockito.Mockito;
 
 final class SimulationProtocolFixtures {
 
-    static final HttpBaseUrl EXAMPLE_URL = HttpBaseUrl.of(
-            HttpScheme.HTTPS,
-            HttpHost.of("example.com")
-    );
+    static final HttpBaseUrl EXAMPLE_URL =
+            HttpBaseUrl.of(HttpScheme.HTTPS, "example.com");
 
     private SimulationProtocolFixtures() {}
 

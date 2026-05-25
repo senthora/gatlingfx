@@ -9,7 +9,7 @@ import java.util.Objects;
 public record HttpBaseUrl(HttpScheme scheme, NetworkAddress address) {
 
     public static final HttpBaseUrl LOCALHOST =
-            HttpBaseUrl.of(HttpScheme.HTTP, HttpHost.LOCALHOST);
+            HttpBaseUrl.of(HttpScheme.HTTP, "localhost");
 
     /**
      * Creates a new HTTP base URL.
@@ -45,7 +45,7 @@ public record HttpBaseUrl(HttpScheme scheme, NetworkAddress address) {
      *
      * @throws NullPointerException if {@code scheme} or {@code host} is null
      */
-    public static HttpBaseUrl of(HttpScheme scheme, HttpHost host) {
+    public static HttpBaseUrl of(HttpScheme scheme, String host) {
         var port = switch (scheme) {
             case HTTP -> 80;
             case HTTPS -> 443;

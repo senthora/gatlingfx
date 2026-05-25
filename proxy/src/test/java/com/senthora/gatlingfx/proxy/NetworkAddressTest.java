@@ -1,6 +1,5 @@
 package com.senthora.gatlingfx.proxy;
 
-import com.senthora.gatlingfx.http.api.HttpHost;
 import com.senthora.gatlingfx.http.api.NetworkAddress;
 
 import org.junit.jupiter.api.DisplayName;
@@ -22,23 +21,23 @@ class NetworkAddressTest {
     @Test
     @DisplayName("Should throw IllegalArgumentException when port is not positive")
     void should_ThrowIllegalArgumentException_when_PortIsNotPositive() {
-        assertThatThrownBy(() -> new NetworkAddress(HttpHost.LOCALHOST, 0))
+        assertThatThrownBy(() -> new NetworkAddress("localhost", 0))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("Should return provided host and port when network address is created")
     void should_ReturnProvidedHostAndPort_when_NetworkAddressIsCreated() {
-        var address = new NetworkAddress(HttpHost.LOCALHOST, 8080);
+        var address = new NetworkAddress("localhost", 8080);
 
-        assertThat(address.host()).isEqualTo(HttpHost.LOCALHOST);
+        assertThat(address.host()).isEqualTo("localhost");
         assertThat(address.port()).isEqualTo(8080);
     }
 
     @Test
     @DisplayName("Should return formatted address when value is requested")
     void should_ReturnFormattedAddress_when_ValueIsRequested() {
-        var address = new NetworkAddress(HttpHost.LOCALHOST, 8080);
+        var address = new NetworkAddress("localhost", 8080);
 
         assertThat(address.value()).isEqualTo("localhost:8080");
     }
@@ -46,9 +45,9 @@ class NetworkAddressTest {
     @Test
     @DisplayName("Should return network address with provided host and port when arguments are valid")
     void should_ReturnNetworkAddressWithProvidedHostAndPort_when_ArgumentsAreValid() {
-        var address = new NetworkAddress(HttpHost.LOCALHOST, 8080);
+        var address = new NetworkAddress("localhost", 8080);
 
-        assertThat(address.host()).isEqualTo(HttpHost.LOCALHOST);
+        assertThat(address.host()).isEqualTo("localhost");
         assertThat(address.port()).isEqualTo(8080);
     }
 }

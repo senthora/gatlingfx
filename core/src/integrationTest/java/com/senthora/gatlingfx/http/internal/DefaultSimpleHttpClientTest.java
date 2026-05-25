@@ -80,7 +80,7 @@ class DefaultSimpleHttpClientTest extends MockWebServerTest {
         @Test
         @DisplayName("Should throw HttpClientNetworkException when request execution fails")
         void should_ThrowHttpClientNetworkException_when_RequestExecutionFails() {
-            var address = new NetworkAddress(HttpHost.LOCALHOST, 9999);
+            var address = new NetworkAddress("localhost", 9999);
             var baseUrl = HttpBaseUrl.of(HttpScheme.HTTP, address);
 
             var client = SimpleHttpClient.create(baseUrl);

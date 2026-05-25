@@ -1,7 +1,6 @@
 package com.senthora.gatlingfx.proxy.support;
 
 import com.senthora.gatlingfx.http.api.HttpBaseUrl;
-import com.senthora.gatlingfx.http.api.HttpHost;
 import com.senthora.gatlingfx.http.api.HttpScheme;
 import com.senthora.gatlingfx.http.api.NetworkAddress;
 import com.senthora.gatlingfx.proxy.ProxyServer;
@@ -16,13 +15,13 @@ public final class ProxyFixtures {
      * Default local HTTP proxy server.
      */
     public static final ProxyServer HTTP_PROXY =
-            ProxyServer.of(new NetworkAddress(HttpHost.LOCALHOST, 8080));
+            ProxyServer.of(new NetworkAddress("localhost", 8080));
 
     /**
      * Default local HTTPS proxy server.
      */
     public static final ProxyServer HTTPS_PROXY =
-            ProxyServer.of(new NetworkAddress(HttpHost.LOCALHOST, 8443));
+            ProxyServer.of(new NetworkAddress("localhost", 8443));
 
     /**
      * Coffee upstream target used for

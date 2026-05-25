@@ -19,7 +19,7 @@ class HttpBaseUrlTest {
         @SuppressWarnings("DataFlowIssue")
         @DisplayName("Should throw NullPointerException when scheme is null")
         void should_ThrowNullPointerException_when_SchemeIsNull() {
-            NetworkAddress address = new NetworkAddress(HttpHost.LOCALHOST, 8080);
+            NetworkAddress address = new NetworkAddress("localhost", 8080);
 
             assertThatThrownBy(() -> new HttpBaseUrl(null, address))
                     .isInstanceOf(NullPointerException.class);
@@ -38,13 +38,11 @@ class HttpBaseUrlTest {
     @DisplayName("of")
     class OfMethodTests {
 
-        private static final HttpHost EXAMPLE_HOST = HttpHost.of("example.com");
-
         @Test
         @DisplayName("Should create base URL from provided scheme and address")
         void should_CreateBaseUrl_when_ValidArgumentsAreProvided() {
             var scheme = HttpScheme.HTTP;
-            var address = new NetworkAddress(HttpHost.LOCALHOST, 8080);
+            var address = new NetworkAddress("localhost", 8080);
 
             var result = HttpBaseUrl.of(scheme, address);
 
@@ -56,7 +54,7 @@ class HttpBaseUrlTest {
         @SuppressWarnings("DataFlowIssue")
         @DisplayName("Should throw NullPointerException when scheme is null")
         void should_ThrowNullPointerException_when_SchemeIsNull() {
-            assertThatThrownBy(() -> HttpBaseUrl.of(null, EXAMPLE_HOST))
+            assertThatThrownBy(() -> HttpBaseUrl.of(null, "example.com"))
                     .isInstanceOf(NullPointerException.class);
         }
 
@@ -73,9 +71,9 @@ class HttpBaseUrlTest {
         void should_CreateBaseUrlUsingHttpDefaultPort_when_SchemeIsHttp() {
             var expected = new HttpBaseUrl(
                     HttpScheme.HTTP,
-                    new NetworkAddress(EXAMPLE_HOST, 80)
+                    new NetworkAddress("example.com", 80)
             );
-            var actual = HttpBaseUrl.of(HttpScheme.HTTP, EXAMPLE_HOST);
+            var actual = HttpBaseUrl.of(HttpScheme.HTTP, "example.com");
 
             assertThat(actual).isEqualTo(expected);
         }
@@ -85,9 +83,9 @@ class HttpBaseUrlTest {
         void should_CreateBaseUrlUsingHttpsDefaultPort_when_SchemeIsHttps() {
             var expected = new HttpBaseUrl(
                     HttpScheme.HTTPS,
-                    new NetworkAddress(EXAMPLE_HOST, 443)
+                    new NetworkAddress("example.com", 443)
             );
-            var actual = HttpBaseUrl.of(HttpScheme.HTTPS, EXAMPLE_HOST);
+            var actual = HttpBaseUrl.of(HttpScheme.HTTPS, "example.com");
 
             assertThat(actual).isEqualTo(expected);
         }
@@ -100,7 +98,7 @@ class HttpBaseUrlTest {
         @Test
         @DisplayName("Should return URL in scheme host and port format")
         void should_ReturnUrlInSchemeHostAndPortFormat_when_Invoked() {
-            var address = new NetworkAddress(HttpHost.LOCALHOST, 8080);
+            var address = new NetworkAddress("localhost", 8080);
             var baseUrl = HttpBaseUrl.of(HttpScheme.HTTP, address);
 
             var expected = "http://localhost:8080";
@@ -115,7 +113,7 @@ class HttpBaseUrlTest {
         @Test
         @DisplayName("Should create URI using provided path")
         void should_CreateUriUsingProvidedPath_when_PathStartsWithSlash() {
-            var address = new NetworkAddress(HttpHost.LOCALHOST, 8080);
+            var address = new NetworkAddress("localhost", 8080);
             var baseUrl = HttpBaseUrl.of(HttpScheme.HTTP, address);
 
             var expected = URI.create("http://localhost:8080/users");
@@ -125,7 +123,7 @@ class HttpBaseUrlTest {
         @Test
         @DisplayName("Should normalize path when leading slash is missing")
         void should_NormalizePath_when_LeadingSlashIsMissing() {
-            var address = new NetworkAddress(HttpHost.LOCALHOST, 8080);
+            var address = new NetworkAddress("localhost", 8080);
             var baseUrl = HttpBaseUrl.of(HttpScheme.HTTP, address);
 
             var expected = URI.create("http://localhost:8080/users");

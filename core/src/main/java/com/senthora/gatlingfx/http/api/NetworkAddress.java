@@ -9,7 +9,7 @@ import java.util.Objects;
  * routable TCP endpoints such as proxy servers,
  * upstream targets, and backend services.
  */
-public record NetworkAddress(HttpHost host, int port) {
+public record NetworkAddress(String host, int port) {
 
     /**
      * Creates a new network address.
@@ -37,7 +37,7 @@ public record NetworkAddress(HttpHost host, int port) {
      * @throws IllegalArgumentException if {@code port} is not positive
      */
     public static NetworkAddress of(String host, int port) {
-        return new NetworkAddress(HttpHost.of(host), port);
+        return new NetworkAddress(host, port);
     }
 
     /**
@@ -47,6 +47,6 @@ public record NetworkAddress(HttpHost host, int port) {
      * @return formatted network address
      */
     public String value() {
-        return host.value() + ':' + port;
+        return host + ':' + port;
     }
 }
