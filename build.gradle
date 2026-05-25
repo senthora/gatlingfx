@@ -95,3 +95,16 @@ tasks.register('jacocoTestReport', JacocoReport) {
 tasks.named('clean') {
     delete layout.buildDirectory
 }
+
+tasks.register("gatlingFx", JavaExec) {
+    group = "verification"
+    description = "Runs GatlingFx simulations"
+
+    classpath = files(rootProject.subprojects.collect { project ->
+            project.sourceSets.integrationTest.runtimeClasspath
+        }
+    )
+    mainClass = "com.senthora.gatlingfx.runtime.core.application.GatlingFx"
+
+    jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
+}
