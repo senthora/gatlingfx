@@ -1,12 +1,8 @@
-compose-base := "./docker-compose.yml"
-compose-proxy := "./proxy/docker-compose.yml"
+compose-core := "./core/compose.test.yml"
+compose-proxy := "./proxy/compose.yml:./proxy/compose.test.yml"
+compose-file := compose-core + ":" + compose-proxy
 
-# Execute docker compose using base topology
+# Execute gatlingfx docker compose command
 compose +args:
-    COMPOSE_FILE={{compose-base}}
-    docker compose {{args}}
-
-# Execute docker compose using proxy topology
-compose-proxy +args:
-    COMPOSE_FILE={{compose-proxy}} \
-    just compose {{args}}
+    COMPOSE_FILE={{compose-file}} \
+    docker compose -p gatlingfx {{args}}
