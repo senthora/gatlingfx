@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class GatlingFxTest {
 
@@ -24,13 +25,14 @@ class GatlingFxTest {
 
         Mockito.when(result.success()).thenReturn(true);
 
-        MockSimulationRunner.with(result, () -> {
-            var args = new String[] {
+        Runnable runnable = () -> {
+            var args = new String[]{
                     GatlingFxArguments.SIMULATION,
                     SuccessfulSimulation.class.getName()
             };
             assertThat(GatlingFx.run(args)).isZero();
-        });
+        };
+        MockSimulationRunner.with(result, runnable);
     }
 
     @Test
@@ -44,13 +46,99 @@ class GatlingFxTest {
                 FirstSimulation.class,
                 SecondSimulation.class
         );
-        MockSimulationScanner.with(simulationClasses, () ->
-            MockSimulationRunner.with(result, () ->
+        withMockedRuntime(simulationClasses, result, () ->
                 assertThat(GatlingFx.run(new String[0])).isZero()
-            )
+        );
+    }
+
+    @Test
+    @DisplayName("Should throw IllegalArgumentException when simulation class does not exist")
+    void should_ThrowIllegalArgumentException_when_SimulationClassDoesNotExist() {
+        var result = Mockito.mock(SimulationRunResult.class);
+
+        Mockito.when(result.success()).thenReturn(true);
+
+        Runnable runnable = () -> {
+            var args = new String[]{
+                    GatlingFxArguments.SIMULATION,
+                    "com.example.MissingSimulation"
+            };
+            assertThatThrownBy(() -> GatlingFx.run(args))
+                    .isInstanceOf(IllegalArgumentException.class);
+        };
+        MockSimulationRunner.with(result, runnable);
+    }
+
+    @Test
+    @DisplayName("Should throw IllegalArgumentException when class is not GatlingFx simulation")
+    void should_ThrowIllegalArgumentException_when_ClassIsNotGatlingFxSimulation() {
+        var result = Mockito.mock(SimulationRunResult.class);
+
+        Mockito.when(result.success()).thenReturn(true);
+
+        Runnable runnable = () -> {
+            var args = new String[]{
+                    GatlingFxArguments.SIMULATION,
+                    Object.class.getName()
+            };
+            assertThatThrownBy(() -> GatlingFx.run(args))
+                    .isInstanceOf(IllegalArgumentException.class);
+        };
+        MockSimulationRunner.with(result, runnable);
+    }
+
+    @Test
+    @DisplayName("Should throw IllegalArgumentException when discovered class is not GatlingFx simulation")
+    void should_ThrowIllegalArgumentException_when_DiscoveredClassIsNotGatlingFxSimulation() {
+        var result = Mockito.mock(SimulationRunResult.class);
+
+        Mockito.when(result.success()).thenReturn(true);
+
+        List<Class<?>> simulationClasses = List.of(Object.class);
+
+        withMockedRuntime(simulationClasses, result, () ->
+                assertThatThrownBy(() -> GatlingFx.run(new String[0]))
+                        .isInstanceOf(IllegalArgumentException.class)
+        );
+    }
+
+    @Test
+    @DisplayName("Should return non-zero exit code when simulation execution fails")
+    void should_ReturnNonZeroExitCode_when_SimulationExecutionFails() {
+        var result = Mockito.mock(SimulationRunResult.class);
+
+        Mockito.when(result.success()).thenReturn(false);
+
+        List<Class<?>> simulationClasses = List.of(SuccessfulSimulation.class);
+
+        withMockedRuntime(simulationClasses, result, () ->
+                assertThat(GatlingFx.run(new String[0])).isEqualTo(1)
+        );
+    }
+
+    @Test
+    @DisplayName("Should return zero exit code when no simulations are discovered")
+    void should_ReturnZeroExitCode_when_NoSimulationsAreDiscovered() {
+        var result = Mockito.mock(SimulationRunResult.class);
+
+        Mockito.when(result.success()).thenReturn(true);
+
+        withMockedRuntime(List.of(), result, () ->
+                assertThat(GatlingFx.run(new String[0])).isZero()
+        );
+    }
+
+    private static void withMockedRuntime(
+            List<Class<?>> simulationClasses,
+            SimulationRunResult result,
+            Runnable executable
+    ) {
+        MockSimulationScanner.with(simulationClasses, () ->
+                MockSimulationRunner.with(result, executable)
         );
     }
 
     static class FirstSimulation extends TestBaseSimulation {}
+
     static class SecondSimulation extends TestBaseSimulation {}
 }

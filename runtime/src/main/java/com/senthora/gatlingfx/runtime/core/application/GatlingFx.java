@@ -27,10 +27,24 @@ public final class GatlingFx {
     //      - fail-fast on first simulation fail (--fail-fast flag)
     private GatlingFx() {}
 
+    /**
+     * Executes GatlingFx simulations and terminates
+     * JVM using the resulting process exit code.
+     */
     public static void main(String[] args) {
         System.exit(run(args));
     }
 
+    /**
+     * Executes GatlingFx simulations using
+     * the provided command-line arguments.
+     *
+     * @param args command-line arguments
+     *
+     * @return process exit code
+     * @throws IllegalArgumentException if the requested simulation
+     * class does not exist or is not a valid GatlingFx simulation
+     */
     static int run(String[] args) {
         GatlingFxArguments arguments = parseArgs(args);
         SimulationRunner runner = SimulationRunner.create();

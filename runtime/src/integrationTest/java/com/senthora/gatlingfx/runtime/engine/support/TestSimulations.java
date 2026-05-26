@@ -14,5 +14,7 @@ public final class TestSimulations {
     @GatlingSimulation
     public static class FailedSimulation extends TestBaseSimulation {}
 
-    public static class NonSimulation extends TestBaseSimulation {}
+    public static class NonAnnotatedSimulation extends TestBaseSimulation {}
+
+    public static class NonSimulation {}
 }

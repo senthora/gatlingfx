@@ -1,6 +1,7 @@
 package com.senthora.gatlingfx.runtime.engine;
 
-import com.senthora.gatlingfx.runtime.engine.support.*;
+import com.senthora.gatlingfx.runtime.engine.support.GatlingFxEngineKit;
+import com.senthora.gatlingfx.runtime.engine.support.TestSimulations;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ class SimulationDiscoveryTest {
     void should_IgnoreNonAnnotatedClasses_when_ClassSelectorsAreProvided() {
         List<Class<?>> selection = List.of(
                 TestSimulations.SuccessfulSimulation.class,
-                TestSimulations.NonSimulation.class
+                TestSimulations.NonAnnotatedSimulation.class
         );
         var descriptor = GatlingFxEngineKit.engine()
                 .select(selection)
@@ -67,5 +68,22 @@ class SimulationDiscoveryTest {
                 .getEngineDescriptor();
 
         assertThat(descriptor.getChildren()).isNotEmpty();
+    }
+
+    @Test
+    @DisplayName("Should ignore non-GatlingFx simulations when discovered")
+    void should_IgnoreNonGatlingFxSimulations_when_Discovered() {
+        List<Class<?>> selection = List.of(
+                TestSimulations.SuccessfulSimulation.class,
+                TestSimulations.NonSimulation.class
+        );
+        var descriptor = GatlingFxEngineKit.engine()
+                .select(selection)
+                .discover()
+                .getEngineDescriptor();
+
+        assertThat(descriptor.getChildren())
+                .extracting(TestDescriptor::getDisplayName)
+                .containsExactly("SuccessfulSimulation");
     }
 }
