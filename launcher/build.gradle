@@ -1,0 +1,29 @@
+plugins {
+    id 'application'
+}
+
+configurations {
+    integrationTestRuntimeElements {
+        canBeConsumed = true
+        canBeResolved = false
+    }
+}
+
+dependencies {
+    implementation project(':runtime')
+
+    [':core', ':proxy'].each {
+        runtimeOnly project(
+                path: it,
+                configuration: 'integrationTestRuntimeElements'
+        )
+    }
+}
+
+application {
+    mainClass = 'com.senthora.gatlingfx.runtime.core.application.GatlingFx'
+}
+
+tasks.named('run', JavaExec) {
+    jvmArgs '--add-opens=java.base/java.lang=ALL-UNNAMED'
+}
