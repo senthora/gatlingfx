@@ -36,6 +36,9 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v6
 
+      - name: Install just
+        uses: extractions/setup-just@v4
+
       - name: Build Java modules
         run: ./gradlew build -x test -x integrationTest
 
