@@ -33,6 +33,9 @@ subprojects {
     tasks.withType(Test).configureEach {
         useJUnitPlatform()
 
+        if (name == "integrationTest") {
+            outputs.upToDateWhen { false }
+        }
         testLogging {
             events "passed", "skipped", "failed"
             showStandardStreams = true
