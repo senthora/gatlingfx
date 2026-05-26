@@ -36,8 +36,25 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v6
 
-      - name: Build
+      - name: Build Java modules
         run: ./gradlew build -x test -x integrationTest
 
-      - name: Run tests
-        run: ./gradlew test integrationTest
+      - name: Run unit tests
+        run: ./gradlew test
+
+      - name: Build docker images
+        run: just compose build
+
+      - name: Start compose services
+        run: just compose up -d
+
+      - name: Run integration tests
+        run: ./gradlew integrationTest -x test
+
+      - name: Print compose logs
+        if: always()
+        run: just compose logs --tail=500 --no-color || true
+
+      - name: Stop compose services
+        if: always()
+        run: docker compose down
