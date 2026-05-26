@@ -1,7 +1,9 @@
 package com.senthora.gatlingfx.runtime.core.internal;
 
+import com.senthora.gatlingfx.runtime.core.api.SimulationDiscoveryResult;
 import com.senthora.gatlingfx.runtime.core.internal.support.TestSimulations;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -9,17 +11,43 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ClasspathSimulationScannerTest {
 
-    @Test
-    @DisplayName("Should return annotated simulations when simulations exist")
-    void should_ReturnAnnotatedSimulations_when_SimulationsExist() {
-        assertThat(ClasspathSimulationScanner.scan())
-                .contains(TestSimulations.AnnotatedSimulation.class);
+    private static SimulationDiscoveryResult result;
+
+    @BeforeAll
+    static void setupClasspathSimulationScannerTest() {
+        result = ClasspathSimulationScanner.scan();
     }
 
     @Test
-    @DisplayName("Should exclude non-annotated classes when scanning classpath")
-    void should_ExcludeNonAnnotatedClasses_when_ScanningClasspath() {
-        assertThat(ClasspathSimulationScanner.scan())
-                .doesNotContain(TestSimulations.StandardSimulation.class);
+    @DisplayName("Should return supported simulations when annotated GatlingFx simulations exist")
+    void should_ReturnSupportedSimulations_when_AnnotatedGatlingFxSimulationsExist() {
+        assertThat(result.supported()).contains(
+                TestSimulations.SupportedSimulation.class
+        );
+    }
+
+    @Test
+    @DisplayName("Should return unsupported simulations when non-GatlingFx simulations are discovered")
+    void should_ReturnUnsupportedSimulations_when_NonGatlingFxSimulationsAreDiscovered() {
+        assertThat(result.unsupported()).contains(
+                TestSimulations.UnsupportedSimulation.class
+        );
+    }
+
+    @Test
+    @DisplayName("Should exclude non-annotated GatlingFx simulations when discovering simulations")
+    void should_ExcludeNonAnnotatedGatlingFxSimulations_when_DiscoveringSimulations() {
+        var expected = TestSimulations.NonAnnotatedSimulation.class;
+
+        assertThat(result.supported()).doesNotContain(expected);
+        assertThat(result.unsupported()).doesNotContain(expected);
+    }
+
+    @Test
+    @DisplayName("Should exclude non-annotated classes when discovering simulations")
+    void should_ExcludeNonAnnotatedClasses_when_DiscoveringSimulations() {
+        assertThat(result.unsupported()).doesNotContain(
+                TestSimulations.StandardClass.class
+        );
     }
 }

@@ -3,19 +3,18 @@ package com.senthora.gatlingfx.runtime.core.application;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRunResult;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRunner;
 import com.senthora.gatlingfx.runtime.core.api.SimulationScanner;
-import com.senthora.gatlingfx.simulation.api.BaseSimulation;
+import com.senthora.gatlingfx.runtime.core.internal.SimulationResolver;
 
 import picocli.CommandLine;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * GatlingFx application entrypoint.
  * <p>
- * This bootstrap class executes all discovered GatlingFx
- * simulations using the default simulation runner and terminates
- * the JVM with a non-zero exit code when at least one simulation fails.
+ * This bootstrap class executes GatlingFx simulations and
+ * provides a command-line entrypoint that terminates the JVM
+ * with a non-zero exit code when simulation execution fails.
  * <p>
  * <strong>API Note:</strong>
  * Intended for command-line execution, Gradle integration,
@@ -44,6 +43,7 @@ public final class GatlingFx {
      * @return process exit code
      * @throws IllegalArgumentException if the requested simulation
      * class does not exist or is not a valid GatlingFx simulation
+     * @throws CommandLine.ParameterException if command-line arguments are invalid
      */
     static int run(String[] args) {
         GatlingFxArguments arguments = parseArgs(args);
@@ -53,38 +53,22 @@ public final class GatlingFx {
 
         var simulationClassName = arguments.simulationClassName();
         if (simulationClassName.isPresent()) {
-            var gatlingSimulation = resolveSimulationClass(simulationClassName.get());
-            result = runner.run(gatlingSimulation);
+            var simulationClass = findClass(simulationClassName.get());
+            var simulation = SimulationResolver.resolve(simulationClass);
+
+            result = runner.run(simulation);
         }
         else {
-            var simulationClasses = SimulationScanner.scan();
-            result = runner.run(asSimulations(simulationClasses));
+            var discoveryResult = SimulationScanner.scan();
+
+            result = runner.run(discoveryResult.supported());
+
+            var unsupportedSimulations = discoveryResult.unsupported();
+            if (!unsupportedSimulations.isEmpty()) {
+                warnUnsupportedSimulations(unsupportedSimulations);
+            }
         }
         return result.success() ? 0 : 1;
-    }
-
-    private static Class<? extends BaseSimulation> resolveSimulationClass(String className) {
-        try {
-            return asSimulation(Class.forName(className));
-        }
-        catch (ClassNotFoundException e) {
-            var message = "Simulation class not found: " + className;
-            throw new IllegalArgumentException(message, e);
-        }
-    }
-
-    private static Class<? extends BaseSimulation> asSimulation(Class<?> clazz) {
-        if (!BaseSimulation.class.isAssignableFrom(clazz)) {
-            var message = "Class is not a GatlingFx simulation: " + clazz.getName();
-            throw new IllegalArgumentException(message);
-        }
-        return clazz.asSubclass(BaseSimulation.class);
-    }
-
-    private static List<Class<? extends BaseSimulation>> asSimulations(List<Class<?>> classes) {
-        return classes.stream()
-                .map(GatlingFx::asSimulation)
-                .collect(Collectors.toList());
     }
 
     private static GatlingFxArguments parseArgs(String[] args) {
@@ -92,5 +76,26 @@ public final class GatlingFx {
         new CommandLine(arguments).parseArgs(args);
 
         return arguments;
+    }
+
+    private static Class<?> findClass(String className) {
+        try {
+            return Class.forName(className);
+        }
+        catch (ClassNotFoundException e) {
+            var message = "Simulation class not found: " + className;
+            throw new IllegalArgumentException(message, e);
+        }
+    }
+
+    private static void warnUnsupportedSimulations(List<Class<?>> simulations) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("WARN: Skipping unsupported Gatling simulations:");
+
+        simulations.forEach(simulation ->
+                sb.append("\n- ").append(simulation.getName())
+        );
+        System.out.println(sb);
     }
 }

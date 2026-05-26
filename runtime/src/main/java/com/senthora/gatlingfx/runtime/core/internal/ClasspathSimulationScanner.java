@@ -2,9 +2,11 @@ package com.senthora.gatlingfx.runtime.core.internal;
 
 import com.senthora.gatlingfx.runtime.core.api.GatlingSimulation;
 import com.senthora.gatlingfx.runtime.core.api.SimulationScanner;
+import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 
 import io.github.classgraph.ClassGraph;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,9 +20,27 @@ public final class ClasspathSimulationScanner {
             .enableClassInfo()
             .enableAnnotationInfo();
 
-    public static List<Class<?>> scan() {
+    public static DefaultSimulationDiscoveryResult scan() {
         try (var scan = CLASS_GRAPH.scan()) {
-            return scan.getClassesWithAnnotation(ANNOTATION_NAME).loadClasses();
+            var discoveredClasses = scan
+                    .getClassesWithAnnotation(ANNOTATION_NAME)
+                    .loadClasses();
+
+            List<Class<?>> unsupportedClasses = new ArrayList<>();
+            List<Class<? extends BaseSimulation>> supportedClasses = new ArrayList<>();
+
+            for (Class<?> clazz : discoveredClasses) {
+                if (SimulationResolver.isSupported(clazz)) {
+                    supportedClasses.add(SimulationResolver.resolveInternal(clazz));
+                }
+                else {
+                    unsupportedClasses.add(clazz);
+                }
+            }
+            return new DefaultSimulationDiscoveryResult(
+                    supportedClasses,
+                    unsupportedClasses
+            );
         }
     }
 }

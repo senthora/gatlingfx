@@ -1,10 +1,11 @@
 package com.senthora.gatlingfx.runtime.core.application;
 
+import com.senthora.gatlingfx.runtime.core.api.SimulationDiscoveryResult;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRunResult;
+import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationDiscoveryResult;
 import com.senthora.gatlingfx.runtime.core.internal.support.SuccessfulSimulation;
 import com.senthora.gatlingfx.runtime.support.MockSimulationRunner;
 import com.senthora.gatlingfx.runtime.support.MockSimulationScanner;
-import com.senthora.gatlingfx.runtime.support.TestBaseSimulation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,17 +37,17 @@ class GatlingFxTest {
     }
 
     @Test
-    @DisplayName("Should run all discovered simulations when no arguments are supplied")
-    void should_RunAllDiscoveredSimulations_when_NoArgumentsAreSupplied() {
+    @DisplayName("Should run supported discovered simulations when unsupported simulations are discovered")
+    void should_RunSupportedDiscoveredSimulations_when_UnsupportedSimulationsAreDiscovered() {
         var result = Mockito.mock(SimulationRunResult.class);
 
         Mockito.when(result.success()).thenReturn(true);
 
-        List<Class<?>> simulationClasses = List.of(
-                FirstSimulation.class,
-                SecondSimulation.class
+        var discoveryResult = new DefaultSimulationDiscoveryResult(
+                List.of(SuccessfulSimulation.class),
+                List.of(Object.class)
         );
-        withMockedRuntime(simulationClasses, result, () ->
+        withMockedRuntime(discoveryResult, result, () ->
                 assertThat(GatlingFx.run(new String[0])).isZero()
         );
     }
@@ -88,17 +89,18 @@ class GatlingFxTest {
     }
 
     @Test
-    @DisplayName("Should throw IllegalArgumentException when discovered class is not GatlingFx simulation")
-    void should_ThrowIllegalArgumentException_when_DiscoveredClassIsNotGatlingFxSimulation() {
+    @DisplayName("Should return zero exit code when only unsupported simulations are discovered")
+    void should_ReturnZeroExitCode_when_OnlyUnsupportedSimulationsAreDiscovered() {
         var result = Mockito.mock(SimulationRunResult.class);
 
         Mockito.when(result.success()).thenReturn(true);
 
-        List<Class<?>> simulationClasses = List.of(Object.class);
-
-        withMockedRuntime(simulationClasses, result, () ->
-                assertThatThrownBy(() -> GatlingFx.run(new String[0]))
-                        .isInstanceOf(IllegalArgumentException.class)
+        var discoveryResult = new DefaultSimulationDiscoveryResult(
+                List.of(),
+                List.of(Object.class)
+        );
+        withMockedRuntime(discoveryResult, result, () ->
+                assertThat(GatlingFx.run(new String[0])).isZero()
         );
     }
 
@@ -109,9 +111,11 @@ class GatlingFxTest {
 
         Mockito.when(result.success()).thenReturn(false);
 
-        List<Class<?>> simulationClasses = List.of(SuccessfulSimulation.class);
-
-        withMockedRuntime(simulationClasses, result, () ->
+        var discoveryResult = new DefaultSimulationDiscoveryResult(
+                List.of(SuccessfulSimulation.class),
+                List.of()
+        );
+        withMockedRuntime(discoveryResult, result, () ->
                 assertThat(GatlingFx.run(new String[0])).isEqualTo(1)
         );
     }
@@ -123,22 +127,22 @@ class GatlingFxTest {
 
         Mockito.when(result.success()).thenReturn(true);
 
-        withMockedRuntime(List.of(), result, () ->
+        var discoveryResult = new DefaultSimulationDiscoveryResult(
+                List.of(),
+                List.of()
+        );
+        withMockedRuntime(discoveryResult, result, () ->
                 assertThat(GatlingFx.run(new String[0])).isZero()
         );
     }
 
     private static void withMockedRuntime(
-            List<Class<?>> simulationClasses,
-            SimulationRunResult result,
+            SimulationDiscoveryResult discoveryResult,
+            SimulationRunResult runResult,
             Runnable executable
     ) {
-        MockSimulationScanner.with(simulationClasses, () ->
-                MockSimulationRunner.with(result, executable)
+        MockSimulationScanner.with(discoveryResult, () ->
+                MockSimulationRunner.with(runResult, executable)
         );
     }
-
-    static class FirstSimulation extends TestBaseSimulation {}
-
-    static class SecondSimulation extends TestBaseSimulation {}
 }

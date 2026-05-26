@@ -18,10 +18,9 @@ public interface SimulationScanner {
      * Scans the runtime classpath
      * for discoverable simulations.
      *
-     * @return list of discovered simulation classes,
-     * or an empty list if no simulations were discovered
+     * @return the result of simulation discovery
      */
-    static List<Class<?>> scan() {
+    static SimulationDiscoveryResult scan() {
         return ClasspathSimulationScanner.scan();
     }
 }

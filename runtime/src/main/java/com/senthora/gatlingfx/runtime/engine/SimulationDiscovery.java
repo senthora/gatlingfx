@@ -42,7 +42,7 @@ final class SimulationDiscovery {
             }
             return engineDescriptor;
         }
-        for (var simulationClass : SimulationScanner.scan()) {
+        for (var simulationClass : SimulationScanner.scan().supported()) {
             addDescriptor(engineDescriptor, id, simulationClass);
         }
         return engineDescriptor;
@@ -53,9 +53,6 @@ final class SimulationDiscovery {
             UniqueId id,
             Class<?> simulationClass
     ) {
-        if (!BaseSimulation.class.isAssignableFrom(simulationClass)) {
-            return;
-        }
         var simulationId = id.append("simulation", simulationClass.getName());
 
         var simulationDescriptor = new SimulationDescriptor(
