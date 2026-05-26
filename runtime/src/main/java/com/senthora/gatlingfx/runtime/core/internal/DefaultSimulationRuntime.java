@@ -62,7 +62,7 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
     }
 
     private SimulationExecutionResult execute(
-            Class<?> simulationClass,
+            Class<? extends BaseSimulation> simulationClass,
             ActorSystem actorSystem,
             EpollEventLoopGroup eventLoopGroup
     ) {
@@ -81,7 +81,7 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
                 gatlingArgs,
                 gatlingConfig
         );
-        var statusCode = run(gatlingArgs, runner);
+        var statusCode = run(simulationClass, gatlingArgs, runner);
         var result = statusCode == StatusCode.Success$.MODULE$
                 ? SimulationResult.SUCCESS
                 : SimulationResult.FAILURE;
@@ -89,7 +89,11 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
         return new DefaultSimulationExecutionResult(simulationClass, result);
     }
 
-    private StatusCode run(GatlingArgs gatlingArgs, Runner runner) {
+    private StatusCode run(
+            Class<? extends BaseSimulation> simulationClass,
+            GatlingArgs gatlingArgs,
+            Runner runner
+    ) {
         try {
             var runResult = gatlingRunner.run(gatlingArgs, runner);
             var processor = new RunResultProcessor(gatlingArgs, gatlingConfig);
@@ -101,7 +105,8 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
             return StatusCode.AssertionsFailed$.MODULE$;
         }
         catch (Throwable e) {
-            var message = "Failed executing simulation runtime";
+            var className = simulationClass.getName();
+            var message = "Failed executing simulation runtime for class " + className;
             throw new DefaultSimulationRuntimeException(message, e);
         }
     }
