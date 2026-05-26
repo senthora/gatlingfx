@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.runtime.engine.support;
+package com.senthora.gatlingfx.runtime.support;
 
 import org.junit.jupiter.api.DisplayName;
 

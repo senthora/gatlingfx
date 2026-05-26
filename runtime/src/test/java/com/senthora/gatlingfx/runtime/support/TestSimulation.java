@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.runtime.engine.support;
+package com.senthora.gatlingfx.runtime.support;
 
 import com.senthora.gatlingfx.http.api.HttpBaseUrl;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
