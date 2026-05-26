@@ -1,9 +1,13 @@
-package com.senthora.gatlingfx.runtime.engine.support;
+package com.senthora.gatlingfx.runtime.support;
 
 import com.senthora.gatlingfx.runtime.core.api.GatlingSimulation;
-import com.senthora.gatlingfx.runtime.support.TestBaseSimulation;
 
 public final class TestSimulations {
+
+    private TestSimulations() {}
+
+    @GatlingSimulation
+    public static class SupportedSimulation extends TestBaseSimulation {}
 
     @GatlingSimulation
     public static class VerySuccessfulSimulation extends TestBaseSimulation {}
@@ -13,6 +17,9 @@ public final class TestSimulations {
 
     @GatlingSimulation
     public static class FailedSimulation extends TestBaseSimulation {}
+
+    @GatlingSimulation
+    public static class UnsupportedSimulation {}
 
     public static class NonAnnotatedSimulation extends TestBaseSimulation {}
 

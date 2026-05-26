@@ -3,6 +3,7 @@ package com.senthora.gatlingfx.runtime.engine;
 import com.senthora.gatlingfx.runtime.engine.support.*;
 import com.senthora.gatlingfx.runtime.support.MockSimulationRunResult;
 import com.senthora.gatlingfx.runtime.support.MockSimulationRunner;
+import com.senthora.gatlingfx.runtime.support.TestSimulations;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

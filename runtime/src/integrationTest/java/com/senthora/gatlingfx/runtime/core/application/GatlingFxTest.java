@@ -3,9 +3,9 @@ package com.senthora.gatlingfx.runtime.core.application;
 import com.senthora.gatlingfx.runtime.core.api.SimulationDiscoveryResult;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRunResult;
 import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationDiscoveryResult;
-import com.senthora.gatlingfx.runtime.core.internal.support.SuccessfulSimulation;
 import com.senthora.gatlingfx.runtime.support.MockSimulationRunner;
 import com.senthora.gatlingfx.runtime.support.MockSimulationScanner;
+import com.senthora.gatlingfx.runtime.support.TestSimulations;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class GatlingFxTest {
         Runnable runnable = () -> {
             var args = new String[]{
                     GatlingFxArguments.SIMULATION,
-                    SuccessfulSimulation.class.getName()
+                    TestSimulations.SuccessfulSimulation.class.getName()
             };
             assertThat(GatlingFx.run(args)).isZero();
         };
@@ -44,7 +44,7 @@ class GatlingFxTest {
         Mockito.when(result.success()).thenReturn(true);
 
         var discoveryResult = new DefaultSimulationDiscoveryResult(
-                List.of(SuccessfulSimulation.class),
+                List.of(TestSimulations.SuccessfulSimulation.class),
                 List.of(Object.class)
         );
         withMockedRuntime(discoveryResult, result, () ->
@@ -112,7 +112,7 @@ class GatlingFxTest {
         Mockito.when(result.success()).thenReturn(false);
 
         var discoveryResult = new DefaultSimulationDiscoveryResult(
-                List.of(SuccessfulSimulation.class),
+                List.of(TestSimulations.SuccessfulSimulation.class),
                 List.of()
         );
         withMockedRuntime(discoveryResult, result, () ->

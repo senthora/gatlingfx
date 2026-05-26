@@ -1,7 +1,7 @@
 package com.senthora.gatlingfx.runtime.core.internal;
 
 import com.senthora.gatlingfx.runtime.core.api.SimulationDiscoveryResult;
-import com.senthora.gatlingfx.runtime.core.internal.support.TestSimulations;
+import com.senthora.gatlingfx.runtime.support.TestSimulations;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -44,10 +44,10 @@ class ClasspathSimulationScannerTest {
     }
 
     @Test
-    @DisplayName("Should exclude non-annotated classes when discovering simulations")
+    @DisplayName("Should exclude non-annotated non-simulation classes when discovering simulations")
     void should_ExcludeNonAnnotatedClasses_when_DiscoveringSimulations() {
         assertThat(result.unsupported()).doesNotContain(
-                TestSimulations.StandardClass.class
+                TestSimulations.NonSimulation.class
         );
     }
 }

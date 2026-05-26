@@ -1,7 +1,7 @@
 package com.senthora.gatlingfx.runtime.engine;
 
 import com.senthora.gatlingfx.runtime.engine.support.GatlingFxEngineKit;
-import com.senthora.gatlingfx.runtime.engine.support.TestSimulations;
+import com.senthora.gatlingfx.runtime.support.TestSimulations;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
