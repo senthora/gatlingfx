@@ -100,9 +100,9 @@ tasks.register("gatlingFx", JavaExec) {
     group = "verification"
     description = "Runs GatlingFx simulations"
 
-    classpath = files(rootProject.subprojects.collect { project ->
-            project.sourceSets.integrationTest.runtimeClasspath
-        }
+    classpath = files(rootProject.subprojects
+        .findAll { it.name in ["core", "proxy", "wiremock"] }
+        .collect { it.sourceSets.integrationTest.runtimeClasspath }
     )
     mainClass = "com.senthora.gatlingfx.runtime.core.application.GatlingFx"
 
