@@ -7,7 +7,7 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.http;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
-public final class SuccessfulSimulation extends TestBaseSimulation {
+public class SuccessfulSimulation extends TestBaseSimulation {
 
     public SuccessfulSimulation() {
         var baseUrl = MockWebServerTest.baseUrl();

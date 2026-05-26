@@ -48,8 +48,8 @@ public interface SimulationRunner {
      * Executes multiple GatlingFx simulations.
      * <p>
      * <strong>API Note:</strong>
-     * Simulation execution order is delegated
-     * to Gatling and cannot be guaranteed.
+     * Executes multiple GatlingFx simulations
+     * sequentially in the order provided.
      *
      * @param simulationClasses classes of simulations to run
      * @return result of executing the provided simulations,

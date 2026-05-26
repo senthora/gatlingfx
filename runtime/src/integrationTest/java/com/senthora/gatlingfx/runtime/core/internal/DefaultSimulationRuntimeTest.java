@@ -4,6 +4,7 @@ import com.senthora.gatlingfx.runtime.core.api.SimulationExecutionResult;
 import com.senthora.gatlingfx.runtime.core.api.SimulationResult;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRuntimeException;
 import com.senthora.gatlingfx.runtime.core.internal.support.FailedSimulation;
+import com.senthora.gatlingfx.runtime.core.internal.support.OrderedSimulation;
 import com.senthora.gatlingfx.runtime.core.internal.support.SuccessfulSimulation;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 import com.senthora.gatlingfx.support.MockWebServerTest;
@@ -86,5 +87,39 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
 
         assertThatThrownBy(() -> runtime.execute(List.of(SuccessfulSimulation.class)))
                 .isInstanceOf(SimulationRuntimeException.class);
+    }
+
+    @Test
+    @DisplayName("Should execute simulations in provided order when executing multiple simulations")
+    void should_ExecuteSimulationsInProvidedOrder_when_ExecutingMultipleSimulations() {
+        OrderedSimulation.executionOrder.clear();
+        server.enqueue(new MockResponse().setResponseCode(200));
+
+        var gatlingRunner = new DefaultGatlingRunner();
+        var runtime = new DefaultSimulationRuntime(gatlingRunner);
+
+        List<Class<? extends BaseSimulation>> simulationClasses = List.of(
+                FirstOrderedSimulation.class,
+                SecondOrderedSimulation.class
+        );
+        runtime.execute(simulationClasses);
+
+        assertThat(OrderedSimulation.executionOrder).containsExactly(1, 2);
+    }
+
+    public static final class FirstOrderedSimulation extends OrderedSimulation {
+
+        @Override
+        protected int orderNumber() {
+            return 1;
+        }
+    }
+
+    public static final class SecondOrderedSimulation extends OrderedSimulation {
+
+        @Override
+        protected int orderNumber() {
+            return 2;
+        }
     }
 }
