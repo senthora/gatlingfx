@@ -1,12 +1,8 @@
-# Run all Gatling simulations
+# Run all Gatling simulations via GatlingFx
 run-simulations:
-    just gatling --all
+    ./gradlew gatlingFx
 
-# Run single Gatling simulation
+# Run single Gatling simulation via GatlingFx
 [arg("simulation", help="simulation class")]
 run-simulation simulation:
-    just gatling --simulation {{simulation}}
-
-[private]
-gatling +args:
-    just gradle gatling gatlingRun {{args}}
+    ./gradlew gatlingFx --args="--simulation {{simulation}}"
