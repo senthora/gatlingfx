@@ -6,6 +6,11 @@ import com.senthora.gatlingfx.runtime.core.api.SimulationRuntime;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRuntimeException;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 
+import org.jspecify.annotations.Nullable;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.gatling.app.RunResultProcessor;
 import io.gatling.app.Runner;
 import io.gatling.app.cli.StatusCode;
@@ -13,6 +18,7 @@ import io.gatling.core.actor.ActorSystem;
 import io.gatling.core.cli.GatlingArgs;
 import io.gatling.core.config.GatlingConfiguration;
 import io.netty.channel.epoll.EpollEventLoopGroup;
+import scala.Console;
 import scala.Option;
 
 import java.nio.file.Path;
@@ -20,19 +26,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Default {@link SimulationRuntime} implementation.
  */
 public final class DefaultSimulationRuntime implements SimulationRuntime {
 
+    private static final Logger log = LoggerFactory.getLogger(DefaultSimulationRuntime.class);
+
     private final GatlingRunner gatlingRunner;
     private final GatlingConfiguration gatlingConfig;
+    private final SimulationRunId runId;
 
     public DefaultSimulationRuntime(GatlingRunner gatlingRunner) {
         Objects.requireNonNull(gatlingRunner, "gatlingRunner must not be null");
         this.gatlingRunner = gatlingRunner;
-        this.gatlingConfig = loadConfiguration();
+        this.gatlingConfig = GatlingConfiguration.load();
+        this.runId = SimulationRunId.create();
     }
 
     @Override
@@ -95,11 +106,11 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
             GatlingArgs gatlingArgs,
             Runner runner
     ) {
-        try {
-            var runResult = gatlingRunner.run(gatlingArgs, runner);
-            var processor = new RunResultProcessor(gatlingArgs, gatlingConfig);
+        log.info("Running simulation '{}'", simulationClass.getName());
 
-            return processor.processRunResult(runResult);
+        var result = new AtomicReference<StatusCode>(StatusCode.AssertionsFailed$.MODULE$);
+        try (var logManager = new SimulationLogManager(runId, simulationClass.getSimpleName())) {
+            Console.withOut(logManager.output(), redirectedRun(result, gatlingArgs, runner));
         }
         catch (AssertionError e) {
             e.printStackTrace();
@@ -110,13 +121,22 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
             var message = "Failed executing simulation runtime for class " + className;
             throw new SimulationRuntimeException(message, e);
         }
+        return result.get();
     }
 
-    private static GatlingConfiguration loadConfiguration() {
-        System.setProperty(
-                "logback.configurationFile",
-                "src/resources/logback-test.xml"
-        );
-        return GatlingConfiguration.load();
+    private scala.Function0<@Nullable Void> redirectedRun(
+            AtomicReference<StatusCode> result,
+            GatlingArgs gatlingArgs,
+            Runner runner
+    ) {
+        return () -> {
+            var runResult = gatlingRunner.run(gatlingArgs, runner);
+            var processor = new RunResultProcessor(
+                    gatlingArgs,
+                    gatlingConfig
+            );
+            result.set(processor.processRunResult(runResult));
+            return null;
+        };
     }
 }
