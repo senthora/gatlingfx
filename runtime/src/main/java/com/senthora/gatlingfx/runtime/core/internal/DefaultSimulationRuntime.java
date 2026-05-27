@@ -1,9 +1,6 @@
 package com.senthora.gatlingfx.runtime.core.internal;
 
-import com.senthora.gatlingfx.runtime.core.api.SimulationExecutionResult;
-import com.senthora.gatlingfx.runtime.core.api.SimulationResult;
-import com.senthora.gatlingfx.runtime.core.api.SimulationRuntime;
-import com.senthora.gatlingfx.runtime.core.api.SimulationRuntimeException;
+import com.senthora.gatlingfx.runtime.core.api.*;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 
 import org.jspecify.annotations.Nullable;
@@ -33,7 +30,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public final class DefaultSimulationRuntime implements SimulationRuntime {
 
-    private static final Logger log = LoggerFactory.getLogger(DefaultSimulationRuntime.class);
+    private static final Logger log = LoggerFactory.getLogger("SimulationRuntime");
 
     private final GatlingRunner gatlingRunner;
     private final GatlingConfiguration gatlingConfig;
@@ -93,35 +90,56 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
                 gatlingArgs,
                 gatlingConfig
         );
-        var statusCode = run(simulationClass, gatlingArgs, runner);
-        var result = statusCode == StatusCode.Success$.MODULE$
-                ? SimulationResult.SUCCESS
-                : SimulationResult.FAILURE;
+        log.info("Running simulation '{}'", simulationClass.getName());
+        var stopwatch = SimulationStopwatch.start();
 
-        return new DefaultSimulationExecutionResult(simulationClass, result);
+        ExecutionResult executionResult;
+        try {
+            executionResult = execute(simulationClass, gatlingArgs, runner);
+        }
+        catch (Throwable e) {
+            var className = simulationClass.getName();
+            log.error("Simulation run failed (time={} ms, log=N/A)",
+                    stopwatch.elapsed().toMillis(),
+                    e
+            );
+            var message = "Failed executing simulation runtime for class " + className;
+            throw new SimulationRuntimeException(message, e);
+        }
+        var simulationResult = executionResult.simulationResult();
+        long simulationRunTime = stopwatch.elapsed().toMillis();
+
+        if (simulationResult == SimulationResult.FAILURE) {
+            log.warn("Simulation run failed (time={} ms, log={})",
+                    simulationRunTime,
+                    executionResult.logFilePath
+            );
+        }
+        else {
+            log.info("Simulation run successful (time={} ms, log={})",
+                    simulationRunTime,
+                    executionResult.logFilePath
+            );
+        }
+        return new DefaultSimulationExecutionResult(simulationClass, simulationResult);
     }
 
-    private StatusCode run(
+    private ExecutionResult execute(
             Class<? extends BaseSimulation> simulationClass,
             GatlingArgs gatlingArgs,
             Runner runner
     ) {
-        log.info("Running simulation '{}'", simulationClass.getName());
-
         var result = new AtomicReference<StatusCode>(StatusCode.AssertionsFailed$.MODULE$);
+        var logFilePath = Path.of("N/A");
+
         try (var logManager = new SimulationLogManager(runId, simulationClass.getSimpleName())) {
+            logFilePath = logManager.logFilePath();
             Console.withOut(logManager.output(), redirectedRun(result, gatlingArgs, runner));
         }
         catch (AssertionError e) {
             e.printStackTrace();
-            return StatusCode.AssertionsFailed$.MODULE$;
         }
-        catch (Throwable e) {
-            var className = simulationClass.getName();
-            var message = "Failed executing simulation runtime for class " + className;
-            throw new SimulationRuntimeException(message, e);
-        }
-        return result.get();
+        return ExecutionResult.with(result.get(), logFilePath);
     }
 
     private scala.Function0<@Nullable Void> redirectedRun(
@@ -138,5 +156,17 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
             result.set(processor.processRunResult(runResult));
             return null;
         };
+    }
+
+    private record ExecutionResult(StatusCode code, Path logFilePath) {
+
+        private static ExecutionResult with(StatusCode code, Path logFilePath) {
+            return new ExecutionResult(code, logFilePath);
+        }
+
+        private SimulationResult simulationResult() {
+            return code.equals(StatusCode.Success$.MODULE$) ?
+                    SimulationResult.SUCCESS : SimulationResult.FAILURE;
+        }
     }
 }
