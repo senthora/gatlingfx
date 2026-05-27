@@ -3,72 +3,61 @@ package com.senthora.gatlingfx.runtime.core.internal;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRuntimeException;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 /**
- * Redirects simulation console
- * output into a dedicated log file.
+ * Manages simulation log files
+ * for a single runtime execution.
  */
-final class SimulationLogManager implements AutoCloseable {
+final class SimulationLogManager {
 
-    private static final String LOG_DIRECTORY_PATH = "build/gatlingfx";
-
-    private final PrintStream output;
-    private final Path logFilePath;
+    private final Path logDirectory;
 
     /**
      * Creates a new simulation log manager.
      *
+     * @param logDirectoryPath path to directory where log files will be stored
      * @param runId simulation runtime execution identifier
-     * @param simulationName executed simulation name
      *
      * @throws NullPointerException if any argument is null
+     * @throws SimulationRuntimeException if log directory creation failed
+     */
+    SimulationLogManager(Path logDirectoryPath, SimulationRunId runId) {
+        Objects.requireNonNull(logDirectoryPath, "logDirectoryPath must not be null");
+        Objects.requireNonNull(runId, "runId must not be null");
+
+        var path = logDirectoryPath.resolve(runId.value());
+        try {
+            this.logDirectory = Files.createDirectories(path);
+        }
+        catch (IOException e) {
+            var message = "Failed creating GatlingFx log directory (path=%s)";
+            throw new SimulationRuntimeException(message.formatted(path), e);
+        }
+    }
+
+    /**
+     * Returns simulation log directory path.
+     */
+    Path logDirectory() {
+        return logDirectory;
+    }
+
+    /**
+     * Creates a new simulation log session.
+     *
+     * @param simulationClass class of simulation being executed
+     *
+     * @throws NullPointerException if {@code simulationClass} is null
      * @throws UncheckedIOException if log stream creation fails
      */
-    SimulationLogManager(SimulationRunId runId, String simulationName) {
-        try {
-            var runDirectory = createRunDirectory(runId);
-            this.logFilePath = runDirectory.resolve(simulationName + ".log");
+    SimulationLogSession createSession(Class<?> simulationClass) {
+        Objects.requireNonNull(simulationClass, "simulationClass must not be null");
+        var logFilePath = logDirectory.resolve(simulationClass.getSimpleName() + ".log");
 
-            var outputStream = Files.newOutputStream(logFilePath);
-            this.output = new PrintStream(outputStream);
-        }
-        catch (IOException e) {
-            var message = "Failed creating simulation log stream";
-            throw new UncheckedIOException(message, e);
-        }
-    }
-
-    @Override
-    public void close() {
-        output.close();
-    }
-
-    /**
-     * Returns redirected simulation output stream.
-     */
-    PrintStream output() {
-        return output;
-    }
-
-    /**
-     * Returns the path to the log file.
-     */
-    Path logFilePath() {
-        return logFilePath;
-    }
-
-    private static Path createRunDirectory(SimulationRunId runId) {
-        var directory = Path.of(LOG_DIRECTORY_PATH, runId.value());
-        try {
-            return Files.createDirectories(directory);
-        }
-        catch (IOException e) {
-            var message = "Failed creating GatlingFx run directory";
-            throw new SimulationRuntimeException(message, e);
-        }
+        return new SimulationLogSession(logFilePath);
     }
 }
