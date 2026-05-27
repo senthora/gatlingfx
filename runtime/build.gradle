@@ -12,6 +12,8 @@ dependencies {
     implementation libs.gatling.charts
     implementation "io.gatling.highcharts:gatling-charts-highcharts:3.15.0"
 
+    testImplementation(testFixtures(project(':core')))
+
     testImplementation platform(libs.junit.bom)
     testImplementation libs.junit.jupiter
     testRuntimeOnly libs.junit.platform.launcher
