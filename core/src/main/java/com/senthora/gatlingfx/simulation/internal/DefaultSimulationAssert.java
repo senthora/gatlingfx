@@ -2,7 +2,6 @@ package com.senthora.gatlingfx.simulation.internal;
 
 import com.senthora.gatlingfx.simulation.api.SimulationAssert;
 
-import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
@@ -11,7 +10,6 @@ import java.util.function.Predicate;
 /**
  * Default {@link SimulationAssert} implementation.
  */
-@NullMarked
 public final class DefaultSimulationAssert<T> implements SimulationAssert<T> {
 
     private final @Nullable T actual;
