@@ -17,6 +17,7 @@ final class SimulationLogManager implements AutoCloseable {
     private static final String LOG_DIRECTORY_PATH = "build/gatlingfx";
 
     private final PrintStream output;
+    private final Path logFilePath;
 
     /**
      * Creates a new simulation log manager.
@@ -30,9 +31,9 @@ final class SimulationLogManager implements AutoCloseable {
     SimulationLogManager(SimulationRunId runId, String simulationName) {
         try {
             var runDirectory = createRunDirectory(runId);
-            var logFile = runDirectory.resolve(simulationName + ".log");
+            this.logFilePath = runDirectory.resolve(simulationName + ".log");
 
-            var outputStream = Files.newOutputStream(logFile);
+            var outputStream = Files.newOutputStream(logFilePath);
             this.output = new PrintStream(outputStream);
         }
         catch (IOException e) {
@@ -51,6 +52,13 @@ final class SimulationLogManager implements AutoCloseable {
      */
     PrintStream output() {
         return output;
+    }
+
+    /**
+     * Returns the path to the log file.
+     */
+    Path logFilePath() {
+        return logFilePath;
     }
 
     private static Path createRunDirectory(SimulationRunId runId) {
