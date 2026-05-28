@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.simulation.internal.support;
+package com.senthora.gatlingfx.simulation.internal;
 
 import com.senthora.gatlingfx.simulation.api.event.SimulationEvent;
 import com.senthora.gatlingfx.simulation.api.event.SimulationEventListener;

@@ -1,7 +1,5 @@
 package com.senthora.gatlingfx.simulation.internal;
 
-import com.senthora.gatlingfx.simulation.internal.support.TestSimulationEventListener;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
