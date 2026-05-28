@@ -42,7 +42,6 @@ record WireMockStubRequest(
      * @param url exact request URL
      *
      * @return stub request payload
-     *
      * @throws NullPointerException if {@code method} is null
      * @throws IllegalArgumentException if {@code url} is null
      */
@@ -58,7 +57,6 @@ record WireMockStubRequest(
      * @param urlPattern request URL pattern
      *
      * @return stub request payload
-     *
      * @throws NullPointerException if {@code method} is null
      * @throws IllegalArgumentException if {@code urlPattern} is null
      */

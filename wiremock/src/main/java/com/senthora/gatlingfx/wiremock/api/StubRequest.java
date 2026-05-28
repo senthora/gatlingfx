@@ -78,7 +78,6 @@ public record StubRequest(String method, UrlMatcher url, List<HttpHeader> header
      * @param header required request header
      *
      * @return request matcher
-     *
      * @throws NullPointerException if {@code header} is null
      */
     public StubRequest withHeader(HttpHeader header) {

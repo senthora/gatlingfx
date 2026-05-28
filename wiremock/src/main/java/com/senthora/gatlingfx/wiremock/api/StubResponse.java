@@ -38,7 +38,6 @@ public record StubResponse(int status, String body, List<HttpHeader> headers) {
      * @param header response header
      *
      * @return stub response
-     *
      * @throws NullPointerException if {@code header} is null
      */
     public StubResponse withHeader(HttpHeader header) {

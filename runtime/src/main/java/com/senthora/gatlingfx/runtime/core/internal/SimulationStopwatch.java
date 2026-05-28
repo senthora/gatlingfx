@@ -25,7 +25,6 @@ final class SimulationStopwatch {
      * @param clock simulation stopwatch clock
      *
      * @return started simulation stopwatch
-     *
      * @throws NullPointerException if {@code clock} is null
      */
     static SimulationStopwatch start(Clock clock) {

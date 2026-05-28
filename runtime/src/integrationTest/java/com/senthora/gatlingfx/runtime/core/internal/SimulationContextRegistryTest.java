@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static com.senthora.gatlingfx.simulation.internal.SimulationTestSupport.*;
-
+import static com.senthora.gatlingfx.simulation.internal.SimulationTestSupport.publishEvent;
+import static com.senthora.gatlingfx.simulation.internal.SimulationTestSupport.resetListenerRegistry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

@@ -63,7 +63,6 @@ public final class SimulationProtocol {
      * @param value header value
      *
      * @return current protocol configuration
-     *
      * @throws NullPointerException if {@code name} or {@code value} is null
      * @throws IllegalArgumentException if {@code name} is blank
      */

@@ -17,8 +17,8 @@ public final class SimulationResolver {
      * as a supported GatlingFx simulation.
      *
      * @param clazz class to resolve
-     * @return resolved simulation class
      *
+     * @return resolved simulation class
      * @throws NullPointerException if {@code clazz} is null
      * @throws IllegalArgumentException if the class
      * is not supported by GatlingFx

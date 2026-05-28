@@ -30,7 +30,7 @@ public record LoggedRequests(List<LoggedRequest> requests) {
      * @param path request path
      *
      * @return optional containing the last matching request,
-     *         or an empty optional if no matching request exists
+     * or an empty optional if no matching request exists
      */
     public Optional<LoggedRequest> lastFor(String path) {
         return requests.stream()

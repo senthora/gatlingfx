@@ -17,8 +17,8 @@ public interface SimulationAssert<T> {
      * is equal to the expected value.
      *
      * @param expected expected value
-     * @return current assertion chain
      *
+     * @return current assertion chain
      * @throws AssertionError if assertion fails
      */
     SimulationAssert<T> isEqualTo(@Nullable T expected);
@@ -27,7 +27,6 @@ public interface SimulationAssert<T> {
      * Verifies that the actual value is not null.
      *
      * @return current assertion chain
-     *
      * @throws AssertionError if assertion fails
      */
     SimulationAssert<T> isNotNull();
@@ -36,7 +35,6 @@ public interface SimulationAssert<T> {
      * Verifies that the actual value is null.
      *
      * @return current assertion chain
-     *
      * @throws AssertionError if assertion fails
      */
     SimulationAssert<T> isNull();
@@ -47,8 +45,8 @@ public interface SimulationAssert<T> {
      *
      * @param predicate validation predicate
      * @param message failure message
-     * @return current assertion chain
      *
+     * @return current assertion chain
      * @throws NullPointerException if predicate or message is null
      * @throws AssertionError if assertion fails
      */

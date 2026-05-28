@@ -1,6 +1,7 @@
 package com.senthora.gatlingfx.wiremock.internal;
 
-import com.senthora.gatlingfx.http.api.*;
+import com.senthora.gatlingfx.http.api.HttpBaseUrl;
+import com.senthora.gatlingfx.http.api.SimpleHttpClient;
 import com.senthora.gatlingfx.wiremock.api.StubMapping;
 import com.senthora.gatlingfx.wiremock.api.StubRequest;
 import com.senthora.gatlingfx.wiremock.api.StubResponse;

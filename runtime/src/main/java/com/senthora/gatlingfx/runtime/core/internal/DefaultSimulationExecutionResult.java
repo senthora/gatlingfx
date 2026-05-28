@@ -11,7 +11,7 @@ import java.util.Objects;
 record DefaultSimulationExecutionResult(
         Class<?> simulationClass,
         SimulationResult result
-) implements SimulationExecutionResult{
+) implements SimulationExecutionResult {
 
     /**
      * Creates a new executed simulation result.

@@ -18,7 +18,6 @@ final class WireMockMapper {
      * @param json serialized JSON payload
      *
      * @return parsed logged requests
-     *
      * @throws NullPointerException if {@code json} is null
      * @throws WireMockException if request parsing fails
      */

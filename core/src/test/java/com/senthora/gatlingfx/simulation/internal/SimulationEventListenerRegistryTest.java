@@ -5,8 +5,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static com.senthora.gatlingfx.simulation.internal.SimulationTestSupport.*;
-
+import static com.senthora.gatlingfx.simulation.internal.SimulationTestSupport.registerListener;
+import static com.senthora.gatlingfx.simulation.internal.SimulationTestSupport.registeredListeners;
 import static org.assertj.core.api.Assertions.*;
 
 class SimulationEventListenerRegistryTest {

@@ -33,14 +33,14 @@ class NetworkAddressTest {
         @Test
         @DisplayName("Should throw IllegalArgumentException when port is not positive")
         void should_ThrowIllegalArgumentException_when_PortIsNotPositive() {
-            assertThatThrownBy(() -> NetworkAddress.localhost( 0))
+            assertThatThrownBy(() -> NetworkAddress.localhost(0))
                     .isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
         @DisplayName("Should return provided host and port when network address is created")
         void should_ReturnProvidedHostAndPort_when_NetworkAddressIsCreated() {
-            var address = NetworkAddress.localhost( 8080);
+            var address = NetworkAddress.localhost(8080);
 
             assertThat(address.host()).isEqualTo("localhost");
             assertThat(address.port()).isEqualTo(8080);

@@ -47,6 +47,7 @@ public record NetworkAddress(String host, int port) {
      * Creates a new network address for localhost.
      *
      * @param port network port
+     *
      * @throws IllegalArgumentException if {@code port} is not positive
      */
     public static NetworkAddress localhost(int port) {

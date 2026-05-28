@@ -1,7 +1,7 @@
 package com.senthora.gatlingfx.http.internal;
 
-import com.senthora.gatlingfx.http.api.SimpleHttpClient;
 import com.senthora.gatlingfx.http.api.HttpBaseUrl;
+import com.senthora.gatlingfx.http.api.SimpleHttpClient;
 
 import java.io.IOException;
 import java.net.http.HttpClient;

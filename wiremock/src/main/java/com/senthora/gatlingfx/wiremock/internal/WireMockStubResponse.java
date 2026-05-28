@@ -54,7 +54,6 @@ record WireMockStubResponse(int status, String body, Map<String, String> headers
      * @param headers response headers
      *
      * @return stub response payload
-     *
      * @throws NullPointerException if {@code body}, {@code headers}, or any header is null
      * @throws IllegalArgumentException if {@code status} is not a valid HTTP status code
      */

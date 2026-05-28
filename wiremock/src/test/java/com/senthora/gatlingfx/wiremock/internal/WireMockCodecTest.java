@@ -57,6 +57,7 @@ class WireMockCodecTest {
         @Test
         @DisplayName("Should deserialize logged requests when JSON payload is valid")
         void should_DeserializeLoggedRequests_when_JsonPayloadIsValid() {
+            //@formatter:off
             var json = """
             {
               "requests": [
@@ -71,6 +72,7 @@ class WireMockCodecTest {
               ]
             }
             """;
+            //@formatter:on
             var result = WireMockCodec.deserialize(json);
             var expected = new WireMockLoggedRequestEntry(
                     new LoggedRequest("/test", TestHeaders.jsonContentTypeHeaders())

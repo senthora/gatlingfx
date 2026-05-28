@@ -2,8 +2,6 @@ package com.senthora.gatlingfx.runtime.core.api;
 
 import com.senthora.gatlingfx.runtime.core.internal.ClasspathSimulationScanner;
 
-import java.util.List;
-
 /**
  * Discovers classes annotated with {@link GatlingSimulation}
  * available on the runtime classpath.

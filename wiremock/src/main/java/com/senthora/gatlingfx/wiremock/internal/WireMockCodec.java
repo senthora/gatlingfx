@@ -21,7 +21,6 @@ final class WireMockCodec {
      * @param stub WireMock stub payload
      *
      * @return serialized JSON payload
-     *
      * @throws NullPointerException if {@code stub} is null
      * @throws WireMockCodecException if serialization fails
      */
@@ -41,7 +40,6 @@ final class WireMockCodec {
      * @param json serialized JSON payload
      *
      * @return deserialized logged requests payload
-     *
      * @throws NullPointerException if {@code json} is null
      * @throws WireMockCodecException if deserialization fails
      */

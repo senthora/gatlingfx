@@ -8,7 +8,7 @@ import java.util.List;
 
 public final class SimulationTestSupport {
 
-    private SimulationTestSupport() { }
+    private SimulationTestSupport() {}
 
     public static void registerListener(SimulationEventListener listener) {
         SimulationEventListeners.register(listener);

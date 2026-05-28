@@ -3,9 +3,8 @@ package com.senthora.gatlingfx.runtime.core.internal;
 import com.senthora.gatlingfx.runtime.core.api.SimulationResult;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 

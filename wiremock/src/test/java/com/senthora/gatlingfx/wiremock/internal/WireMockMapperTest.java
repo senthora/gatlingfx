@@ -22,6 +22,7 @@ class WireMockMapperTest {
         @Test
         @DisplayName("Should parse requests when JSON payload is valid")
         void should_ParseRequests_when_JsonPayloadIsValid() {
+            //@formatter:off
             var json = """
             {
               "requests": [
@@ -36,8 +37,9 @@ class WireMockMapperTest {
               ]
             }
             """;
+            //@formatter:on
             var actual = WireMockMapper.parseRequests(json);
-            var expected =  new LoggedRequest("/test", TestHeaders.jsonContentTypeHeaders());
+            var expected = new LoggedRequest("/test", TestHeaders.jsonContentTypeHeaders());
 
             assertThat(actual.requests()).containsExactly(expected);
         }

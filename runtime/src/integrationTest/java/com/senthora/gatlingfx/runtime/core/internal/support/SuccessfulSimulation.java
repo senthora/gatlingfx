@@ -12,8 +12,8 @@ public class SuccessfulSimulation extends TestBaseSimulation {
     public SuccessfulSimulation() {
         var baseUrl = MockWebServerTest.baseUrl();
         var scenario = scenario("success").exec(http("request")
-                        .get("/")
-                        .check(status().is(200)));
+                .get("/")
+                .check(status().is(200)));
 
         setUp(scenario.injectOpen(atOnceUsers(1)))
                 .protocols(http.baseUrl(baseUrl.asString()))

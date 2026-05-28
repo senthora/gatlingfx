@@ -38,8 +38,8 @@ public interface SimulationRunner {
      * Executes a single GatlingFx simulation.
      *
      * @param simulationClass class of the simulation to run
-     * @return result of executing the provided simulation
      *
+     * @return result of executing the provided simulation
      * @throws NullPointerException if {@code simulationClass} is null
      */
     SimulationRunResult run(Class<? extends BaseSimulation> simulationClass);
@@ -52,9 +52,9 @@ public interface SimulationRunner {
      * sequentially in the order provided.
      *
      * @param simulationClasses classes of simulations to run
+     *
      * @return result of executing the provided simulations,
      * or an empty successful result if no simulations are provided
-     *
      * @throws NullPointerException if {@code simulationClasses}
      * is null or contains null elements
      */

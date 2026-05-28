@@ -4,6 +4,7 @@ import com.senthora.gatlingfx.http.api.HttpBaseUrl;
 import com.senthora.gatlingfx.http.api.HttpScheme;
 
 import com.senthora.gatlingfx.simulation.internal.HttpProtocolFactory;
+
 import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 import org.mockito.Mockito;

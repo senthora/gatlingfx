@@ -1,8 +1,8 @@
 package com.senthora.gatlingfx.wiremock.api;
 
+import com.senthora.gatlingfx.http.api.HttpBaseUrl;
 import com.senthora.gatlingfx.http.api.SimpleHttpClient;
 import com.senthora.gatlingfx.simulation.api.SimulationBackend;
-import com.senthora.gatlingfx.http.api.HttpBaseUrl;
 import com.senthora.gatlingfx.wiremock.internal.DefaultWireMockBackend;
 
 /**

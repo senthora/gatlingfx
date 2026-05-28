@@ -1,6 +1,6 @@
 package com.senthora.gatlingfx.runtime.engine;
 
-import com.senthora.gatlingfx.runtime.engine.support.*;
+import com.senthora.gatlingfx.runtime.engine.support.GatlingFxEngineKit;
 import com.senthora.gatlingfx.runtime.support.MockSimulationRunResult;
 import com.senthora.gatlingfx.runtime.support.MockSimulationRunner;
 import com.senthora.gatlingfx.runtime.support.TestSimulations;
@@ -31,7 +31,7 @@ class GatlingFxTestEngineTest {
     @Test
     @DisplayName("Should report successful simulation when simulation succeeds")
     void should_ReportSuccessfulSimulation_when_SimulationSucceeds() {
-        MockSimulationRunner.with(MockSimulationRunResult.ALWAYS_SUCCESS, () -> {
+        Runnable run = () -> {
             var results = GatlingFxEngineKit.engine()
                     .select(TestSimulations.SuccessfulSimulation.class)
                     .execute();
@@ -40,13 +40,14 @@ class GatlingFxTestEngineTest {
                     .started(1)
                     .succeeded(1)
                     .failed(0));
-        });
+        };
+        MockSimulationRunner.with(MockSimulationRunResult.ALWAYS_SUCCESS, run);
     }
 
     @Test
     @DisplayName("Should report failed simulation when simulation fails")
     void should_ReportFailedSimulation_when_SimulationFails() {
-        MockSimulationRunner.with(MockSimulationRunResult.ALWAYS_FAIL, () -> {
+        Runnable run = () -> {
             var results = GatlingFxEngineKit.engine()
                     .select(TestSimulations.FailedSimulation.class)
                     .execute();
@@ -55,13 +56,14 @@ class GatlingFxTestEngineTest {
                     .started(1)
                     .succeeded(0)
                     .failed(1));
-        });
+        };
+        MockSimulationRunner.with(MockSimulationRunResult.ALWAYS_FAIL, run);
     }
 
     @Test
     @DisplayName("Should continue executing remaining simulations after simulation failure")
     void should_ContinueExecutingRemainingSimulations_when_SimulationFails() {
-        MockSimulationRunner.with(MockSimulationRunResult.ALWAYS_FAIL, () -> {
+        Runnable run = () -> {
             List<Class<?>> selection = List.of(
                     TestSimulations.FailedSimulation.class,
                     TestSimulations.SuccessfulSimulation.class
@@ -74,6 +76,7 @@ class GatlingFxTestEngineTest {
                     .started(2)
                     .succeeded(0)
                     .failed(2));
-        });
+        };
+        MockSimulationRunner.with(MockSimulationRunResult.ALWAYS_FAIL, run);
     }
 }

@@ -29,7 +29,6 @@ public interface SimulationScenario {
      * @param path request path
      *
      * @return configured HTTP GET request builder
-     *
      * @throws NullPointerException if {@code path} is null
      * @throws IllegalArgumentException if {@code path} is blank
      */

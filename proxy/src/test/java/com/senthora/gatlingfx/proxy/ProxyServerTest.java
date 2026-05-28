@@ -21,7 +21,7 @@ class ProxyServerTest {
     @Test
     @DisplayName("Should return provided address when proxy server is created")
     void should_ReturnProvidedAddress_when_ProxyServerIsCreated() {
-        var address = NetworkAddress.localhost( 8080);
+        var address = NetworkAddress.localhost(8080);
         var proxyServer = new ProxyServer(address);
 
         assertThat(proxyServer.address()).isEqualTo(address);
@@ -30,7 +30,7 @@ class ProxyServerTest {
     @Test
     @DisplayName("Should return proxy server with provided address when address is valid")
     void should_ReturnProxyServerWithProvidedAddress_when_AddressIsValid() {
-        var address = NetworkAddress.localhost( 8080);
+        var address = NetworkAddress.localhost(8080);
         var proxyServer = ProxyServer.of(address);
 
         assertThat(proxyServer.address()).isEqualTo(address);

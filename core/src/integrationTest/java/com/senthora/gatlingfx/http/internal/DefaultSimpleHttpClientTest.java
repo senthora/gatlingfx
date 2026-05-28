@@ -1,6 +1,9 @@
 package com.senthora.gatlingfx.http.internal;
 
-import com.senthora.gatlingfx.http.api.*;
+import com.senthora.gatlingfx.http.api.HttpBaseUrl;
+import com.senthora.gatlingfx.http.api.HttpScheme;
+import com.senthora.gatlingfx.http.api.NetworkAddress;
+import com.senthora.gatlingfx.http.api.SimpleHttpClient;
 import com.senthora.gatlingfx.support.MockWebServerTest;
 
 import org.junit.jupiter.api.DisplayName;

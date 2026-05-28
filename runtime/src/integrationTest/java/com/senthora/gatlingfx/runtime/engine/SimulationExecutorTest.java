@@ -15,7 +15,7 @@ class SimulationExecutorTest {
     @Test
     @DisplayName("Should report successful simulations when simulation succeeds")
     void should_ReportSuccessfulSimulations_when_SimulationSucceeds() {
-        MockSimulationRunner.with(MockSimulationRunResult.ALWAYS_SUCCESS, () -> {
+        Runnable run = () -> {
             var results = GatlingFxEngineKit.engine()
                     .select(TestSimulations.SuccessfulSimulation.class)
                     .execute();
@@ -24,13 +24,14 @@ class SimulationExecutorTest {
                     .started(1)
                     .succeeded(1)
                     .failed(0));
-        });
+        };
+        MockSimulationRunner.with(MockSimulationRunResult.ALWAYS_SUCCESS, run);
     }
 
     @Test
     @DisplayName("Should report failed simulations when simulation fails")
     void should_ReportFailedSimulations_when_SimulationFails() {
-        MockSimulationRunner.with(MockSimulationRunResult.ALWAYS_FAIL, () -> {
+        Runnable run = () -> {
             var results = GatlingFxEngineKit.engine()
                     .select(TestSimulations.FailedSimulation.class)
                     .execute();
@@ -39,13 +40,14 @@ class SimulationExecutorTest {
                     .started(1)
                     .succeeded(0)
                     .failed(1));
-        });
+        };
+        MockSimulationRunner.with(MockSimulationRunResult.ALWAYS_FAIL, run);
     }
 
     @Test
     @DisplayName("Should continue executing remaining simulations when simulation fails")
     void should_ContinueExecutingRemainingSimulations_when_SimulationFails() {
-        MockSimulationRunner.with(MockSimulationRunResult.ALWAYS_FAIL, () -> {
+        Runnable run = () -> {
             List<Class<?>> selection = List.of(
                     TestSimulations.FailedSimulation.class,
                     TestSimulations.SuccessfulSimulation.class
@@ -58,6 +60,7 @@ class SimulationExecutorTest {
                     .started(2)
                     .succeeded(0)
                     .failed(2));
-        });
+        };
+        MockSimulationRunner.with(MockSimulationRunResult.ALWAYS_FAIL, run);
     }
 }

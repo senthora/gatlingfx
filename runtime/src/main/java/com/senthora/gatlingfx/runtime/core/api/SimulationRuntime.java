@@ -27,8 +27,8 @@ public interface SimulationRuntime {
      * Simulations are executed sequentially in the order provided.
      *
      * @param simulationClasses simulation classes to execute
-     * @return execution results
      *
+     * @return execution results
      * @throws SimulationRuntimeException if an unexpected
      * failure occurs during simulation execution
      */
