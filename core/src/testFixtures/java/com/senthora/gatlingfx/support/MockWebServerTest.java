@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 
 import java.io.IOException;
 
+@SuppressWarnings("NotNullFieldNotInitialized")
 public abstract class MockWebServerTest {
 
     protected static MockWebServer server;

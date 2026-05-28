@@ -9,6 +9,7 @@ public final class MockSimulationRunner {
 
     private MockSimulationRunner() {}
 
+    @SuppressWarnings("unchecked")
     public static void with(SimulationRunResult result, Runnable runnable) {
         var runner = Mockito.mock(SimulationRunner.class);
 

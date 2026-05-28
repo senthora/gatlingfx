@@ -83,6 +83,7 @@ class DefaultSimulationAssertTest {
     class MatchesMethodTests {
 
         @Test
+        @SuppressWarnings("DataFlowIssue")
         @DisplayName("Should throw NullPointerException when predicate is null")
         void should_ThrowNullPointerException_when_PredicateIsNull() {
             var assertion = new DefaultSimulationAssert<>("value");
@@ -92,6 +93,7 @@ class DefaultSimulationAssertTest {
         }
 
         @Test
+        @SuppressWarnings("DataFlowIssue")
         @DisplayName("Should throw NullPointerException when message is null")
         void should_ThrowNullPointerException_when_MessageIsNull() {
             var assertion = new DefaultSimulationAssert<>("value");
