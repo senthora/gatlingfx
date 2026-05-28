@@ -3,7 +3,6 @@ package com.senthora.gatlingfx.runtime.core.internal;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 import com.senthora.gatlingfx.simulation.api.SimulationContext;
 import com.senthora.gatlingfx.simulation.api.event.ContextCreatedEvent;
-import com.senthora.gatlingfx.simulation.internal.AbstractSimulationEventTest;
 import com.senthora.gatlingfx.support.AbstractTestSimulation;
 import com.senthora.gatlingfx.support.TestSimulation;
 
@@ -13,17 +12,17 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
+import static com.senthora.gatlingfx.simulation.internal.SimulationTestSupport.*;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class SimulationContextRegistryTest extends AbstractSimulationEventTest {
+class SimulationContextRegistryTest {
 
-    @Override
     @AfterEach
-    protected void teardownSimulationEventTest() {
-        super.teardownSimulationEventTest();
-
+    protected void teardownSimulationContextRegistryTest() {
         SimulationContextRegistry.reset();
+        resetListenerRegistry();
     }
 
     @Test

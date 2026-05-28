@@ -4,26 +4,25 @@ import com.senthora.gatlingfx.simulation.api.event.SimulationEvent;
 import com.senthora.gatlingfx.simulation.api.event.SimulationEventListener;
 import com.senthora.gatlingfx.simulation.api.event.SimulationEventListeners;
 
-import org.junit.jupiter.api.AfterEach;
-
 import java.util.List;
 
-public abstract class AbstractSimulationEventTest {
+public final class SimulationTestSupport {
 
-    @AfterEach
-    protected void teardownSimulationEventTest() {
-        SimulationEventListenerRegistry.clear();
-    }
+    private SimulationTestSupport() { }
 
-    protected static void registerListener(SimulationEventListener listener) {
+    public static void registerListener(SimulationEventListener listener) {
         SimulationEventListeners.register(listener);
     }
 
-    protected static void publishEvent(SimulationEvent event) {
+    public static void publishEvent(SimulationEvent event) {
         SimulationEventPublisher.publish(event);
     }
 
-    protected static List<SimulationEventListener> registeredListeners() {
+    public static List<SimulationEventListener> registeredListeners() {
         return SimulationEventListenerRegistry.listeners();
+    }
+
+    public static void resetListenerRegistry() {
+        SimulationEventListenerRegistry.clear();
     }
 }

@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
+import static com.senthora.gatlingfx.simulation.internal.SimulationTestSupport.*;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class SimulationEventPublisherTest extends AbstractSimulationEventTest {
+class SimulationEventPublisherTest {
 
     @Test
     @DisplayName("Should publish event when listener is registered")
