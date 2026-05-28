@@ -33,7 +33,7 @@ class SimulationLogSessionTest {
     @Test
     @DisplayName("Should return provided log file path when log session is created")
     void should_ReturnProvidedLogFilePath_when_LogSessionIsCreated() {
-        Path logFilePath = Path.of("simulation.log");
+        Path logFilePath = createTempSimulationLog();
 
         try (var session = new SimulationLogSession(logFilePath)) {
             assertThat(session.logFilePath()).isEqualTo(logFilePath);
@@ -43,11 +43,8 @@ class SimulationLogSessionTest {
     @Test
     @DisplayName("Should return redirected output stream when log session is created")
     void should_ReturnRedirectedOutputStream_when_LogSessionIsCreated() throws IOException {
-        var logFilePath = Files.createTempFile(
-                tempDirectory,
-                "simulation",
-                ".log"
-        );
+        var logFilePath = createTempSimulationLog();
+
         var expected = "simulation-started";
         try (var session = new SimulationLogSession(logFilePath)) {
             session.output().println(expected);
@@ -59,6 +56,19 @@ class SimulationLogSessionTest {
     private static void runLogSession(Path logFilePath, Runnable action) {
         try (var ignored = new SimulationLogSession(logFilePath)) {
             action.run();
+        }
+    }
+
+    private static Path createTempSimulationLog() {
+        try {
+            return Files.createTempFile(
+                    tempDirectory,
+                    "simulation",
+                    ".log"
+            );
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
