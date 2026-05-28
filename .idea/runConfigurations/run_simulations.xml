@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="run-simulations" type="JustRunConfiguration" factoryName="JustRunConfiguration">
+    <option name="envVariables" />
+    <option name="fileName" />
+    <option name="recipeArgs" value="-q" />
+    <option name="recipeName" value="run-simulations" />
+    <method v="2" />
+  </configuration>
+</component>
