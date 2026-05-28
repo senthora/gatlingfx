@@ -25,11 +25,13 @@ final class SimulationLogManager {
      * @throws NullPointerException if any argument is null
      * @throws SimulationRuntimeException if log directory creation failed
      */
-    SimulationLogManager(Path logDirectoryPath, SimulationRunId runId) {
+    SimulationLogManager(Path logDirectoryPath, String runId) {
         Objects.requireNonNull(logDirectoryPath, "logDirectoryPath must not be null");
         Objects.requireNonNull(runId, "runId must not be null");
-
-        var path = logDirectoryPath.resolve(runId.value());
+        if (runId.isBlank()) {
+            throw new IllegalArgumentException("runId must not be blank");
+        }
+        var path = logDirectoryPath.resolve(runId);
         try {
             this.logDirectory = Files.createDirectories(path);
         }

@@ -23,6 +23,8 @@ import scala.Console;
 import scala.Option;
 
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,23 +36,25 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public final class DefaultSimulationRuntime implements SimulationRuntime {
 
+    private static final DateTimeFormatter RUN_ID_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss-SSS");
+
     private static final Logger log = LoggerFactory.getLogger("SimulationRuntime");
 
     static {
         SimulationContextRegistry.initialize();
     }
-
+    private final String runId;
     private final GatlingRunner gatlingRunner;
     private final GatlingConfiguration gatlingConfig;
-    private final SimulationRunId runId;
     private final SimulationLogManager logManager;
 
     public DefaultSimulationRuntime(GatlingRunner gatlingRunner) {
         Objects.requireNonNull(gatlingRunner, "gatlingRunner must not be null");
 
+        this.runId = RUN_ID_FORMATTER.format(LocalDateTime.now());
         this.gatlingRunner = gatlingRunner;
         this.gatlingConfig = GatlingConfiguration.load();
-        this.runId = SimulationRunId.create();
         this.logManager = new SimulationLogManager(
                 Path.of("build/gatlingfx"),
                 runId

@@ -30,7 +30,7 @@ class SimulationLogManagerTest {
         void should_ThrowNullPointerException_when_LogDirectoryPathIsNull() {
             var thrown = catchThrowable(() -> new SimulationLogManager(
                     null,
-                    new SimulationRunId("run-123")
+                    "run-123"
             ));
             assertThat(thrown).isInstanceOf(NullPointerException.class);
         }
@@ -47,6 +47,16 @@ class SimulationLogManagerTest {
         }
 
         @Test
+        @DisplayName("Should throw IllegalArgumentException when run id is blank")
+        void should_ThrowIllegalArgumentException_when_RunIdIsBlank() {
+            var thrown = catchThrowable(() -> new SimulationLogManager(
+                    tempDirectory,
+                    " "
+            ));
+            assertThat(thrown).isInstanceOf(IllegalArgumentException.class);
+        }
+
+        @Test
         @DisplayName("Should throw SimulationRuntimeException when log directory creation fails")
         void should_ThrowSimulationRuntimeException_when_LogDirectoryCreationFails() throws IOException {
             var logDirectoryPath = Files.createTempFile(
@@ -54,11 +64,9 @@ class SimulationLogManagerTest {
                     "gatlingfx",
                     ".log"
             );
-            var runId = new SimulationRunId("run-123");
-
             var thrown = catchThrowable(() -> new SimulationLogManager(
                     logDirectoryPath,
-                    runId
+                    "run-123"
             ));
             assertThat(thrown).isInstanceOf(SimulationRuntimeException.class);
         }
@@ -67,14 +75,14 @@ class SimulationLogManagerTest {
         @DisplayName("Should return created log directory when log manager is created")
         void should_ReturnCreatedLogDirectory_when_LogManagerIsCreated() {
             var logDirectoryPath = tempDirectory.resolve("logs");
-            var runId = new SimulationRunId("run-123");
+            var runId = "run-123";
 
             var logManager = new SimulationLogManager(logDirectoryPath, runId);
 
             assertThat(logManager.logDirectory())
                     .exists()
                     .isDirectory()
-                    .isEqualTo(logDirectoryPath.resolve("run-123"));
+                    .isEqualTo(logDirectoryPath.resolve(runId));
         }
     }
 
@@ -88,7 +96,7 @@ class SimulationLogManagerTest {
         void should_ThrowNullPointerException_when_SimulationClassIsNull() {
             var logManager = new SimulationLogManager(
                     tempDirectory,
-                    new SimulationRunId("run-123")
+                    "run-123"
             );
             var thrown = catchThrowable(() -> {
                 //noinspection EmptyTryBlock
@@ -102,7 +110,7 @@ class SimulationLogManagerTest {
         void should_ReturnSimulationLogSession_when_SimulationClassIsValid() {
             var logManager = new SimulationLogManager(
                     tempDirectory,
-                    new SimulationRunId("run-123")
+                    "run-123"
             );
             try (var session = logManager.createSession(TestSimulation.class)) {
                 assertThat(session).isNotNull();
@@ -114,7 +122,7 @@ class SimulationLogManagerTest {
         void should_CreateLogFileUsingSimulationClassName_when_SessionIsCreated() {
             var logManager = new SimulationLogManager(
                     tempDirectory,
-                    new SimulationRunId("run-123")
+                    "run-123"
             );
             try (var ignored = logManager.createSession(TestSimulation.class)) {
                 var expected = logManager.logDirectory().resolve("TestSimulation.log");
