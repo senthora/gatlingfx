@@ -1,5 +1,7 @@
 package com.senthora.gatlingfx.runtime.support;
 
+import com.senthora.gatlingfx.support.TestSimulation;
+
 import org.junit.jupiter.api.DisplayName;
 
 public class NamedTestSimulations {

@@ -1,7 +1,7 @@
 package com.senthora.gatlingfx.runtime.core.internal;
 
 import com.senthora.gatlingfx.runtime.core.api.SimulationRuntimeException;
-import com.senthora.gatlingfx.runtime.support.TestSimulation;
+import com.senthora.gatlingfx.support.TestSimulation;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;

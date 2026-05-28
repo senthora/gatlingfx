@@ -1,6 +1,6 @@
 package com.senthora.gatlingfx.runtime.core.internal;
 
-import com.senthora.gatlingfx.runtime.support.TestSimulation;
+import com.senthora.gatlingfx.support.TestSimulation;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
