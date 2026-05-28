@@ -1,6 +1,9 @@
 package com.senthora.gatlingfx.simulation.api;
 
+import com.senthora.gatlingfx.simulation.api.event.ContextCreatedEvent;
 import com.senthora.gatlingfx.simulation.internal.DefaultSimulationContext;
+import com.senthora.gatlingfx.simulation.internal.SimulationEventPublisher;
+
 import io.gatling.javaapi.core.Assertion;
 import io.gatling.javaapi.core.PopulationBuilder;
 import io.gatling.javaapi.core.Simulation;
@@ -31,6 +34,9 @@ public abstract class BaseSimulation extends Simulation {
     protected BaseSimulation() {
         setUp(setup()).protocols(protocol().build()).assertions(assertions());
         this.context = new DefaultSimulationContext(getClass());
+
+        var event = new ContextCreatedEvent(context);
+        SimulationEventPublisher.publish(event);
     }
 
     @Override
