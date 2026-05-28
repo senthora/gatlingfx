@@ -49,6 +49,9 @@ public abstract class BaseSimulation extends Simulation {
         try {
             verify();
         }
+        catch (Throwable e) {
+            context.setFailure(e);
+        }
         finally {
             backend().teardown();
         }
