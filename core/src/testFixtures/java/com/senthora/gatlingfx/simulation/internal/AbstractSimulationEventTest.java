@@ -8,22 +8,22 @@ import org.junit.jupiter.api.AfterEach;
 
 import java.util.List;
 
-abstract class AbstractSimulationEventTest {
+public abstract class AbstractSimulationEventTest {
 
     @AfterEach
-    void teardownSimulationEventTest() {
+    protected void teardownSimulationEventTest() {
         SimulationEventListenerRegistry.clear();
     }
 
-    static void registerListener(SimulationEventListener listener) {
+    protected static void registerListener(SimulationEventListener listener) {
         SimulationEventListeners.register(listener);
     }
 
-    static void publishEvent(SimulationEvent event) {
+    protected static void publishEvent(SimulationEvent event) {
         SimulationEventPublisher.publish(event);
     }
 
-    static List<SimulationEventListener> registeredListeners() {
+    protected static List<SimulationEventListener> registeredListeners() {
         return SimulationEventListenerRegistry.listeners();
     }
 }
