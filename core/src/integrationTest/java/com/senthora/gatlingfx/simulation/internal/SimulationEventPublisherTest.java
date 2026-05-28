@@ -1,5 +1,6 @@
 package com.senthora.gatlingfx.simulation.internal;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +12,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class SimulationEventPublisherTest {
+
+    @AfterEach
+    void teardownSimulationEventPublisherTest() {
+        SimulationTestSupport.resetListenerRegistry();
+    }
 
     @Test
     @DisplayName("Should publish event when listener is registered")
