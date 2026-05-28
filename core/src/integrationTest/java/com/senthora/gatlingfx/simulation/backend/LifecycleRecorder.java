@@ -1,6 +1,7 @@
 package com.senthora.gatlingfx.simulation.backend;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 final class LifecycleRecorder {
@@ -14,7 +15,7 @@ final class LifecycleRecorder {
     }
 
     static List<Event> events() {
-        return List.copyOf(EVENTS);
+        return Collections.unmodifiableList(EVENTS);
     }
 
     static void clear() {

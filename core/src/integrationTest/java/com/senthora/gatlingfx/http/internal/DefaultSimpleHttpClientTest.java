@@ -3,8 +3,6 @@ package com.senthora.gatlingfx.http.internal;
 import com.senthora.gatlingfx.http.api.*;
 import com.senthora.gatlingfx.support.MockWebServerTest;
 
-import okhttp3.mockwebserver.MockResponse;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -88,10 +86,6 @@ class DefaultSimpleHttpClientTest extends MockWebServerTest {
             assertThatThrownBy(() -> client.get("/users"))
                     .isInstanceOf(HttpClientNetworkException.class);
         }
-    }
-
-    private static void enqueueOkResponse() {
-        server.enqueue(new MockResponse().setResponseCode(200).setBody("ok"));
     }
 
     private static void assertOkResponse(HttpResponse<String> response) {

@@ -4,6 +4,7 @@ import com.senthora.gatlingfx.http.api.HttpBaseUrl;
 import com.senthora.gatlingfx.http.api.HttpScheme;
 import com.senthora.gatlingfx.http.api.NetworkAddress;
 
+import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 
 import org.junit.jupiter.api.AfterAll;
@@ -35,5 +36,9 @@ public abstract class MockWebServerTest {
 
     public static HttpBaseUrl baseUrl() {
         return baseUrl;
+    }
+
+    protected static void enqueueOkResponse() {
+        server.enqueue(new MockResponse().setResponseCode(200).setBody("ok"));
     }
 }

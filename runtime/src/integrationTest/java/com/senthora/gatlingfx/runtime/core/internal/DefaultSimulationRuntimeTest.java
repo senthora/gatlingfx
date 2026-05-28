@@ -10,8 +10,6 @@ import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 import com.senthora.gatlingfx.simulation.internal.SimulationTestSupport;
 import com.senthora.gatlingfx.support.MockWebServerTest;
 
-import okhttp3.mockwebserver.MockResponse;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +25,7 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
 
     @BeforeEach
     void setupDefaultSimulationRuntimeTest() {
-        server.enqueue(new MockResponse().setResponseCode(200));
+        enqueueOkResponse();
     }
 
     @AfterEach
@@ -67,7 +65,7 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
     @Test
     @DisplayName("Should continue executing remaining simulations when simulation fails")
     void should_ContinueExecutingRemainingSimulations_when_SimulationFails() {
-        server.enqueue(new MockResponse().setResponseCode(200));
+        enqueueOkResponse();
 
         var gatlingRunner = new DefaultGatlingRunner();
         var runtime = new DefaultSimulationRuntime(gatlingRunner);
@@ -94,9 +92,9 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
     @Test
     @DisplayName("Should stop executing remaining simulations when runtime execution crashes")
     void should_StopExecutingRemainingSimulations_when_RuntimeExecutionCrashes() {
-        server.enqueue(new MockResponse().setResponseCode(200));
-        var executions = new AtomicInteger();
+        enqueueOkResponse();
 
+        var executions = new AtomicInteger();
         var runtime = new DefaultSimulationRuntime((args, gatlingRunner) -> {
             if (executions.incrementAndGet() == 2) {
                 throw new RuntimeException("boom");
@@ -117,7 +115,7 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
     @Test
     @DisplayName("Should execute simulations in provided order when executing multiple simulations")
     void should_ExecuteSimulationsInProvidedOrder_when_ExecutingMultipleSimulations() {
-        server.enqueue(new MockResponse().setResponseCode(200));
+        enqueueOkResponse();
 
         var gatlingRunner = new DefaultGatlingRunner();
         var runtime = new DefaultSimulationRuntime(gatlingRunner);
