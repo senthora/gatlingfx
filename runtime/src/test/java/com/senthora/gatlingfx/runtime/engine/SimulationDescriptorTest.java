@@ -1,6 +1,5 @@
 package com.senthora.gatlingfx.runtime.engine;
 
-import com.senthora.gatlingfx.runtime.support.NamedTestSimulations;
 import com.senthora.gatlingfx.support.TestSimulation;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 

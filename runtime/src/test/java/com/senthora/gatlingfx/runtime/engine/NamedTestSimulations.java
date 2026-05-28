@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.runtime.support;
+package com.senthora.gatlingfx.runtime.engine;
 
 import com.senthora.gatlingfx.support.TestSimulation;
 
