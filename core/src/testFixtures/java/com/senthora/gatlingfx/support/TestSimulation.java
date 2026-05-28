@@ -4,9 +4,6 @@ import com.senthora.gatlingfx.http.api.HttpBaseUrl;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 import com.senthora.gatlingfx.simulation.api.SimulationProtocol;
 
-import org.jspecify.annotations.NullMarked;
-
-@NullMarked
 public class TestSimulation extends BaseSimulation {
 
     @Override
