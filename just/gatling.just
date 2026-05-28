@@ -1,6 +1,6 @@
 # Run all Gatling simulations via GatlingFx
-run-simulations:
-    ./gradlew :launcher:run
+run-simulations *args:
+    ./gradlew :launcher:run {{args}}
 
 # Run single Gatling simulation via GatlingFx
 [arg("simulation", help="simulation class")]
