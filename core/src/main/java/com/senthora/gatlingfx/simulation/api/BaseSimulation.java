@@ -1,5 +1,6 @@
 package com.senthora.gatlingfx.simulation.api;
 
+import com.senthora.gatlingfx.simulation.internal.DefaultSimulationContext;
 import io.gatling.javaapi.core.Assertion;
 import io.gatling.javaapi.core.PopulationBuilder;
 import io.gatling.javaapi.core.Simulation;
@@ -19,6 +20,8 @@ import static io.gatling.javaapi.core.CoreDsl.global;
  */
 public abstract class BaseSimulation extends Simulation {
 
+    private final SimulationContext context;
+
     /**
      * Creates and configures the simulation.
      * <p>
@@ -27,6 +30,7 @@ public abstract class BaseSimulation extends Simulation {
      */
     protected BaseSimulation() {
         setUp(setup()).protocols(protocol().build()).assertions(assertions());
+        this.context = new DefaultSimulationContext(getClass());
     }
 
     @Override
