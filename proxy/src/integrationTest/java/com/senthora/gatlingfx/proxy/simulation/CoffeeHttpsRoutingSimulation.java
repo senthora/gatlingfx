@@ -7,9 +7,12 @@ import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 import com.senthora.gatlingfx.simulation.api.SimulationProtocol;
 import com.senthora.gatlingfx.simulation.api.SimulationScenario;
 
+import org.junit.jupiter.api.DisplayName;
+
 import java.util.List;
 
 @GatlingSimulation
+@DisplayName("Should route HTTPS requests to coffee service")
 public final class CoffeeHttpsRoutingSimulation extends BaseSimulation {
 
     @Override
