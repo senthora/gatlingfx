@@ -3,6 +3,9 @@ package com.senthora.gatlingfx.runtime.core.application;
 import com.senthora.gatlingfx.runtime.core.api.*;
 import com.senthora.gatlingfx.runtime.core.internal.SimulationResolver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import picocli.CommandLine;
 
 import java.util.List;
@@ -19,6 +22,8 @@ import java.util.List;
  * CI pipelines, and IDE run configurations.
  */
 public final class GatlingFx {
+
+    private static final Logger log = LoggerFactory.getLogger(GatlingFx.class);
 
     private GatlingFx() {}
 
@@ -46,12 +51,21 @@ public final class GatlingFx {
      */
     static int run(String[] args) {
         var arguments = parseArgs(args);
-        var config = createConfig(arguments);
-        var runner = SimulationRunner.create(config);
+        var logLevel = arguments.quietLogs() ?
+                RuntimeLogLevel.WARN : RuntimeLogLevel.INFO;
 
+        try (var ignored = LoggingContext.configure(logLevel)) {
+            var config = createConfig(arguments);
+            var runner = SimulationRunner.create(config);
+
+            return run(arguments, runner);
+        }
+    }
+
+    private static int run(GatlingFxArguments args, SimulationRunner runner) {
         SimulationRunResult result;
 
-        var simulationClassName = arguments.simulationClassName();
+        var simulationClassName = args.simulationClassName();
         if (simulationClassName.isPresent()) {
             var simulationClass = findClass(simulationClassName.get());
             var simulation = SimulationResolver.resolve(simulationClass);
@@ -61,6 +75,9 @@ public final class GatlingFx {
         else {
             var discoveryResult = SimulationScanner.scan();
 
+            log.info("Discovered {} simulation(s)",
+                    discoveryResult.supported().size()
+            );
             result = runner.run(discoveryResult.supported());
 
             var unsupportedSimulations = discoveryResult.unsupported();
@@ -79,11 +96,7 @@ public final class GatlingFx {
     }
 
     private static SimulationRuntimeConfig createConfig(GatlingFxArguments arguments) {
-        var logLevel = arguments.quietLogs() ?
-                RuntimeLogLevel.WARN : RuntimeLogLevel.INFO;
-
         return SimulationRuntimeConfig.create()
-                .withLogLevel(logLevel)
                 .withFailFast(arguments.failFast())
                 .build();
     }
@@ -99,13 +112,16 @@ public final class GatlingFx {
     }
 
     private static void warnUnsupportedSimulations(List<Class<?>> simulations) {
-        StringBuilder sb = new StringBuilder();
+        var names = simulations.stream()
+                .map(clazz -> "- " + clazz.getName())
+                .toList();
 
-        sb.append("WARN: Skipping unsupported Gatling simulations:");
-
-        simulations.forEach(simulation ->
-                sb.append("\n- ").append(simulation.getName())
+        //@formatter:off
+        log.warn("""
+            Skipping {} unsupported Gatling simulation(s):
+            {}
+            """, simulations.size(), String.join("\n", names)
         );
-        System.out.println(sb);
+        //@formatter:on
     }
 }

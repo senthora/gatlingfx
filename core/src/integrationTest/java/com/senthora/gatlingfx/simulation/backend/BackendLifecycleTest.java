@@ -1,31 +1,43 @@
 package com.senthora.gatlingfx.simulation.backend;
 
 import com.senthora.gatlingfx.runtime.core.api.*;
+import com.senthora.gatlingfx.runtime.core.application.LoggingContext;
 import com.senthora.gatlingfx.runtime.core.internal.DefaultGatlingRunner;
 import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationRuntime;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.jspecify.annotations.NullUnmarked;
+
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@NullUnmarked
 class BackendLifecycleTest {
 
+    private static LoggingContext loggingContext;
+
     private SimulationRuntime runtime;
+
+    @BeforeAll
+    static void setupBackendLifecycleTests() {
+        loggingContext = LoggingContext.configure(RuntimeLogLevel.ERROR);
+    }
 
     @BeforeEach
     void setupBackendLifecycleTest() {
         var runner = new DefaultGatlingRunner();
-        var config = SimulationRuntimeConfig.create()
-                .withLogLevel(RuntimeLogLevel.ERROR)
-                .build();
+        var config = SimulationRuntimeConfig.create().build();
 
         runtime = new DefaultSimulationRuntime(runner, config);
 
         LifecycleRecorder.clear();
+    }
+
+    @AfterAll
+    static void teardownBackendLifecycleTests() {
+        loggingContext.close();
     }
 
     @Test

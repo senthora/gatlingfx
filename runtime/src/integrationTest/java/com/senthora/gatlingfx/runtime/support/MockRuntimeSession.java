@@ -62,19 +62,13 @@ public final class MockRuntimeSession implements AutoCloseable {
         Mockito.verify(runner).run(classes);
     }
 
-    public void verifyLogLevel(RuntimeLogLevel expected) {
-        assertThat(config.logLevel()).isEqualTo(expected);
-    }
-
     public void verifyFailFast(boolean expected) {
         assertThat(config.failFast()).isEqualTo(expected);
     }
 
     @Override
     public void close() {
-        if (scannerMock != null) {
-            scannerMock.close();
-        }
+        scannerMock.close();
         runnerMock.close();
     }
 }

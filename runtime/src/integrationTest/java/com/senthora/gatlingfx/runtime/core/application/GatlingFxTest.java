@@ -1,6 +1,5 @@
 package com.senthora.gatlingfx.runtime.core.application;
 
-import com.senthora.gatlingfx.runtime.core.api.RuntimeLogLevel;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRuntimeConfig;
 import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationDiscoveryResult;
 import com.senthora.gatlingfx.runtime.support.MockRuntimeSession;
@@ -10,6 +9,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -91,7 +94,7 @@ class GatlingFxTest {
                 runtime.stubExecutionResult(true);
                 runtime.stubDiscoveryResult(discoveryResult);
 
-                assertThat(GatlingFx.run(new String[0])).isZero();
+                assertThat(runGatlingFxQuiet()).isZero();
             }
         }
 
@@ -106,7 +109,7 @@ class GatlingFxTest {
                 runtime.stubExecutionResult(true);
                 runtime.stubDiscoveryResult(discoveryResult);
 
-                assertThat(GatlingFx.run(new String[0])).isZero();
+                assertThat(runGatlingFxQuiet()).isZero();
             }
         }
 
@@ -121,7 +124,7 @@ class GatlingFxTest {
                 runtime.stubExecutionResult(true);
                 runtime.stubDiscoveryResult(discoveryResult);
 
-                assertThat(GatlingFx.run(new String[0])).isZero();
+                assertThat(runGatlingFxQuiet()).isZero();
             }
         }
 
@@ -136,7 +139,7 @@ class GatlingFxTest {
                 runtime.stubExecutionResult(true);
                 runtime.stubDiscoveryResult(discoveryResult);
 
-                GatlingFx.run(new String[0]);
+                assertThat(runGatlingFxQuiet()).isZero();
 
                 runtime.verifySimulationsExecuted(List.of(
                         TestSimulations.SuccessfulSimulation.class
@@ -155,7 +158,7 @@ class GatlingFxTest {
                 runtime.stubExecutionResult(true);
                 runtime.stubDiscoveryResult(discoveryResult);
 
-                GatlingFx.run(new String[0]);
+                assertThat(runGatlingFxQuiet()).isZero();
 
                 runtime.verifySimulationsExecuted(List.of(
                         TestSimulations.SuccessfulSimulation.class
@@ -179,7 +182,7 @@ class GatlingFxTest {
                 runtime.stubExecutionResult(false);
                 runtime.stubDiscoveryResult(discoveryResult);
 
-                assertThat(GatlingFx.run(new String[0])).isEqualTo(1);
+                assertThat(runGatlingFxQuiet()).isEqualTo(1);
             }
         }
     }
@@ -189,46 +192,14 @@ class GatlingFxTest {
     class ConfigurationTests {
 
         @Test
-        @DisplayName("Should configure warn log level when quiet argument supplied")
-        void should_ConfigureWarnLogLevel_when_QuietArgumentSupplied() {
-            try (var runtime = MockRuntimeSession.create()) {
-                runtime.stubExecutionResult(true);
-
-                var args = new String[]{
-                        GatlingFxArguments.QUIET
-                };
-                GatlingFx.run(args);
-
-                runtime.verifyLogLevel(RuntimeLogLevel.WARN);
-            }
-        }
-
-        @Test
-        @DisplayName("Should configure default log level when quiet argument not supplied")
-        void should_ConfigureDefaultLogLevel_when_QuietArgumentNotSupplied() {
-            var defaultConfig = SimulationRuntimeConfig.create().build();
-            var defaultLogLevel = defaultConfig.logLevel();
-
-            try (var runtime = MockRuntimeSession.create()) {
-                runtime.stubExecutionResult(true);
-
-                GatlingFx.run(new String[0]);
-
-                runtime.verifyLogLevel(defaultLogLevel);
-            }
-        }
-
-        @Test
         @DisplayName("Should enable fail-fast when fail-fast argument supplied")
         void should_EnableFailFast_when_FailFastArgumentSupplied() {
             try (var runtime = MockRuntimeSession.create()) {
                 runtime.stubExecutionResult(true);
 
-                var args = new String[]{
+                runGatlingFxQuiet(new String[]{
                         GatlingFxArguments.FAIL_FAST
-                };
-                GatlingFx.run(args);
-
+                });
                 runtime.verifyFailFast(true);
             }
         }
@@ -242,10 +213,90 @@ class GatlingFxTest {
             try (var runtime = MockRuntimeSession.create()) {
                 runtime.stubExecutionResult(true);
 
-                GatlingFx.run(new String[0]);
+                runGatlingFxQuiet();
 
                 runtime.verifyFailFast(defaultFailFast);
             }
         }
+    }
+
+    @Nested
+    @DisplayName("logging")
+    class LoggingTests {
+
+        @Test
+        @DisplayName("Should suppress logs when quiet argument supplied")
+        void should_SuppressInfoLogs_when_QuietArgumentSupplied() {
+            var discoveryResult = new DefaultSimulationDiscoveryResult(
+                    List.of(),
+                    List.of()
+            );
+            try (var runtime = MockRuntimeSession.create()) {
+                runtime.stubExecutionResult(true);
+                runtime.stubDiscoveryResult(discoveryResult);
+
+                var output = captureStdOut(() -> {
+                    var args = new String[]{
+                            GatlingFxArguments.QUIET
+                    };
+                    GatlingFx.run(args);
+                });
+                assertThat(output).isEmpty();
+            }
+        }
+
+        @Test
+        @DisplayName("Should emit logs when quiet argument not supplied")
+        void should_EmitLogs_when_QuietArgumentNotSupplied() {
+            var discoveryResult = new DefaultSimulationDiscoveryResult(
+                    List.of(),
+                    List.of()
+            );
+            try (var runtime = MockRuntimeSession.create()) {
+                runtime.stubExecutionResult(true);
+                runtime.stubDiscoveryResult(discoveryResult);
+
+                var output = captureStdOut(() ->
+                        GatlingFx.run(new String[0])
+                );
+                assertThat(output).isNotEmpty();
+            }
+        }
+
+        private static String captureStdOut(Runnable runnable) {
+            var output = new ByteArrayOutputStream();
+
+            var previous = System.out;
+
+            try (var stream = new PrintStream(output)) {
+                System.setOut(stream);
+
+                runnable.run();
+
+                stream.flush();
+
+                return output.toString(StandardCharsets.UTF_8);
+            }
+            finally {
+                System.setOut(previous);
+            }
+        }
+    }
+
+    private static int runGatlingFxQuiet(String[] args) {
+        var previous = System.out;
+
+        try (var stream = new PrintStream(OutputStream.nullOutputStream())) {
+            System.setOut(stream);
+
+            return GatlingFx.run(args);
+        }
+        finally {
+            System.setOut(previous);
+        }
+    }
+
+    private static int runGatlingFxQuiet() {
+        return runGatlingFxQuiet(new String[0]);
     }
 }

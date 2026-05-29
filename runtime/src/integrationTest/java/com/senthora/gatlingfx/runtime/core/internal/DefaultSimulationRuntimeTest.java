@@ -1,6 +1,7 @@
 package com.senthora.gatlingfx.runtime.core.internal;
 
 import com.senthora.gatlingfx.runtime.core.api.*;
+import com.senthora.gatlingfx.runtime.core.application.LoggingContext;
 import com.senthora.gatlingfx.runtime.core.internal.support.FailedSimulation;
 import com.senthora.gatlingfx.runtime.core.internal.support.OrderedSimulation;
 import com.senthora.gatlingfx.runtime.core.internal.support.SimulationRuntimeBuilder;
@@ -11,9 +12,6 @@ import com.senthora.gatlingfx.support.MockWebServerTest;
 
 import org.junit.jupiter.api.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -21,6 +19,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class DefaultSimulationRuntimeTest extends MockWebServerTest {
+
+    private static LoggingContext loggingContext;
+
+    @BeforeAll
+    static void setupDefaultSimulationRuntimeTests() {
+        loggingContext = LoggingContext.configure(RuntimeLogLevel.ERROR);
+    }
 
     @BeforeEach
     void setupDefaultSimulationRuntimeTest() {
@@ -37,6 +42,11 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
         SimulationContextRegistry.initialize();
     }
 
+    @AfterAll
+    static void teardownDefaultSimulationRuntimeTests() {
+        loggingContext.close();
+    }
+
     @Nested
     @DisplayName("failure")
     class FailureTests {
@@ -48,12 +58,13 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
                 throw new RuntimeException("boom");
             };
             SimulationRuntime runtime = simulationRuntime()
-                    .withLogLevel(RuntimeLogLevel.OFF)
                     .withGatlingRunner(runner)
                     .build();
 
-            assertThatThrownBy(() -> runtime.execute(List.of(SuccessfulSimulation.class)))
-                    .isInstanceOf(SimulationRuntimeException.class);
+            try (var ignored = LoggingContext.configure(RuntimeLogLevel.OFF)) {
+                assertThatThrownBy(() -> runtime.execute(List.of(SuccessfulSimulation.class)))
+                        .isInstanceOf(SimulationRuntimeException.class);
+            }
         }
 
         @Test
@@ -69,7 +80,6 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
                 return gatlingRunner.run();
             };
             SimulationRuntime runtime = simulationRuntime()
-                    .withLogLevel(RuntimeLogLevel.OFF)
                     .withGatlingRunner(runner)
                     .build();
 
@@ -77,9 +87,10 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
                     OrderedSimulation.First.class,
                     OrderedSimulation.Second.class
             );
-            assertThatThrownBy(() -> runtime.execute(simulationClasses))
-                    .isInstanceOf(SimulationRuntimeException.class);
-
+            try (var ignored = LoggingContext.configure(RuntimeLogLevel.OFF)) {
+                assertThatThrownBy(() -> runtime.execute(simulationClasses))
+                        .isInstanceOf(SimulationRuntimeException.class);
+            }
             assertThat(OrderedSimulation.executionOrder)
                     .containsExactly(1);
         }
@@ -175,53 +186,9 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
             assertThat(OrderedSimulation.executionOrder)
                     .containsExactly(1);
         }
-
-        @Test
-        @DisplayName("Should suppress runtime logs when log level is off")
-        void should_SuppressRuntimeLogs_when_LogLevelIsOff() {
-            var runtime = simulationRuntime()
-                    .withLogLevel(RuntimeLogLevel.OFF)
-                    .build();
-
-            var output = captureStdOut(() ->
-                    runtime.execute(List.of(SuccessfulSimulation.class))
-            );
-            assertThat(output).isEmpty();
-        }
-
-        @Test
-        @DisplayName("Should emit runtime logs when log level is not off")
-        void should_EmitRuntimeLogs_when_LogLevelIsNotOff() {
-            var runtime = simulationRuntime()
-                    .withLogLevel(RuntimeLogLevel.INFO)
-                    .build();
-
-            var output = captureStdOut(() ->
-                    runtime.execute(List.of(SuccessfulSimulation.class))
-            );
-            assertThat(output).isNotEmpty();
-        }
     }
 
     private static SimulationRuntimeBuilder simulationRuntime() {
         return new SimulationRuntimeBuilder();
-    }
-
-    private static String captureStdOut(Runnable runnable) {
-        var output = new ByteArrayOutputStream();
-        var stream = new PrintStream(output);
-
-        var previous = System.out;
-
-        try {
-            System.setOut(stream);
-            runnable.run();
-
-            stream.flush();
-            return output.toString(StandardCharsets.UTF_8);
-        }
-        finally {
-            System.setOut(previous);
-        }
     }
 }

@@ -9,7 +9,6 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Level;
 import io.gatling.app.RunResultProcessor;
 import io.gatling.app.Runner;
 import io.gatling.app.cli.StatusCode;
@@ -37,11 +36,13 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
     private static final DateTimeFormatter RUN_ID_FORMATTER =
             DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss-SSS");
 
-    private static final Logger log = LoggerFactory.getLogger("SimulationRuntime");
+    @SuppressWarnings("LoggerInitializedWithForeignClass")
+    private static final Logger log = LoggerFactory.getLogger(SimulationRuntime.class);
 
     static {
         SimulationContextRegistry.initialize();
     }
+
     private final String runId;
     private final GatlingRunner gatlingRunner;
     private final SimulationRuntimeConfig runtimeConfig;
@@ -64,23 +65,6 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
 
     @Override
     public List<SimulationExecutionResult> execute(
-            List<Class<? extends BaseSimulation>> simulationClasses
-    ) {
-        Objects.requireNonNull(simulationClasses, "simulationClasses must not be null");
-
-        var logger = (ch.qos.logback.classic.Logger) log;
-        var previousLevel = logger.getLevel();
-
-        try {
-            logger.setLevel(toLevel(runtimeConfig.logLevel()));
-            return doExecute(simulationClasses);
-        }
-        finally {
-            logger.setLevel(previousLevel);
-        }
-    }
-
-    private List<SimulationExecutionResult> doExecute(
             List<Class<? extends BaseSimulation>> simulationClasses
     ) {
         List<SimulationExecutionResult> results = new ArrayList<>();
@@ -221,17 +205,6 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
             );
             result.set(processor.processRunResult(runResult));
             return null;
-        };
-    }
-
-    private static Level toLevel(RuntimeLogLevel level) {
-        return switch (level) {
-            case TRACE -> Level.TRACE;
-            case DEBUG -> Level.DEBUG;
-            case INFO -> Level.INFO;
-            case WARN -> Level.WARN;
-            case ERROR -> Level.ERROR;
-            case OFF -> Level.OFF;
         };
     }
 
