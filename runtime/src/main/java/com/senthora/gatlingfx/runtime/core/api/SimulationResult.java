@@ -7,5 +7,21 @@ package com.senthora.gatlingfx.runtime.core.api;
  * after executing a single simulation.
  */
 public enum SimulationResult {
-    SUCCESS, FAILURE
+    SUCCESS, FAILURE;
+
+    /**
+     * Returns whether this result
+     * represents a successful execution.
+     */
+    public boolean isSuccess() {
+        return this == SUCCESS;
+    }
+
+    /**
+     * Returns whether this result
+     * represents a failed execution.
+     */
+    public boolean isFailure() {
+        return this == FAILURE;
+    }
 }

@@ -104,12 +104,12 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
         }
         var okCount = results.stream()
                 .map(SimulationExecutionResult::result)
-                .filter(r -> r == SimulationResult.SUCCESS)
+                .filter(SimulationResult::isSuccess)
                 .count();
 
         var koCount = results.stream()
                 .map(SimulationExecutionResult::result)
-                .filter(r -> r == SimulationResult.FAILURE)
+                .filter(SimulationResult::isFailure)
                 .count();
 
         log.info("Finished running {} simulations (ok={}, ko={})",
@@ -169,7 +169,7 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
                     message != null ? message : "unknown"
             );
         }
-        else if (simulationResult == SimulationResult.FAILURE) {
+        else if (simulationResult.isFailure()) {
             log.warn("Simulation run failed (time={} ms)", simulationRunTime);
         }
         else {
