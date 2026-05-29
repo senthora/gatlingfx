@@ -12,7 +12,7 @@ import java.util.List;
  * <p>
  * This bootstrap class executes GatlingFx simulations and
  * provides a command-line entrypoint that terminates the JVM
- * with a non-zero exit code when simulation execution fails.
+ * with an exit code representing the simulation execution result.
  * <p>
  * <strong>API Note:</strong>
  * Intended for command-line execution, Gradle integration,
@@ -20,13 +20,14 @@ import java.util.List;
  */
 public final class GatlingFx {
 
-    // TODO: implement support for arguments;
-    //      - fail-fast on first simulation fail (--fail-fast flag)
     private GatlingFx() {}
 
     /**
      * Executes GatlingFx simulations and terminates
-     * JVM using the resulting process exit code.
+     * the JVM using the resulting process exit code.
+     * <p>
+     * Exits with {@code 0} when execution
+     * succeeds and {@code 1} when execution fails.
      */
     public static void main(String[] args) {
         System.exit(run(args));
@@ -38,7 +39,7 @@ public final class GatlingFx {
      *
      * @param args command-line arguments
      *
-     * @return process exit code
+     * @return {@code 0} when execution succeeds, otherwise {@code 1}
      * @throws IllegalArgumentException if the requested simulation
      * class does not exist or is not a valid GatlingFx simulation
      * @throws CommandLine.ParameterException if command-line arguments are invalid
