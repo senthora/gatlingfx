@@ -45,11 +45,7 @@ public final class GatlingFx {
      */
     static int run(String[] args) {
         var arguments = parseArgs(args);
-        var logLevel = arguments.quietLogs() ? RuntimeLogLevel.ERROR : RuntimeLogLevel.INFO;
-        var config = SimulationRuntimeConfig.create()
-                .withLogLevel(logLevel)
-                .build();
-
+        var config = createConfig(arguments);
         var runner = SimulationRunner.create(config);
 
         SimulationRunResult result;
@@ -79,6 +75,16 @@ public final class GatlingFx {
         new CommandLine(arguments).parseArgs(args);
 
         return arguments;
+    }
+
+    private static SimulationRuntimeConfig createConfig(GatlingFxArguments arguments) {
+        var logLevel = arguments.quietLogs() ?
+                RuntimeLogLevel.WARN : RuntimeLogLevel.INFO;
+
+        return SimulationRuntimeConfig.create()
+                .withLogLevel(logLevel)
+                .withFailFast(arguments.failFast())
+                .build();
     }
 
     private static Class<?> findClass(String className) {

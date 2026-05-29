@@ -16,6 +16,7 @@ final class GatlingFxArguments {
 
     static final String SIMULATION = "--simulation";
     static final String QUIET = "--quiet";
+    static final String FAIL_FAST = "--fail-fast";
 
     @Option(
             names = SIMULATION,
@@ -29,11 +30,21 @@ final class GatlingFxArguments {
     )
     private boolean quietLogs;
 
+    @Option(
+            names = FAIL_FAST,
+            description = "Stop execution after the first failed simulation"
+    )
+    private boolean failFast;
+
     Optional<String> simulationClassName() {
         return Optional.ofNullable(simulationClassName);
     }
 
     boolean quietLogs() {
         return quietLogs;
+    }
+
+    boolean failFast() {
+        return failFast;
     }
 }

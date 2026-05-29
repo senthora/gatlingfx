@@ -13,8 +13,9 @@ public interface SimulationRuntime {
     /**
      * Executes the provided GatlingFx simulations.
      * <p>
-     * Simulation execution does not short-circuit when
-     * individual simulations fail. All provided simulations
+     * Simulation execution does not short-circuit
+     * when individual simulations fail unless fail-fast
+     * execution is enabled. All provided simulations
      * are executed before returning execution results,
      * unless an unexpected runtime failure occurs.
      * <p>

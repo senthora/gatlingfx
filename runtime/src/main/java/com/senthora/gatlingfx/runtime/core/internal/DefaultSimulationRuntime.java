@@ -91,6 +91,10 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
                 for (var simulationClass : simulationClasses) {
                     var result = execute(simulationClass, actorSystem, eventLoopGroup);
                     results.add(result);
+
+                    if (runtimeConfig.failFast() && result.result().isFailure()) {
+                        break;
+                    }
                 }
             }
             finally {
