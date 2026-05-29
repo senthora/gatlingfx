@@ -9,12 +9,15 @@ import org.mockito.Mockito;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public final class MockRuntimeSession implements AutoCloseable {
 
     private final SimulationRunner runner;
     private final MockedStatic<SimulationRunner> runnerMock;
     private final MockedStatic<SimulationScanner> scannerMock;
 
+    private SimulationRuntimeConfig config;
 
     private MockRuntimeSession() {
         this.runner = Mockito.mock(SimulationRunner.class);
@@ -57,6 +60,14 @@ public final class MockRuntimeSession implements AutoCloseable {
 
     public void verifySimulationsExecuted(List<Class<? extends BaseSimulation>> classes) {
         Mockito.verify(runner).run(classes);
+    }
+
+    public void verifyLogLevel(RuntimeLogLevel expected) {
+        assertThat(config.logLevel()).isEqualTo(expected);
+    }
+
+    public void verifyFailFast(boolean expected) {
+        assertThat(config.failFast()).isEqualTo(expected);
     }
 
     @Override

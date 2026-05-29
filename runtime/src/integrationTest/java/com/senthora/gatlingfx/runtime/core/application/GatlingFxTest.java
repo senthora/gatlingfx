@@ -1,5 +1,7 @@
 package com.senthora.gatlingfx.runtime.core.application;
 
+import com.senthora.gatlingfx.runtime.core.api.RuntimeLogLevel;
+import com.senthora.gatlingfx.runtime.core.api.SimulationRuntimeConfig;
 import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationDiscoveryResult;
 import com.senthora.gatlingfx.runtime.support.MockRuntimeSession;
 import com.senthora.gatlingfx.runtime.support.TestSimulations;
@@ -178,6 +180,71 @@ class GatlingFxTest {
                 runtime.stubDiscoveryResult(discoveryResult);
 
                 assertThat(GatlingFx.run(new String[0])).isEqualTo(1);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("configuration")
+    class ConfigurationTests {
+
+        @Test
+        @DisplayName("Should configure warn log level when quiet argument supplied")
+        void should_ConfigureWarnLogLevel_when_QuietArgumentSupplied() {
+            try (var runtime = MockRuntimeSession.create()) {
+                runtime.stubExecutionResult(true);
+
+                var args = new String[]{
+                        GatlingFxArguments.QUIET
+                };
+                GatlingFx.run(args);
+
+                runtime.verifyLogLevel(RuntimeLogLevel.WARN);
+            }
+        }
+
+        @Test
+        @DisplayName("Should configure default log level when quiet argument not supplied")
+        void should_ConfigureDefaultLogLevel_when_QuietArgumentNotSupplied() {
+            var defaultConfig = SimulationRuntimeConfig.create().build();
+            var defaultLogLevel = defaultConfig.logLevel();
+
+            try (var runtime = MockRuntimeSession.create()) {
+                runtime.stubExecutionResult(true);
+
+                GatlingFx.run(new String[0]);
+
+                runtime.verifyLogLevel(defaultLogLevel);
+            }
+        }
+
+        @Test
+        @DisplayName("Should enable fail-fast when fail-fast argument supplied")
+        void should_EnableFailFast_when_FailFastArgumentSupplied() {
+            try (var runtime = MockRuntimeSession.create()) {
+                runtime.stubExecutionResult(true);
+
+                var args = new String[]{
+                        GatlingFxArguments.FAIL_FAST
+                };
+                GatlingFx.run(args);
+
+                runtime.verifyFailFast(true);
+            }
+        }
+
+        @Test
+        @DisplayName("Should configure default fail-fast when fail-fast argument not supplied")
+        void should_ConfigureDefaultFailFast_when_FailFastArgumentNotSupplied() {
+            var defaultConfig = SimulationRuntimeConfig.create().build();
+            var defaultFailFast = defaultConfig.failFast();
+
+            try (var runtime = MockRuntimeSession.create()) {
+                runtime.stubExecutionResult(true);
+
+                GatlingFx.run(new String[0]);
+
+                runtime.verifyFailFast(defaultFailFast);
             }
         }
     }
