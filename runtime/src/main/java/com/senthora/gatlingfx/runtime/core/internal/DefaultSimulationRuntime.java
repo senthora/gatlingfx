@@ -1,9 +1,6 @@
 package com.senthora.gatlingfx.runtime.core.internal;
 
-import com.senthora.gatlingfx.runtime.core.api.SimulationExecutionResult;
-import com.senthora.gatlingfx.runtime.core.api.SimulationResult;
-import com.senthora.gatlingfx.runtime.core.api.SimulationRuntime;
-import com.senthora.gatlingfx.runtime.core.api.SimulationRuntimeException;
+import com.senthora.gatlingfx.runtime.core.api.*;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 import com.senthora.gatlingfx.simulation.api.SimulationContext;
 
@@ -12,6 +9,7 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ch.qos.logback.classic.Level;
 import io.gatling.app.RunResultProcessor;
 import io.gatling.app.Runner;
 import io.gatling.app.cli.StatusCode;
@@ -46,14 +44,17 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
     }
     private final String runId;
     private final GatlingRunner gatlingRunner;
+    private final SimulationRuntimeConfig runtimeConfig;
     private final GatlingConfiguration gatlingConfig;
     private final SimulationLogManager logManager;
 
-    public DefaultSimulationRuntime(GatlingRunner gatlingRunner) {
+    public DefaultSimulationRuntime(GatlingRunner gatlingRunner, SimulationRuntimeConfig config) {
         Objects.requireNonNull(gatlingRunner, "gatlingRunner must not be null");
+        Objects.requireNonNull(config, "config must not be null");
 
         this.runId = RUN_ID_FORMATTER.format(LocalDateTime.now());
         this.gatlingRunner = gatlingRunner;
+        this.runtimeConfig = config;
         this.gatlingConfig = GatlingConfiguration.load();
         this.logManager = new SimulationLogManager(
                 Path.of("build/gatlingfx"),
@@ -66,6 +67,22 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
             List<Class<? extends BaseSimulation>> simulationClasses
     ) {
         Objects.requireNonNull(simulationClasses, "simulationClasses must not be null");
+
+        var logger = (ch.qos.logback.classic.Logger) log;
+        var previousLevel = logger.getLevel();
+
+        try {
+            logger.setLevel(toLevel(runtimeConfig.logLevel()));
+            return doExecute(simulationClasses);
+        }
+        finally {
+            logger.setLevel(previousLevel);
+        }
+    }
+
+    private List<SimulationExecutionResult> doExecute(
+            List<Class<? extends BaseSimulation>> simulationClasses
+    ) {
         List<SimulationExecutionResult> results = new ArrayList<>();
 
         try (var actorSystem = new ActorSystem()) {
@@ -200,6 +217,17 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
             );
             result.set(processor.processRunResult(runResult));
             return null;
+        };
+    }
+
+    private static Level toLevel(RuntimeLogLevel level) {
+        return switch (level) {
+            case TRACE -> Level.TRACE;
+            case DEBUG -> Level.DEBUG;
+            case INFO -> Level.INFO;
+            case WARN -> Level.WARN;
+            case ERROR -> Level.ERROR;
+            case OFF -> Level.OFF;
         };
     }
 

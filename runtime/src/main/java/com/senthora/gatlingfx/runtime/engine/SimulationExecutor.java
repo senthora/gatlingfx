@@ -1,6 +1,8 @@
 package com.senthora.gatlingfx.runtime.engine;
 
+import com.senthora.gatlingfx.runtime.core.api.RuntimeLogLevel;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRunner;
+import com.senthora.gatlingfx.runtime.core.api.SimulationRuntimeConfig;
 
 import org.junit.platform.engine.EngineExecutionListener;
 import org.junit.platform.engine.ExecutionRequest;
@@ -55,7 +57,12 @@ final class SimulationExecutor {
 
     private static void execute(SimulationDescriptor descriptor) {
         var simulationClass = descriptor.simulationClass();
-        var result = SimulationRunner.create().run(List.of(simulationClass));
+        var runtimeConfig = SimulationRuntimeConfig.create()
+                .withLogLevel(RuntimeLogLevel.ERROR)
+                .build();
+
+        var result = SimulationRunner.create(runtimeConfig)
+                .run(List.of(simulationClass));
 
         if (!result.success()) {
             var message = "Simulation failed: " + simulationClass.getName();

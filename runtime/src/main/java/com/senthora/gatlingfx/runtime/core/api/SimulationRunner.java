@@ -26,10 +26,12 @@ public interface SimulationRunner {
 
     /**
      * Creates a new simulation runner.
+     *
+     * @param config simulation runtime configuration
      */
-    static SimulationRunner create() {
+    static SimulationRunner create(SimulationRuntimeConfig config) {
         var gatlingRunner = new DefaultGatlingRunner();
-        var runtime = new DefaultSimulationRuntime(gatlingRunner);
+        var runtime = new DefaultSimulationRuntime(gatlingRunner, config);
 
         return new DefaultSimulationRunner(runtime);
     }

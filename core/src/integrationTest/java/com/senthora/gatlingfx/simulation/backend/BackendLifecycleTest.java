@@ -1,8 +1,6 @@
 package com.senthora.gatlingfx.simulation.backend;
 
-import com.senthora.gatlingfx.runtime.core.api.SimulationExecutionResult;
-import com.senthora.gatlingfx.runtime.core.api.SimulationResult;
-import com.senthora.gatlingfx.runtime.core.api.SimulationRuntime;
+import com.senthora.gatlingfx.runtime.core.api.*;
 import com.senthora.gatlingfx.runtime.core.internal.DefaultGatlingRunner;
 import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationRuntime;
 
@@ -20,8 +18,12 @@ class BackendLifecycleTest {
 
     @BeforeEach
     void setupBackendLifecycleTest() {
-        var gatlingRunner = new DefaultGatlingRunner();
-        runtime = new DefaultSimulationRuntime(gatlingRunner);
+        var runner = new DefaultGatlingRunner();
+        var config = SimulationRuntimeConfig.create()
+                .withLogLevel(RuntimeLogLevel.ERROR)
+                .build();
+
+        runtime = new DefaultSimulationRuntime(runner, config);
 
         LifecycleRecorder.clear();
     }

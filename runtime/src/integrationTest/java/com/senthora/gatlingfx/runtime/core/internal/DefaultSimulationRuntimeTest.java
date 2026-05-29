@@ -1,8 +1,6 @@
 package com.senthora.gatlingfx.runtime.core.internal;
 
-import com.senthora.gatlingfx.runtime.core.api.SimulationExecutionResult;
-import com.senthora.gatlingfx.runtime.core.api.SimulationResult;
-import com.senthora.gatlingfx.runtime.core.api.SimulationRuntimeException;
+import com.senthora.gatlingfx.runtime.core.api.*;
 import com.senthora.gatlingfx.runtime.core.internal.support.FailedSimulation;
 import com.senthora.gatlingfx.runtime.core.internal.support.OrderedSimulation;
 import com.senthora.gatlingfx.runtime.core.internal.support.SuccessfulSimulation;
@@ -41,10 +39,7 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
     @Test
     @DisplayName("Should return successful result when simulation succeeds")
     void should_ReturnSuccessfulResult_when_SimulationSucceeds() {
-        var gatlingRunner = new DefaultGatlingRunner();
-        var runtime = new DefaultSimulationRuntime(gatlingRunner);
-
-        assertThat(runtime.execute(List.of(SuccessfulSimulation.class)))
+        assertThat(simulationRuntime().execute(List.of(SuccessfulSimulation.class)))
                 .singleElement()
                 .extracting(SimulationExecutionResult::result)
                 .isEqualTo(SimulationResult.SUCCESS);
@@ -53,10 +48,7 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
     @Test
     @DisplayName("Should return failed result when simulation fails")
     void should_ReturnFailedResult_when_SimulationFails() {
-        var gatlingRunner = new DefaultGatlingRunner();
-        var runtime = new DefaultSimulationRuntime(gatlingRunner);
-
-        assertThat(runtime.execute(List.of(FailedSimulation.class)))
+        assertThat(simulationRuntime().execute(List.of(FailedSimulation.class)))
                 .singleElement()
                 .extracting(SimulationExecutionResult::result)
                 .isEqualTo(SimulationResult.FAILURE);
@@ -67,14 +59,11 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
     void should_ContinueExecutingRemainingSimulations_when_SimulationFails() {
         enqueueOkResponse();
 
-        var gatlingRunner = new DefaultGatlingRunner();
-        var runtime = new DefaultSimulationRuntime(gatlingRunner);
-
         List<Class<? extends BaseSimulation>> simulationClasses = List.of(
                 FailedSimulation.class,
                 SuccessfulSimulation.class
         );
-        assertThat(runtime.execute(simulationClasses))
+        assertThat(simulationRuntime().execute(simulationClasses))
                 .extracting(SimulationExecutionResult::result)
                 .containsExactly(SimulationResult.FAILURE, SimulationResult.SUCCESS);
     }
@@ -82,7 +71,7 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
     @Test
     @DisplayName("Should throw RuntimeException when runtime execution crashes")
     void should_ThrowRuntimeException_when_RuntimeExecutionCrashes() {
-        var runtime = new DefaultSimulationRuntime((args, gatlingRunner) -> {
+        var runtime = simulationRuntime(RuntimeLogLevel.OFF, (args, gatlingRunner) -> {
             throw new RuntimeException("boom");
         });
         assertThatThrownBy(() -> runtime.execute(List.of(SuccessfulSimulation.class)))
@@ -93,9 +82,9 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
     @DisplayName("Should stop executing remaining simulations when runtime execution crashes")
     void should_StopExecutingRemainingSimulations_when_RuntimeExecutionCrashes() {
         enqueueOkResponse();
-
         var executions = new AtomicInteger();
-        var runtime = new DefaultSimulationRuntime((args, gatlingRunner) -> {
+
+        var runtime = simulationRuntime(RuntimeLogLevel.OFF, (args, gatlingRunner) -> {
             if (executions.incrementAndGet() == 2) {
                 throw new RuntimeException("boom");
             }
@@ -117,17 +106,34 @@ class DefaultSimulationRuntimeTest extends MockWebServerTest {
     void should_ExecuteSimulationsInProvidedOrder_when_ExecutingMultipleSimulations() {
         enqueueOkResponse();
 
-        var gatlingRunner = new DefaultGatlingRunner();
-        var runtime = new DefaultSimulationRuntime(gatlingRunner);
-
         List<Class<? extends BaseSimulation>> simulationClasses = List.of(
                 FirstOrderedSimulation.class,
                 SecondOrderedSimulation.class
         );
-        runtime.execute(simulationClasses);
+        simulationRuntime().execute(simulationClasses);
 
         assertThat(OrderedSimulation.executionOrder)
                 .containsExactly(1, 2);
+    }
+
+    private static SimulationRuntime simulationRuntime(
+            RuntimeLogLevel logLevel,
+            GatlingRunner gatlingRunner
+
+    ) {
+        var config = SimulationRuntimeConfig.create()
+                .withLogLevel(logLevel)
+                .build();
+
+        return new DefaultSimulationRuntime(gatlingRunner, config);
+    }
+
+    private static SimulationRuntime simulationRuntime(GatlingRunner gatlingRunner) {
+        return simulationRuntime(RuntimeLogLevel.ERROR, gatlingRunner);
+    }
+
+    private static SimulationRuntime simulationRuntime() {
+        return simulationRuntime(new DefaultGatlingRunner());
     }
 
     public static final class FirstOrderedSimulation extends OrderedSimulation {

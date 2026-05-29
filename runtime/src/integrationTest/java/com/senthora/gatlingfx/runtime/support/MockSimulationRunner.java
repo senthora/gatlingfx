@@ -17,7 +17,7 @@ public final class MockSimulationRunner {
         Mockito.when(runner.run(Mockito.anyList())).thenReturn(result);
 
         try (var mocked = Mockito.mockStatic(SimulationRunner.class)) {
-            mocked.when(SimulationRunner::create).thenReturn(runner);
+            mocked.when(() -> SimulationRunner.create(Mockito.any())).thenReturn(runner);
             runnable.run();
         }
     }

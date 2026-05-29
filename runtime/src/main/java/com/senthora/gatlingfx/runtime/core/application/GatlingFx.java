@@ -1,8 +1,6 @@
 package com.senthora.gatlingfx.runtime.core.application;
 
-import com.senthora.gatlingfx.runtime.core.api.SimulationRunResult;
-import com.senthora.gatlingfx.runtime.core.api.SimulationRunner;
-import com.senthora.gatlingfx.runtime.core.api.SimulationScanner;
+import com.senthora.gatlingfx.runtime.core.api.*;
 import com.senthora.gatlingfx.runtime.core.internal.SimulationResolver;
 
 import picocli.CommandLine;
@@ -46,8 +44,13 @@ public final class GatlingFx {
      * @throws CommandLine.ParameterException if command-line arguments are invalid
      */
     static int run(String[] args) {
-        GatlingFxArguments arguments = parseArgs(args);
-        SimulationRunner runner = SimulationRunner.create();
+        var arguments = parseArgs(args);
+        var logLevel = arguments.quietLogs() ? RuntimeLogLevel.ERROR : RuntimeLogLevel.INFO;
+        var config = SimulationRuntimeConfig.create()
+                .withLogLevel(logLevel)
+                .build();
+
+        var runner = SimulationRunner.create(config);
 
         SimulationRunResult result;
 

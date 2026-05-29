@@ -15,6 +15,7 @@ import java.util.Optional;
 final class GatlingFxArguments {
 
     static final String SIMULATION = "--simulation";
+    static final String QUIET = "--quiet";
 
     @Option(
             names = SIMULATION,
@@ -22,7 +23,17 @@ final class GatlingFxArguments {
     )
     private @Nullable String simulationClassName;
 
+    @Option(
+            names = QUIET,
+            description = "Suppress runtime console logging"
+    )
+    private boolean quietLogs;
+
     Optional<String> simulationClassName() {
         return Optional.ofNullable(simulationClassName);
+    }
+
+    boolean quietLogs() {
+        return quietLogs;
     }
 }
