@@ -2,6 +2,7 @@ package com.senthora.gatlingfx.runtime.core.application;
 
 import com.senthora.gatlingfx.runtime.core.api.SimulationDiscoveryResult;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRunResult;
+import com.senthora.gatlingfx.runtime.core.api.SimulationRunner;
 import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationDiscoveryResult;
 import com.senthora.gatlingfx.runtime.support.MockSimulationRunner;
 import com.senthora.gatlingfx.runtime.support.MockSimulationScanner;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -76,6 +78,25 @@ class GatlingFxTest {
             };
             MockSimulationRunner.with(result, runnable);
         }
+
+        @Test
+        @DisplayName("Should pass provided simulation to runner when simulation argument supplied")
+        void should_PassProvidedSimulationToRunner_when_SimulationArgumentSupplied() {
+            var result = Mockito.mock(SimulationRunResult.class);
+
+            Mockito.when(result.success()).thenReturn(true);
+
+            Consumer<SimulationRunner> consumer = runner -> {
+                var args = new String[]{
+                        GatlingFxArguments.SIMULATION,
+                        TestSimulations.SuccessfulSimulation.class.getName()
+                };
+                GatlingFx.run(args);
+
+                Mockito.verify(runner).run(TestSimulations.SuccessfulSimulation.class);
+            };
+            MockSimulationRunner.with(result, consumer);
+        }
     }
 
     @Nested
@@ -129,6 +150,48 @@ class GatlingFxTest {
                     assertThat(GatlingFx.run(new String[0])).isZero()
             );
         }
+
+        @Test
+        @DisplayName("Should pass supported simulations to runner when supported simulations discovered")
+        void should_PassSupportedSimulationsToRunner_when_SupportedSimulationsDiscovered() {
+            var result = Mockito.mock(SimulationRunResult.class);
+
+            Mockito.when(result.success()).thenReturn(true);
+
+            var discoveryResult = new DefaultSimulationDiscoveryResult(
+                    List.of(TestSimulations.SuccessfulSimulation.class),
+                    List.of()
+            );
+            Consumer<SimulationRunner> consumer = runner -> {
+                GatlingFx.run(new String[0]);
+
+                Mockito.verify(runner).run(List.of(
+                        TestSimulations.SuccessfulSimulation.class
+                ));
+            };
+            withMockedRuntime(discoveryResult, result, consumer);
+        }
+
+        @Test
+        @DisplayName("Should exclude unsupported simulations when unsupported simulations discovered")
+        void should_ExcludeUnsupportedSimulations_when_UnsupportedSimulationsDiscovered() {
+            var result = Mockito.mock(SimulationRunResult.class);
+
+            Mockito.when(result.success()).thenReturn(true);
+
+            var discoveryResult = new DefaultSimulationDiscoveryResult(
+                    List.of(TestSimulations.SuccessfulSimulation.class),
+                    List.of(Object.class)
+            );
+
+            Consumer<SimulationRunner> consumer = runner -> {
+                GatlingFx.run(new String[0]);
+
+                Mockito.verify(runner).run(List.of(TestSimulations.SuccessfulSimulation.class));
+            };
+
+            withMockedRuntime(discoveryResult, result, consumer);
+        }
     }
 
     @Nested
@@ -155,10 +218,18 @@ class GatlingFxTest {
     private static void withMockedRuntime(
             SimulationDiscoveryResult discoveryResult,
             SimulationRunResult runResult,
-            Runnable executable
+            Consumer<SimulationRunner> consumer
     ) {
-        MockSimulationScanner.with(discoveryResult, () ->
-                MockSimulationRunner.with(runResult, executable)
-        );
+        Runnable run = () -> MockSimulationRunner.with(runResult, consumer);
+        MockSimulationScanner.with(discoveryResult, run);
+    }
+
+    private static void withMockedRuntime(
+            SimulationDiscoveryResult discoveryResult,
+            SimulationRunResult runResult,
+            Runnable runnable
+    ) {
+        Consumer<SimulationRunner> consumer = ignored -> runnable.run();
+        withMockedRuntime(discoveryResult, runResult, consumer);
     }
 }
