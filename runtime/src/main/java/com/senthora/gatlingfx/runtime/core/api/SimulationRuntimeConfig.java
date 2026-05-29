@@ -5,6 +5,12 @@ import java.util.Objects;
 /**
  * Immutable configuration used for
  * simulation runtime execution.
+ * <p>
+ * Supports the following options:
+ * <ul>
+ *     <li>Fail-fast execution mode (default: {@code false})</li>
+ *     <li>Runtime logging level (default: {@code INFO})</li>
+ * </ul>
  */
 public final class SimulationRuntimeConfig {
 
@@ -81,10 +87,9 @@ public final class SimulationRuntimeConfig {
          * Builds runtime configuration.
          * <p>
          * <strong>API Note:</strong>
-         * Defaults runtime logging level to
-         * {@link RuntimeLogLevel#INFO} when not configured.
-         *
-         * @return runtime configuration
+         * Defaults fail-fast mode to disabled and runtime
+         * logging level to {@link RuntimeLogLevel#INFO}
+         * when not configured.
          */
         public SimulationRuntimeConfig build() {
             return new SimulationRuntimeConfig(this);
