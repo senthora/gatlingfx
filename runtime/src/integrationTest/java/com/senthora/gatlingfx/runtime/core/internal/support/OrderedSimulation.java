@@ -13,4 +13,20 @@ public abstract class OrderedSimulation extends SuccessfulSimulation {
     }
 
     protected abstract int orderNumber();
+
+    public static class First extends OrderedSimulation {
+
+        @Override
+        protected int orderNumber() {
+            return 1;
+        }
+    }
+
+    public static class Second extends OrderedSimulation {
+
+        @Override
+        protected int orderNumber() {
+            return 2;
+        }
+    }
 }
