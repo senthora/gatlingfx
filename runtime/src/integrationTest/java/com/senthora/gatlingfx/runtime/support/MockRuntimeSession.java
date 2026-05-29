@@ -1,9 +1,7 @@
 package com.senthora.gatlingfx.runtime.support;
 
-import com.senthora.gatlingfx.runtime.core.api.SimulationDiscoveryResult;
-import com.senthora.gatlingfx.runtime.core.api.SimulationRunResult;
-import com.senthora.gatlingfx.runtime.core.api.SimulationRunner;
-import com.senthora.gatlingfx.runtime.core.api.SimulationScanner;
+import com.senthora.gatlingfx.runtime.core.api.*;
+import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationDiscoveryResult;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 
 import org.mockito.MockedStatic;
@@ -15,15 +13,25 @@ public final class MockRuntimeSession implements AutoCloseable {
 
     private final SimulationRunner runner;
     private final MockedStatic<SimulationRunner> runnerMock;
+    private final MockedStatic<SimulationScanner> scannerMock;
 
-    private MockedStatic<SimulationScanner> scannerMock;
 
     private MockRuntimeSession() {
         this.runner = Mockito.mock(SimulationRunner.class);
         this.runnerMock = Mockito.mockStatic(SimulationRunner.class);
+        this.scannerMock = Mockito.mockStatic(SimulationScanner.class);
 
         runnerMock.when(() -> SimulationRunner.create(Mockito.any()))
-                .thenReturn(runner);
+                .thenAnswer(invocation -> {
+                    config = invocation.getArgument(0);
+                    return runner;
+                });
+
+        scannerMock.when(SimulationScanner::scan)
+                .thenReturn(new DefaultSimulationDiscoveryResult(
+                        List.of(),
+                        List.of()
+                ));
     }
 
     public static MockRuntimeSession create() {
@@ -40,8 +48,6 @@ public final class MockRuntimeSession implements AutoCloseable {
     }
 
     public void stubDiscoveryResult(SimulationDiscoveryResult result) {
-        scannerMock = Mockito.mockStatic(SimulationScanner.class);
-
         scannerMock.when(SimulationScanner::scan).thenReturn(result);
     }
 
