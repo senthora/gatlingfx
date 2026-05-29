@@ -297,7 +297,7 @@
               <match>
                 <AND>
                   <METHOD>true</METHOD>
-                  <NAME>setup.*Test</NAME>
+                  <NAME>setup.*Test.*</NAME>
                 </AND>
               </match>
             </rule>
@@ -307,7 +307,7 @@
               <match>
                 <AND>
                   <METHOD>true</METHOD>
-                  <NAME>teardown.*Test</NAME>
+                  <NAME>teardown.*Test.*</NAME>
                 </AND>
               </match>
             </rule>
