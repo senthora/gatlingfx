@@ -1,11 +1,11 @@
 services:
-  coffee:
+  coffee-warehouse:
     image: hashicorp/http-echo:1.0.0
     command: -status-code=201
     expose:
       - "5678"
 
-  tea:
+  tea-warehouse:
     image: hashicorp/http-echo:1.0.0
     command: -status-code=418
     expose:

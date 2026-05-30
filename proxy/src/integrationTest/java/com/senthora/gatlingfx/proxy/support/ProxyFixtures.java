@@ -29,7 +29,7 @@ public final class ProxyFixtures {
      */
     public static final HttpBaseUrl COFFEE = HttpBaseUrl.of(
             HttpScheme.HTTP,
-            NetworkAddress.of("coffee", 5678)
+            NetworkAddress.of("coffee-warehouse", 5678)
     );
 
     /**
@@ -38,7 +38,7 @@ public final class ProxyFixtures {
      */
     public static final HttpBaseUrl TEA = HttpBaseUrl.of(
             HttpScheme.HTTP,
-            NetworkAddress.of("tea", 5678)
+            NetworkAddress.of("tea-warehouse", 5678)
     );
 
     private ProxyFixtures() {}
