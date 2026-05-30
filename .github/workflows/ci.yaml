@@ -61,6 +61,15 @@ jobs:
         if: always()
         run: just compose logs --tail=500 --no-color || true
 
+      - name: Upload GatlingFx logs
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: gatlingfx-logs-${{ github.run_number }}
+          path: build/gatlingfx
+          if-no-files-found: warn
+          retention-days: 14
+
       - name: Stop compose services
         if: always()
         run: docker compose down
