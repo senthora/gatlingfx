@@ -8,7 +8,7 @@ import com.senthora.gatlingfx.simulation.api.SimulationProtocol;
 import com.senthora.gatlingfx.simulation.api.SimulationScenario;
 import com.senthora.gatlingfx.wiremock.api.StubRequest;
 import com.senthora.gatlingfx.wiremock.api.WireMockBackend;
-import com.senthora.gatlingfx.wiremock.support.TeaFactory;
+import com.senthora.gatlingfx.wiremock.support.TeaFactorySimulation;
 
 import org.junit.jupiter.api.DisplayName;
 
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TeaProductionRunSimulation extends BaseSimulation {
 
     private final WireMockBackend backend = WireMockBackend.create(
-            TeaFactory.BASE_URL,
+            TeaFactorySimulation.BASE_URL,
             StubRequest.any().willReturnText(200, "homemade")
     );
 
@@ -32,7 +32,7 @@ public class TeaProductionRunSimulation extends BaseSimulation {
 
     @Override
     protected SimulationProtocol protocol() {
-        return SimulationProtocol.create().baseUrl(TeaFactory.BASE_URL);
+        return SimulationProtocol.create().baseUrl(TeaFactorySimulation.BASE_URL);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class TeaProductionRunSimulation extends BaseSimulation {
 
     @Override
     protected void verify() {
-        var httpClient = SimpleHttpClient.create(TeaFactory.BASE_URL);
+        var httpClient = SimpleHttpClient.create(TeaFactorySimulation.BASE_URL);
         var requests = backend.requests();
 
         assertThat(requests.lastFor("/recipes/house")).isPresent();

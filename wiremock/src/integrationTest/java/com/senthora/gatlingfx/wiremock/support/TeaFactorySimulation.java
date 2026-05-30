@@ -8,7 +8,7 @@ import com.senthora.gatlingfx.http.api.NetworkAddress;
  * Shared tea factory fixtures used by
  * WireMock integration simulations.
  */
-public final class TeaFactory {
+public final class TeaFactorySimulation {
 
     /**
      * Tea factory production endpoint.
@@ -18,5 +18,5 @@ public final class TeaFactory {
             NetworkAddress.localhost(8081)
     );
 
-    private TeaFactory() {}
+    private TeaFactorySimulation() {}
 }

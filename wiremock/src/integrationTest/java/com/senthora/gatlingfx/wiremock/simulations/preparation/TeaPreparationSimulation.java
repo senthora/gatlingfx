@@ -8,7 +8,7 @@ import com.senthora.gatlingfx.simulation.api.SimulationProtocol;
 import com.senthora.gatlingfx.simulation.api.SimulationScenario;
 import com.senthora.gatlingfx.wiremock.api.StubRequest;
 import com.senthora.gatlingfx.wiremock.api.WireMockBackend;
-import com.senthora.gatlingfx.wiremock.support.TeaFactory;
+import com.senthora.gatlingfx.wiremock.support.TeaFactorySimulation;
 
 import org.junit.jupiter.api.DisplayName;
 
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Should prepare tea batches using questionable factory recipes")
 public class TeaPreparationSimulation extends BaseSimulation {
 
-    private final WireMockBackend backend = WireMockBackend.create(TeaFactory.BASE_URL);
+    private final WireMockBackend backend = WireMockBackend.create(TeaFactorySimulation.BASE_URL);
 
     @Override
     protected SimulationBackend backend() {
@@ -43,7 +43,7 @@ public class TeaPreparationSimulation extends BaseSimulation {
 
     @Override
     protected SimulationProtocol protocol() {
-        return SimulationProtocol.create().baseUrl(TeaFactory.BASE_URL);
+        return SimulationProtocol.create().baseUrl(TeaFactorySimulation.BASE_URL);
     }
 
     @Override

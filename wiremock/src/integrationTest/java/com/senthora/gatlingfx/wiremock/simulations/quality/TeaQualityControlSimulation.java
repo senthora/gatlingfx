@@ -10,7 +10,7 @@ import com.senthora.gatlingfx.wiremock.api.StubMapping;
 import com.senthora.gatlingfx.wiremock.api.StubRequest;
 import com.senthora.gatlingfx.wiremock.api.StubResponse;
 import com.senthora.gatlingfx.wiremock.api.WireMockBackend;
-import com.senthora.gatlingfx.wiremock.support.TeaFactory;
+import com.senthora.gatlingfx.wiremock.support.TeaFactorySimulation;
 
 import org.junit.jupiter.api.DisplayName;
 
@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Should issue quality control reports for questionable tea batches")
 public class TeaQualityControlSimulation extends BaseSimulation {
 
-    private final WireMockBackend backend = WireMockBackend.create(TeaFactory.BASE_URL);
+    private final WireMockBackend backend = WireMockBackend.create(TeaFactorySimulation.BASE_URL);
 
     @Override
     protected SimulationBackend backend() {
@@ -44,7 +44,7 @@ public class TeaQualityControlSimulation extends BaseSimulation {
 
     @Override
     protected SimulationProtocol protocol() {
-        return SimulationProtocol.create().baseUrl(TeaFactory.BASE_URL);
+        return SimulationProtocol.create().baseUrl(TeaFactorySimulation.BASE_URL);
     }
 
     @Override
