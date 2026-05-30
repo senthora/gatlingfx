@@ -19,7 +19,6 @@ final class PrepareSeasonalTeaBatchScenario implements SimulationScenario {
     public ScenarioBuilder build() {
         return scenario("Prepare seasonal tea batches")
                 .exec(get("/recipes/spring-jasmine").check(status().is(200)))
-                .exec(get("/recipes/summer-oolong").check(status().is(200))
-      );
+                .exec(get("/recipes/summer-oolong").check(status().is(200)));
     }
 }
