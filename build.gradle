@@ -35,6 +35,8 @@ subprojects {
 
         if (name == "integrationTest") {
             outputs.upToDateWhen { false }
+            shouldRunAfter(tasks.test)
+            jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
         }
         testLogging {
             events "passed", "skipped", "failed"
@@ -49,21 +51,6 @@ subprojects {
         reports {
             xml.required = true
             html.required = true
-        }
-    }
-
-    testing {
-        suites {
-            integrationTest(JvmTestSuite) {
-                targets {
-                    all {
-                        testTask.configure {
-                            shouldRunAfter(tasks.test)
-                            jvmArgs("--add-opens=java.base/java.lang=ALL-UNNAMED")
-                        }
-                    }
-                }
-            }
         }
     }
 
