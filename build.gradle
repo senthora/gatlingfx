@@ -62,6 +62,12 @@ configure(libraryProjects) {
         }
     }
 
+    testing {
+        suites {
+            integrationTest(JvmTestSuite) {}
+        }
+    }
+
     if (sourceSets.findByName('integrationTest') != null) {
         configurations {
             integrationTestRuntimeElements {
