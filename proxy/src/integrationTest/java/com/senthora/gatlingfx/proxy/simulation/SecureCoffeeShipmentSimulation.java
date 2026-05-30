@@ -12,7 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import java.util.List;
 
 @GatlingSimulation
-@DisplayName("Should route HTTPS requests to coffee service")
+@DisplayName("Should deliver secure coffee shipments to coffee warehouse")
 public final class SecureCoffeeShipmentSimulation extends BaseSimulation {
 
     @Override

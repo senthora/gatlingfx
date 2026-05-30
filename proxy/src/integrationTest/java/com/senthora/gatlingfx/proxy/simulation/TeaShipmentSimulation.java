@@ -12,7 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import java.util.List;
 
 @GatlingSimulation
-@DisplayName("Should route HTTP requests to tea service")
+@DisplayName("Should deliver tea shipments to tea warehouse")
 public final class TeaShipmentSimulation extends BaseSimulation {
 
     @Override
