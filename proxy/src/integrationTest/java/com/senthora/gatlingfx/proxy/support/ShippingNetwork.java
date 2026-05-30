@@ -5,7 +5,7 @@ import com.senthora.gatlingfx.http.api.HttpScheme;
 import com.senthora.gatlingfx.http.api.NetworkAddress;
 import com.senthora.gatlingfx.proxy.ProxyServer;
 
-public final class TeaShippingNetwork {
+public final class ShippingNetwork {
 
     public static final ProxyServer HTTP_PROXY =
             ProxyServer.of(NetworkAddress.localhost(8080));
@@ -23,5 +23,5 @@ public final class TeaShippingNetwork {
             NetworkAddress.of("tea-warehouse", 5678)
     );
 
-    private TeaShippingNetwork() {}
+    private ShippingNetwork() {}
 }

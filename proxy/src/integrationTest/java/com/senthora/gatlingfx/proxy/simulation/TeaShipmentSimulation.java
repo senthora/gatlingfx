@@ -1,7 +1,7 @@
 package com.senthora.gatlingfx.proxy.simulation;
 
 import com.senthora.gatlingfx.proxy.ProxyProtocols;
-import com.senthora.gatlingfx.proxy.support.TeaShippingNetwork;
+import com.senthora.gatlingfx.proxy.support.ShippingNetwork;
 import com.senthora.gatlingfx.runtime.core.api.GatlingSimulation;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 import com.senthora.gatlingfx.simulation.api.SimulationProtocol;
@@ -17,7 +17,7 @@ public final class TeaShipmentSimulation extends BaseSimulation {
 
     @Override
     protected SimulationProtocol protocol() {
-        return ProxyProtocols.http(TeaShippingNetwork.HTTP_PROXY, TeaShippingNetwork.TEA_WAREHOUSE);
+        return ProxyProtocols.http(ShippingNetwork.HTTP_PROXY, ShippingNetwork.TEA_WAREHOUSE);
     }
 
     @Override
