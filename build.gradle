@@ -98,8 +98,11 @@ tasks.register('jacocoTestReport', JacocoReport) {
             it.name in ['test', 'integrationTest']
         }
     }
-    dependsOn subprojects.collect { it.tasks.named('jacocoTestReport') }
-
+    dependsOn subprojects.collectMany { project ->
+        project.tasks.matching {
+            it.name == 'jacocoTestReport'
+        }
+    }
     additionalSourceDirs.from files(subprojects.sourceSets.main.allSource.srcDirs)
     sourceDirectories.from files(subprojects.sourceSets.main.allSource.srcDirs)
     classDirectories.from files(subprojects.sourceSets.main.output)
