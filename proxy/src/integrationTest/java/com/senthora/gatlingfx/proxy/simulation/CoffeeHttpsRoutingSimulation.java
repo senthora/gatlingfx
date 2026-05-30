@@ -1,7 +1,7 @@
 package com.senthora.gatlingfx.proxy.simulation;
 
 import com.senthora.gatlingfx.proxy.ProxyProtocols;
-import com.senthora.gatlingfx.proxy.support.ProxyFixtures;
+import com.senthora.gatlingfx.proxy.support.TeaShippingNetwork;
 import com.senthora.gatlingfx.runtime.core.api.GatlingSimulation;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 import com.senthora.gatlingfx.simulation.api.SimulationProtocol;
@@ -17,7 +17,7 @@ public final class CoffeeHttpsRoutingSimulation extends BaseSimulation {
 
     @Override
     protected SimulationProtocol protocol() {
-        return ProxyProtocols.https(ProxyFixtures.HTTPS_PROXY, ProxyFixtures.COFFEE);
+        return ProxyProtocols.https(TeaShippingNetwork.HTTPS_PROXY, TeaShippingNetwork.COFFEE);
     }
 
     @Override

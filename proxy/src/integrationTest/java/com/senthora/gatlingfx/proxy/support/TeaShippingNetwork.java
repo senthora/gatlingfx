@@ -9,7 +9,7 @@ import com.senthora.gatlingfx.proxy.ProxyServer;
  * Shared proxy-related fixtures used by
  * integration simulations and test support code.
  */
-public final class ProxyFixtures {
+public final class TeaShippingNetwork {
 
     /**
      * Default local HTTP proxy server.
@@ -41,5 +41,5 @@ public final class ProxyFixtures {
             NetworkAddress.of("tea-warehouse", 5678)
     );
 
-    private ProxyFixtures() {}
+    private TeaShippingNetwork() {}
 }
