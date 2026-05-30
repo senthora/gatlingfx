@@ -12,7 +12,7 @@ configurations {
 dependencies {
     implementation project(':runtime')
 
-    [':core', ':proxy'].each {
+    [':core', ':proxy', ':wiremock'].each {
         runtimeOnly project(
                 path: it,
                 configuration: 'integrationTestRuntimeElements'

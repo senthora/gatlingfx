@@ -12,3 +12,21 @@ dependencies {
     testImplementation platform(libs.mockito.bom)
     testImplementation libs.mockito.core
 }
+
+testing {
+    suites {
+        integrationTest(JvmTestSuite) {
+            dependencies {
+                implementation projects.runtime
+                implementation projects.wiremock
+
+                implementation testFixtures(project(':core'))
+
+                implementation platform(libs.junit.bom)
+                implementation libs.junit.jupiter
+                implementation libs.assertj.core
+            }
+        }
+    }
+}
+
