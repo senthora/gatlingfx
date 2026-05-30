@@ -17,21 +17,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BackendLifecycleTest {
 
     private static LoggingContext loggingContext;
-
-    private SimulationRuntime runtime;
+    private static SimulationRuntime runtime;
 
     @BeforeAll
     static void setupBackendLifecycleTests() {
         loggingContext = LoggingContext.configure(RuntimeLogLevel.ERROR);
-    }
 
-    @BeforeEach
-    void setupBackendLifecycleTest() {
         var runner = new DefaultGatlingRunner();
         var config = SimulationRuntimeConfig.create().build();
 
         runtime = new DefaultSimulationRuntime(runner, config);
+    }
 
+    @BeforeEach
+    void setupBackendLifecycleTest() {
         LifecycleRecorder.clear();
     }
 
