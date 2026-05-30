@@ -7,12 +7,12 @@ import io.gatling.javaapi.core.ScenarioBuilder;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
 import static io.gatling.javaapi.http.HttpDsl.status;
 
-final class UnknownTeaOrderScenario implements SimulationScenario {
+final class ServedTeaOrderScenario implements SimulationScenario {
 
     @Override
     public ScenarioBuilder build() {
-        return scenario("Unknown tea order").exec(get("/order/decaf-tea")
-                .check(status().is(302))
+        return scenario("Redirected tea order").exec(get("/order/decaf-tea")
+                .check(status().is(201))
         );
     }
 }

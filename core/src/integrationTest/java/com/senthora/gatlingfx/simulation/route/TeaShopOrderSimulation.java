@@ -10,7 +10,7 @@ import java.util.List;
 
 @GatlingSimulation
 @DisplayName("Should serve tea, coffee, and rejected pizza orders")
-public class TeaOrderRoutingSimulation extends TeaShopSimulation {
+public class TeaShopOrderSimulation extends TeaShopSimulation {
 
     @Override
     protected List<SimulationScenario> scenarios() {

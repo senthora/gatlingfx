@@ -11,7 +11,7 @@ import java.util.List;
 
 @GatlingSimulation
 @DisplayName("Should follow tea order redirects when redirects are enabled")
-public class RedirectedTeaOrderSimulation extends TeaShopSimulation {
+public class ServedTeaOrderSimulation extends TeaShopSimulation {
 
     @Override
     protected SimulationProtocol protocol() {
@@ -20,6 +20,6 @@ public class RedirectedTeaOrderSimulation extends TeaShopSimulation {
 
     @Override
     protected List<SimulationScenario> scenarios() {
-        return List.of(new RedirectedTeaOrderScenario());
+        return List.of(new ServedTeaOrderScenario());
     }
 }

@@ -1,4 +1,4 @@
-package com.senthora.gatlingfx.simulation.redirect;
+package com.senthora.gatlingfx.simulation.header;
 
 import com.senthora.gatlingfx.runtime.core.api.GatlingSimulation;
 import com.senthora.gatlingfx.simulation.api.SimulationProtocol;
@@ -10,16 +10,16 @@ import org.junit.jupiter.api.DisplayName;
 import java.util.List;
 
 @GatlingSimulation
-@DisplayName("Should not follow tea order redirects when redirects are disabled")
-public class UnknownTeaOrderSimulation extends TeaShopSimulation {
+@DisplayName("Should serve special tea orders when tea strength header is provided")
+public final class CustomTeaOrderSimulation extends TeaShopSimulation {
 
     @Override
     protected SimulationProtocol protocol() {
-        return super.protocol().followRedirects(false);
+        return super.protocol().header("X-Tea-Strength", "vanilla");
     }
 
     @Override
     protected List<SimulationScenario> scenarios() {
-        return List.of(new UnknownTeaOrderScenario());
+        return List.of(new CustomTeaOrderScenario());
     }
 }
