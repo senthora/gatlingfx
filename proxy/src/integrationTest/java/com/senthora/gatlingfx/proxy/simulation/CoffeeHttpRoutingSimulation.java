@@ -17,7 +17,7 @@ public final class CoffeeHttpRoutingSimulation extends BaseSimulation {
 
     @Override
     protected SimulationProtocol protocol() {
-        return ProxyProtocols.http(TeaShippingNetwork.HTTP_PROXY, TeaShippingNetwork.COFFEE);
+        return ProxyProtocols.http(TeaShippingNetwork.HTTP_PROXY, TeaShippingNetwork.COFFEE_WAREHOUSE);
     }
 
     @Override
