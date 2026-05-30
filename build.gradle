@@ -12,7 +12,11 @@ allprojects {
     }
 }
 
-subprojects {
+def libraryProjects = subprojects.findAll {
+    it.name != 'launcher'
+}
+
+configure(libraryProjects) {
     apply plugin: 'java-library'
     apply plugin: 'jacoco'
 
