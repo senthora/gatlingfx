@@ -5,12 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 class SimulationLogSessionTest {
 
@@ -18,17 +17,13 @@ class SimulationLogSessionTest {
     static Path tempDirectory;
 
     @Test
+    @SuppressWarnings({"EmptyTryBlock", "DataFlowIssue"})
     @DisplayName("Should throw NullPointerException when log file path is null")
     void should_ThrowNullPointerException_when_LogFilePathIsNull() {
-        assertThatThrownBy(() -> runLogSession(null, () -> {}))
-                .isInstanceOf(NullPointerException.class);
-    }
-
-    @Test
-    @DisplayName("Should throw UncheckedIOException when log stream creation fails")
-    void should_ThrowUncheckedIOException_when_LogStreamCreationFails() {
-        assertThatThrownBy(() -> runLogSession(Path.of(""), () -> {}))
-                .isInstanceOf(UncheckedIOException.class);
+        var thrown = catchThrowable(() -> {
+            try (var ignored = new SimulationLogSession(null)) {}
+        });
+        assertThat(thrown).isInstanceOf(NullPointerException.class);
     }
 
     @Test
@@ -42,8 +37,8 @@ class SimulationLogSessionTest {
     }
 
     @Test
-    @DisplayName("Should return redirected output stream when log session is created")
-    void should_ReturnRedirectedOutputStream_when_LogSessionIsCreated() throws IOException {
+    @DisplayName("Should write captured output to logfile when session is closed")
+    void should_WriteCapturedOutputToLogFile_when_SessionIsClosed() throws IOException {
         var logFilePath = createTempSimulationLog();
 
         var expected = "simulation-started";
@@ -54,10 +49,17 @@ class SimulationLogSessionTest {
         assertThat(actual.stripTrailing()).isEqualTo(expected);
     }
 
-    private static void runLogSession(Path logFilePath, Runnable action) {
-        try (var ignored = new SimulationLogSession(logFilePath)) {
-            action.run();
-        }
+    @Test
+    @SuppressWarnings("EmptyTryBlock")
+    @DisplayName("Should not create log file when no output was written")
+    void should_NotCreateLogFile_when_NoOutputWasWritten() {
+        var logFilePath = tempDirectory
+                .resolve("simulation")
+                .resolve("simulation.log");
+
+        try (var ignored = new SimulationLogSession(logFilePath)) {}
+
+        assertThat(logFilePath).doesNotExist();
     }
 
     private static Path createTempSimulationLog() {

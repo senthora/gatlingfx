@@ -4,8 +4,6 @@ import com.senthora.gatlingfx.runtime.core.api.*;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 import com.senthora.gatlingfx.simulation.api.SimulationContext;
 
-import org.jspecify.annotations.Nullable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -179,8 +177,10 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
             logFilePath = logSession.logFilePath();
             var outStream = logSession.output();
 
-            Console.withOut(outStream, redirectedRun(result, gatlingArgs, runner));
-
+            Console.withOut(outStream, () -> {
+                result.set(run(gatlingArgs, runner));
+                return null;
+            });
             context = SimulationContextRegistry.get(simulationClass).orElseThrow(() -> {
                 var className = simulationClass.getName();
                 return new IllegalStateException("Unable to find context for class " + className);
@@ -192,20 +192,13 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
         return new ExecutionResult(result.get(), logFilePath, context);
     }
 
-    private scala.Function0<@Nullable Void> redirectedRun(
-            AtomicReference<StatusCode> result,
-            GatlingArgs gatlingArgs,
-            Runner runner
-    ) {
-        return () -> {
-            var runResult = gatlingRunner.run(gatlingArgs, runner);
-            var processor = new RunResultProcessor(
-                    gatlingArgs,
-                    gatlingConfig
-            );
-            result.set(processor.processRunResult(runResult));
-            return null;
-        };
+    private StatusCode run(GatlingArgs gatlingArgs, Runner runner) {
+        var runResult = gatlingRunner.run(gatlingArgs, runner);
+        var processor = new RunResultProcessor(
+                gatlingArgs,
+                gatlingConfig
+        );
+        return processor.processRunResult(runResult);
     }
 
     private record ExecutionResult(

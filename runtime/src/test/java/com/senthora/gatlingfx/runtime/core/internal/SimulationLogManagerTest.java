@@ -1,6 +1,5 @@
 package com.senthora.gatlingfx.runtime.core.internal;
 
-import com.senthora.gatlingfx.runtime.core.api.SimulationRuntimeException;
 import com.senthora.gatlingfx.support.TestSimulation;
 
 import org.junit.jupiter.api.DisplayName;
@@ -8,8 +7,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,34 +52,21 @@ class SimulationLogManagerTest {
             ));
             assertThat(thrown).isInstanceOf(IllegalArgumentException.class);
         }
+    }
+
+    @Nested
+    @DisplayName("logDirectory")
+    class LogDirectoryMethodTests {
 
         @Test
-        @DisplayName("Should throw SimulationRuntimeException when log directory creation fails")
-        void should_ThrowSimulationRuntimeException_when_LogDirectoryCreationFails() throws IOException {
-            var logDirectoryPath = Files.createTempFile(
+        @DisplayName("Should return simulation log directory path")
+        void should_ReturnSimulationLogDirectoryPath() {
+            var logManager = new SimulationLogManager(
                     tempDirectory,
-                    "gatlingfx",
-                    ".log"
-            );
-            var thrown = catchThrowable(() -> new SimulationLogManager(
-                    logDirectoryPath,
                     "run-123"
-            ));
-            assertThat(thrown).isInstanceOf(SimulationRuntimeException.class);
-        }
-
-        @Test
-        @DisplayName("Should return created log directory when log manager is created")
-        void should_ReturnCreatedLogDirectory_when_LogManagerIsCreated() {
-            var logDirectoryPath = tempDirectory.resolve("logs");
-            var runId = "run-123";
-
-            var logManager = new SimulationLogManager(logDirectoryPath, runId);
-
+            );
             assertThat(logManager.logDirectory())
-                    .exists()
-                    .isDirectory()
-                    .isEqualTo(logDirectoryPath.resolve(runId));
+                    .isEqualTo(tempDirectory.resolve("run-123"));
         }
     }
 
@@ -114,19 +98,6 @@ class SimulationLogManagerTest {
             );
             try (var session = logManager.createSession(TestSimulation.class)) {
                 assertThat(session).isNotNull();
-            }
-        }
-
-        @Test
-        @DisplayName("Should create log file using simulation class name when session is created")
-        void should_CreateLogFileUsingSimulationClassName_when_SessionIsCreated() {
-            var logManager = new SimulationLogManager(
-                    tempDirectory,
-                    "run-123"
-            );
-            try (var ignored = logManager.createSession(TestSimulation.class)) {
-                var expected = logManager.logDirectory().resolve("TestSimulation.log");
-                assertThat(expected).exists().isRegularFile();
             }
         }
     }

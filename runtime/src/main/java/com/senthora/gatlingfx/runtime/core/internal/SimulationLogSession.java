@@ -1,5 +1,6 @@
 package com.senthora.gatlingfx.runtime.core.internal;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UncheckedIOException;
@@ -14,6 +15,7 @@ import java.util.Objects;
 final class SimulationLogSession implements AutoCloseable {
 
     private final Path logFilePath;
+    private final ByteArrayOutputStream buffer;
     private final PrintStream output;
 
     /**
@@ -22,24 +24,36 @@ final class SimulationLogSession implements AutoCloseable {
      * @param logFilePath target simulation log file path
      *
      * @throws NullPointerException if {@code logFilePath} is null
-     * @throws UncheckedIOException if log stream creation fails
      */
     SimulationLogSession(Path logFilePath) {
         Objects.requireNonNull(logFilePath, "logFilePath must not be null");
+
         this.logFilePath = logFilePath;
-        try {
-            var outputStream = Files.newOutputStream(this.logFilePath);
-            this.output = new PrintStream(outputStream);
-        }
-        catch (IOException e) {
-            var message = "Failed creating simulation log stream";
-            throw new UncheckedIOException(message, e);
-        }
+        this.buffer = new ByteArrayOutputStream();
+        this.output = new PrintStream(buffer);
     }
 
+    /**
+     * Closes the session and writes any captured
+     * simulation output to the log file.
+     *
+     * @throws UncheckedIOException if the log file cannot be written
+     */
     @Override
     public void close() {
         output.close();
+
+        if (buffer.size() == 0) {
+            return;
+        }
+        try {
+            Files.createDirectories(logFilePath.getParent());
+            Files.write(logFilePath, buffer.toByteArray());
+        }
+        catch (IOException e) {
+            var message = "Failed writing simulation log file";
+            throw new UncheckedIOException(message, e);
+        }
     }
 
     /**
