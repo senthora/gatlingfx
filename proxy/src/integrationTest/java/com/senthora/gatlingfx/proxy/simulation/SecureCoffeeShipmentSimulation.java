@@ -13,7 +13,7 @@ import java.util.List;
 
 @GatlingSimulation
 @DisplayName("Should route HTTPS requests to coffee service")
-public final class CoffeeHttpsRoutingSimulation extends BaseSimulation {
+public final class SecureCoffeeShipmentSimulation extends BaseSimulation {
 
     @Override
     protected SimulationProtocol protocol() {
@@ -22,6 +22,6 @@ public final class CoffeeHttpsRoutingSimulation extends BaseSimulation {
 
     @Override
     protected List<SimulationScenario> scenarios() {
-        return List.of(new CoffeeRoutingScenario());
+        return List.of(new PrepareCoffeeShipmentScenario());
     }
 }

@@ -12,16 +12,16 @@ import org.junit.jupiter.api.DisplayName;
 import java.util.List;
 
 @GatlingSimulation
-@DisplayName("Should route HTTP requests to coffee service")
-public final class CoffeeHttpRoutingSimulation extends BaseSimulation {
+@DisplayName("Should route HTTP requests to tea service")
+public final class TeaShipmentSimulation extends BaseSimulation {
 
     @Override
     protected SimulationProtocol protocol() {
-        return ProxyProtocols.http(TeaShippingNetwork.HTTP_PROXY, TeaShippingNetwork.COFFEE_WAREHOUSE);
+        return ProxyProtocols.http(TeaShippingNetwork.HTTP_PROXY, TeaShippingNetwork.TEA_WAREHOUSE);
     }
 
     @Override
     protected List<SimulationScenario> scenarios() {
-        return List.of(new CoffeeRoutingScenario());
+        return List.of(new PrepareTeaShipmentScenario());
     }
 }
