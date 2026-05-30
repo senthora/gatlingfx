@@ -58,7 +58,7 @@ public final class DefaultSimulationRuntime implements SimulationRuntime {
         this.runtimeConfig = config;
         this.gatlingConfig = GatlingConfiguration.load();
         this.logManager = new SimulationLogManager(
-                Path.of("build/gatlingfx"),
+                LogDirectoryResolver.resolve(),
                 runId
         );
     }

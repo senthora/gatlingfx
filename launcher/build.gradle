@@ -26,4 +26,8 @@ application {
 
 tasks.named('run', JavaExec) {
     jvmArgs '--add-opens=java.base/java.lang=ALL-UNNAMED'
+    systemProperty(
+            "gatlingfx.logs.directory",
+            rootProject.file("build/gatlingfx").absolutePath
+    )
 }
