@@ -3,20 +3,20 @@ package com.senthora.gatlingfx.wiremock.support;
 import com.senthora.gatlingfx.http.api.HttpBaseUrl;
 import com.senthora.gatlingfx.http.api.HttpScheme;
 import com.senthora.gatlingfx.http.api.NetworkAddress;
+import com.senthora.gatlingfx.simulation.api.BaseSimulation;
+import com.senthora.gatlingfx.simulation.api.SimulationProtocol;
 
-/**
- * Shared tea factory fixtures used by
- * WireMock integration simulations.
- */
-public final class TeaFactorySimulation {
+import org.jspecify.annotations.NullMarked;
 
-    /**
-     * Tea factory production endpoint.
-     */
-    public static final HttpBaseUrl BASE_URL = HttpBaseUrl.of(
+@NullMarked
+public abstract class TeaFactorySimulation extends BaseSimulation {
+
+    protected static final HttpBaseUrl BASE_URL = HttpBaseUrl.of(
             HttpScheme.HTTP,
             NetworkAddress.localhost(8081)
     );
 
-    private TeaFactorySimulation() {}
+    protected SimulationProtocol protocol() {
+        return SimulationProtocol.create().baseUrl(BASE_URL);
+    }
 }

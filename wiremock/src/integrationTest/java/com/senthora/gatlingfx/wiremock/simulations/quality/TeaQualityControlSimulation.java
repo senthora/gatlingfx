@@ -2,9 +2,7 @@ package com.senthora.gatlingfx.wiremock.simulations.quality;
 
 import com.senthora.gatlingfx.http.api.HttpHeader;
 import com.senthora.gatlingfx.runtime.core.api.GatlingSimulation;
-import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 import com.senthora.gatlingfx.simulation.api.SimulationBackend;
-import com.senthora.gatlingfx.simulation.api.SimulationProtocol;
 import com.senthora.gatlingfx.simulation.api.SimulationScenario;
 import com.senthora.gatlingfx.wiremock.api.StubMapping;
 import com.senthora.gatlingfx.wiremock.api.StubRequest;
@@ -20,9 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @GatlingSimulation
 @DisplayName("Should issue quality control reports for questionable tea batches")
-public class TeaQualityControlSimulation extends BaseSimulation {
+public class TeaQualityControlSimulation extends TeaFactorySimulation {
 
-    private final WireMockBackend backend = WireMockBackend.create(TeaFactorySimulation.BASE_URL);
+    private final WireMockBackend backend = WireMockBackend.create(BASE_URL);
 
     @Override
     protected SimulationBackend backend() {
@@ -40,11 +38,6 @@ public class TeaQualityControlSimulation extends BaseSimulation {
                 .willReturnText(200, "BATCH-42")
         );
         return backend;
-    }
-
-    @Override
-    protected SimulationProtocol protocol() {
-        return SimulationProtocol.create().baseUrl(TeaFactorySimulation.BASE_URL);
     }
 
     @Override
