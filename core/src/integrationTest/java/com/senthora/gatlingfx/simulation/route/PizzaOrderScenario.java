@@ -11,7 +11,7 @@ final class PizzaOrderScenario implements SimulationScenario {
 
     @Override
     public ScenarioBuilder build() {
-        return scenario("Pizza order status").exec(get("/order/pizza")
+        return scenario("Order pizza").exec(get("/order/pizza")
                 .check(status().is(404))
         );
     }

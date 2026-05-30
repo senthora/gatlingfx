@@ -11,7 +11,7 @@ final class CorrectTeaOrderScenario implements SimulationScenario {
 
     @Override
     public ScenarioBuilder build() {
-        return scenario("Unknown tea order").exec(get("/order/decaf-tea")
+        return scenario("Order decaf tea").exec(get("/order/decaf-tea")
                 .check(status().is(302))
         );
     }

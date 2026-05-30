@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import java.util.List;
 
 @GatlingSimulation
-@DisplayName("Should serve tea, coffee, and rejected pizza orders")
+@DisplayName("Should handle tea shop orders according to the menu")
 public class TeaShopOrderSimulation extends TeaShopSimulation {
 
     @Override

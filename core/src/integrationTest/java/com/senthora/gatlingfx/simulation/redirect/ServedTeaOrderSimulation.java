@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import java.util.List;
 
 @GatlingSimulation
-@DisplayName("Should follow tea order redirects when redirects are enabled")
+@DisplayName("Should serve tea after correcting unconventional orders")
 public class ServedTeaOrderSimulation extends TeaShopSimulation {
 
     @Override

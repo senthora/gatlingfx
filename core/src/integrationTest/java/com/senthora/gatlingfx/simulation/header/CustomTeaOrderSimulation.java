@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import java.util.List;
 
 @GatlingSimulation
-@DisplayName("Should serve special tea orders when tea strength header is provided")
+@DisplayName("Should reject custom tea orders that do not meet shop standards")
 public final class CustomTeaOrderSimulation extends TeaShopSimulation {
 
     @Override

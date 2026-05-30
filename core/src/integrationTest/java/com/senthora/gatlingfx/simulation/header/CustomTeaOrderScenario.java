@@ -11,7 +11,7 @@ final class CustomTeaOrderScenario implements SimulationScenario {
 
     @Override
     public ScenarioBuilder build() {
-        return scenario("Special tea order").exec(get("/order/tea")
+        return scenario("Order custom tea").exec(get("/order/tea")
                 .check(status().is(400))
         );
     }
