@@ -1,5 +1,8 @@
 package com.senthora.gatlingfx.runtime.engine;
 
+import com.senthora.gatlingfx.runtime.core.api.SimulationRunner;
+import com.senthora.gatlingfx.runtime.core.api.SimulationRuntimeConfig;
+
 import org.junit.platform.engine.*;
 
 /**
@@ -15,6 +18,13 @@ public final class GatlingFxTestEngine implements TestEngine {
 
     private static final String ENGINE_ID = "gatlingfx";
 
+    private final SimulationRunner runner;
+
+    public GatlingFxTestEngine() {
+        var config = SimulationRuntimeConfig.create().build();
+        this.runner = SimulationRunner.create(config);
+    }
+
     @Override
     public String getId() {
         return ENGINE_ID;
@@ -27,6 +37,6 @@ public final class GatlingFxTestEngine implements TestEngine {
 
     @Override
     public void execute(ExecutionRequest request) {
-        SimulationExecutor.execute(request);
+        SimulationExecutor.execute(runner, request);
     }
 }

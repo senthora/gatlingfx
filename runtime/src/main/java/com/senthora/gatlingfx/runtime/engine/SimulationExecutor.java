@@ -2,7 +2,6 @@ package com.senthora.gatlingfx.runtime.engine;
 
 import com.senthora.gatlingfx.runtime.core.api.RuntimeLogLevel;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRunner;
-import com.senthora.gatlingfx.runtime.core.api.SimulationRuntimeConfig;
 import com.senthora.gatlingfx.runtime.core.application.LoggingContext;
 
 import org.junit.platform.engine.EngineExecutionListener;
@@ -26,26 +25,27 @@ final class SimulationExecutor {
      *
      * @param request JUnit execution request
      */
-    static void execute(ExecutionRequest request) {
+    static void execute(SimulationRunner runner, ExecutionRequest request) {
         var listener = request.getEngineExecutionListener();
         var descriptor = request.getRootTestDescriptor();
 
         listener.executionStarted(descriptor);
 
         for (var child : descriptor.getChildren()) {
-            execute(listener, (SimulationDescriptor) child);
+            execute(runner, listener, (SimulationDescriptor) child);
         }
         var result = TestExecutionResult.successful();
         listener.executionFinished(descriptor, result);
     }
 
     private static void execute(
+            SimulationRunner runner,
             EngineExecutionListener listener,
             SimulationDescriptor descriptor
     ) {
         listener.executionStarted(descriptor);
         try {
-            execute(descriptor);
+            execute(runner, descriptor);
 
             var result = TestExecutionResult.successful();
             listener.executionFinished(descriptor, result);
@@ -56,10 +56,8 @@ final class SimulationExecutor {
         }
     }
 
-    private static void execute(SimulationDescriptor descriptor) {
+    private static void execute(SimulationRunner runner, SimulationDescriptor descriptor) {
         var simulationClass = descriptor.simulationClass();
-        var config = SimulationRuntimeConfig.create().build();
-        var runner = SimulationRunner.create(config);
 
         try (var ignore = LoggingContext.configure(RuntimeLogLevel.ERROR)) {
             var result = runner.run(List.of(simulationClass));
