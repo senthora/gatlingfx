@@ -31,6 +31,12 @@ configure(libraryProjects) {
         toolchain {
             languageVersion = JavaLanguageVersion.of(21)
         }
+        withSourcesJar()
+        withJavadocJar()
+    }
+    tasks.withType(Javadoc).configureEach {
+        failOnError = false
+        options.addStringOption('Xdoclint:none', '-quiet')
     }
 
     jacoco {
