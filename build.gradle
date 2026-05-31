@@ -93,6 +93,40 @@ configure(libraryProjects) {
             integrationTestRuntimeElements integrationTestJar
         }
     }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+
+                artifactId = "gatlingfx-${project.name}"
+
+                pom {
+                    name = "GatlingFx ${project.name.capitalize()}"
+                    description = "Lightweight toolkit for building reusable and maintainable Gatling simulations."
+                    url = "https://github.com/senthora/gatlingfx"
+
+                    licenses {
+                        license {
+                            name = "Apache License, Version 2.0"
+                            url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = "senthora"
+                            name = "meowpow-png"
+                        }
+                    }
+                    scm {
+                        url = "https://github.com/senthora/gatlingfx"
+                        connection = "scm:git:https://github.com/senthora/gatlingfx.git"
+                        developerConnection = "scm:git:git@github.com:senthora/gatlingfx.git"
+                    }
+                }
+            }
+        }
+    }
 }
 
 tasks.register('jacocoTestReport', JacocoReport) {
