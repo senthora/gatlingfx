@@ -95,11 +95,6 @@ configure(libraryProjects) {
 tasks.register('jacocoTestReport', JacocoReport) {
     dependsOn subprojects.collectMany { project ->
         project.tasks.matching {
-            it.name in ['test', 'integrationTest']
-        }
-    }
-    dependsOn subprojects.collectMany { project ->
-        project.tasks.matching {
             it.name == 'jacocoTestReport'
         }
     }
