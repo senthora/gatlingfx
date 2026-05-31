@@ -94,6 +94,9 @@ configure(libraryProjects) {
 }
 
 tasks.register('jacocoTestReport', JacocoReport) {
+    group = "verification"
+    description = "Generates aggregate jacoco test coverage report"
+
     dependsOn subprojects.collectMany { project ->
         project.tasks.matching {
             it.name == 'jacocoTestReport'
