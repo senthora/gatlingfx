@@ -57,6 +57,9 @@ jobs:
       - name: Run integration tests
         run: ./gradlew integrationTest -x test
 
+      - name: Generate coverage report
+        run: ./gradlew jacocoTestReport
+
       - name: Print compose logs
         if: always()
         run: just compose logs --tail=500 --no-color || true
