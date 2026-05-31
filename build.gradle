@@ -20,6 +20,8 @@ def libraryProjects = subprojects.findAll {
 configure(libraryProjects) {
     apply plugin: 'java-library'
     apply plugin: 'jacoco'
+    apply plugin: 'maven-publish'
+    apply plugin: 'signing'
 
     base {
         archivesName = "${rootProject.name}-${project.name}"
