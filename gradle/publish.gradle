@@ -1,0 +1,90 @@
+import java.security.MessageDigest
+
+tasks.register("generateCentralChecksums") {
+    doLast {
+        new LocalMavenRepository().artifactsToPublish().each { artifact ->
+            artifact.generateChecksums()
+        }
+    }
+}
+
+tasks.register("assembleCentralBundle", Zip) {
+    dependsOn("generateCentralChecksums")
+
+    archiveFileName = "central-bundle.zip"
+    destinationDirectory = layout.buildDirectory.dir("central")
+
+    from({new LocalMavenRepository().asFile()}) {
+        exclude("**/maven-metadata-local.xml")
+        exclude("**/maven-metadata-local.xml.*")
+
+        into("com/senthora/gatlingfx")
+    }
+}
+
+final class LocalMavenRepository {
+
+    private final File repository
+
+    LocalMavenRepository() {
+        this.repository = new File(
+                System.getProperty("user.home"),
+                ".m2/repository/com/senthora/gatlingfx"
+        )
+        if (!repository.exists()) {
+            throw new GradleException("Maven Local artifacts not found: ${repository}")
+        }
+    }
+
+    List<Artifact> artifactsToPublish() {
+        List<Artifact> artifacts = []
+
+        repository.eachFileRecurse { file ->
+            if (!file.isFile()) {
+                return
+            }
+            def excluded = [".asc", ".md5", ".sha1"]
+            if (excluded.any { file.name.endsWith(it) }) {
+                return
+            }
+            artifacts << new Artifact(file)
+        }
+        return artifacts
+    }
+
+    File asFile() {
+        return repository
+    }
+}
+
+final class Artifact {
+
+    private final File file
+
+    Artifact(File file) {
+        this.file = Objects.requireNonNull(file)
+    }
+
+    void generateChecksums() {
+        [md5 : "MD5", sha1: "SHA-1"].each { extension, algorithm ->
+            def checksum = checksum(algorithm)
+            new File("${file.absolutePath}.${extension}").text = checksum
+        }
+    }
+
+    private String checksum(String algorithm) {
+        def digest = MessageDigest.getInstance(algorithm)
+
+        file.withInputStream { stream ->
+            byte[] buffer = new byte[8192]
+            int read
+
+            while ((read = stream.read(buffer)) != -1) {
+                digest.update(buffer, 0, read)
+            }
+        }
+        return digest.digest()
+                .collect { String.format("%02x", it) }
+                .join()
+    }
+}

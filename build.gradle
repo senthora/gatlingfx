@@ -3,6 +3,7 @@ plugins {
     id 'base'
     id 'jacoco'
 }
+apply from: 'gradle/publish.gradle'
 
 allprojects {
     group = 'com.senthora.gatlingfx'
