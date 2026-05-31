@@ -126,6 +126,20 @@ configure(libraryProjects) {
                 }
             }
         }
+        repositories {
+            if (version.toString().endsWith("-SNAPSHOT")) {
+                maven {
+                    name = "snapshots"
+                    url = "https://central.sonatype.com/repository/maven-snapshots/"
+                    credentials {
+                        username = findProperty("mavenCentralUsername")
+                        password = findProperty("mavenCentralPassword")
+                    }
+                }
+            }
+        }
+    }
+
     if (!version.toString().endsWith("-SNAPSHOT")) {
         signing {
             useGpgCmd()
@@ -161,6 +175,15 @@ tasks.register('jacocoTestReport', JacocoReport) {
                 'reports/jacoco/html'
         )
     }
+}
+
+tasks.register("publishToMavenSnapshots") {
+    group = "publishing"
+    description = "Publishes SNAPSHOT artifacts to Maven Central snapshots"
+
+    dependsOn(libraryProjects.collect {
+        "${it.path}:publishAllPublicationsToSnapshotsRepository"
+    })
 }
 
 tasks.named('clean') {
