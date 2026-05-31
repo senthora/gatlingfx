@@ -19,8 +19,8 @@ on:
       - '!**/*.md'
 
 jobs:
-  test:
-    name: Test
+  test-publish:
+    name: Test & Publish
     runs-on: ubuntu-latest
 
     steps:
@@ -68,6 +68,13 @@ jobs:
           disable_search: true
           fail_ci_if_error: true
 
+      - name: Publish snapshot
+        if: github.ref == 'refs/heads/dev'
+        run: ./gradlew publishToMavenSnapshots
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+
       - name: Print compose logs
         if: always()
         run: just compose logs --tail=500 --no-color || true
@@ -84,31 +91,3 @@ jobs:
       - name: Stop compose services
         if: always()
         run: docker compose down
-
-  publish-snapshot:
-    name: Publish Snapshot
-    needs: test
-    if: github.ref == 'refs/heads/dev'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Set up JDK
-        uses: actions/setup-java@v5
-        with:
-          distribution: temurin
-          java-version: 21
-
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v6
-        with:
-          cache-read-only: false
-          cache-cleanup: never
-
-      - name: Publish snapshots
-        run: ./gradlew publishToMavenSnapshots
-        env:
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
