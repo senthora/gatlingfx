@@ -1,8 +1,5 @@
 package com.senthora.gatlingfx.runtime.core.api;
 
-import com.senthora.gatlingfx.runtime.core.internal.DefaultGatlingRunner;
-import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationRunner;
-import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationRuntime;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 
 import java.util.List;
@@ -23,18 +20,6 @@ import java.util.List;
  * coverage reporting and CI pipelines.
  */
 public interface SimulationRunner {
-
-    /**
-     * Creates a new simulation runner.
-     *
-     * @param config simulation runtime configuration
-     */
-    static SimulationRunner create(SimulationRuntimeConfig config) {
-        var gatlingRunner = new DefaultGatlingRunner();
-        var runtime = new DefaultSimulationRuntime(gatlingRunner, config);
-
-        return new DefaultSimulationRunner(runtime);
-    }
 
     /**
      * Executes a single GatlingFx simulation.

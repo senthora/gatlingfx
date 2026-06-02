@@ -1,5 +1,5 @@
 dependencies {
-    implementation projects.runtimeApi
+    api projects.runtimeApi
 
     implementation libs.classgraph
     implementation libs.picocli
