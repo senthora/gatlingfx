@@ -31,8 +31,6 @@ public final class MockRuntimeSession implements AutoCloseable {
                     return runner;
                 });
 
-        var scanner = Mockito.mock(SimulationScanner.class);
-
         Mockito.when(scanner.scan())
                 .thenReturn(new SimulationDiscoveryResult(
                         List.of(),
