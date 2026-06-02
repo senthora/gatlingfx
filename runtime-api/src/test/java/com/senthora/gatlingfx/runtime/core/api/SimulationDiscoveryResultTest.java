@@ -23,7 +23,7 @@ class SimulationDiscoveryResultTest {
                 List.of(expected),
                 List.of()
         );
-        assertThat(result.supported()).containsExactly(expected);
+        Assertions.assertThat(result.supported()).containsExactly(expected);
     }
 
     @Test
@@ -34,7 +34,7 @@ class SimulationDiscoveryResultTest {
                 List.of(),
                 List.of(expected)
         );
-        assertThat(result.unsupported()).containsExactly(expected);
+        Assertions.assertThat(result.unsupported()).containsExactly(expected);
     }
 
     @Test
@@ -44,7 +44,7 @@ class SimulationDiscoveryResultTest {
                 List.of(TestSimulation.class),
                 List.of()
         );
-        assertThatThrownBy(() -> result.supported().add(TestSimulation.class))
+        Assertions.assertThatThrownBy(() -> result.supported().add(TestSimulation.class))
                 .isInstanceOf(UnsupportedOperationException.class);
     }
 
@@ -55,7 +55,7 @@ class SimulationDiscoveryResultTest {
                 List.of(),
                 List.of(String.class)
         );
-        assertThatThrownBy(() -> result.unsupported().add(Object.class))
+        Assertions.assertThatThrownBy(() -> result.unsupported().add(Object.class))
                 .isInstanceOf(UnsupportedOperationException.class);
     }
 
@@ -72,7 +72,7 @@ class SimulationDiscoveryResultTest {
         );
         supported.clear();
 
-        assertThat(result.supported()).containsExactly(expected);
+        Assertions.assertThat(result.supported()).containsExactly(expected);
     }
 
     @Test
@@ -88,26 +88,26 @@ class SimulationDiscoveryResultTest {
         );
         unsupported.clear();
 
-        assertThat(result.unsupported()).containsExactly(expected);
+        Assertions.assertThat(result.unsupported()).containsExactly(expected);
     }
 
     @Test
     @DisplayName("Should throw NullPointerException when supported simulations are null")
     void should_ThrowNullPointerException_when_SupportedSimulationsAreNull() {
-        var thrown = catchThrowable(() -> new SimulationDiscoveryResult(
+        var thrown = ThrowableAssert.catchThrowable(() -> new SimulationDiscoveryResult(
                 null,
                 List.of()
         ));
-        assertThat(thrown).isInstanceOf(NullPointerException.class);
+        Assertions.assertThat(thrown).isInstanceOf(NullPointerException.class);
     }
 
     @Test
     @DisplayName("Should throw NullPointerException when unsupported simulations are null")
     void should_ThrowNullPointerException_when_UnsupportedSimulationsAreNull() {
-        var thrown = catchThrowable(() -> new SimulationDiscoveryResult(
+        var thrown = ThrowableAssert.catchThrowable(() -> new SimulationDiscoveryResult(
                 List.of(),
                 null
         ));
-        assertThat(thrown).isInstanceOf(NullPointerException.class);
+        Assertions.assertThat(thrown).isInstanceOf(NullPointerException.class);
     }
 }

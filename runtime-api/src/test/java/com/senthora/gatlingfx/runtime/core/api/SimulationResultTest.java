@@ -15,13 +15,13 @@ class SimulationResultTest {
         @Test
         @DisplayName("Returns true when the result is success")
         void should_ReturnTrue_when_ResultIsSuccess() {
-            assertThat(SimulationResult.SUCCESS.isSuccess()).isTrue();
+            Assertions.assertThat(SimulationResult.SUCCESS.isSuccess()).isTrue();
         }
 
         @Test
         @DisplayName("Returns false when the result is failure")
         void should_ReturnFalse_when_ResultIsFailure() {
-            assertThat(SimulationResult.FAILURE.isSuccess()).isFalse();
+            Assertions.assertThat(SimulationResult.FAILURE.isSuccess()).isFalse();
         }
     }
 
@@ -32,13 +32,13 @@ class SimulationResultTest {
         @Test
         @DisplayName("Returns true when the result is failure")
         void should_ReturnTrue_when_ResultIsFailure() {
-            assertThat(SimulationResult.FAILURE.isFailure()).isTrue();
+            Assertions.assertThat(SimulationResult.FAILURE.isFailure()).isTrue();
         }
 
         @Test
         @DisplayName("Returns false when the result is success")
         void should_ReturnFalse_when_ResultIsSuccess() {
-            assertThat(SimulationResult.SUCCESS.isFailure()).isFalse();
+            Assertions.assertThat(SimulationResult.SUCCESS.isFailure()).isFalse();
         }
     }
 }
