@@ -1,6 +1,5 @@
-package com.senthora.gatlingfx.runtime.core.internal;
+package com.senthora.gatlingfx.runtime.core.api;
 
-import com.senthora.gatlingfx.runtime.core.api.SimulationDiscoveryResult;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 import com.senthora.gatlingfx.support.TestSimulation;
 
@@ -14,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 
-class DefaultSimulationDiscoveryResultTest {
+class SimulationDiscoveryResultTest {
 
     @Test
     @DisplayName("Should return supported simulations when result is created")
