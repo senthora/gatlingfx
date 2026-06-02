@@ -17,7 +17,7 @@ class SimulationRuntimeConfigTest {
         void should_ReturnSameBuilderInstance() {
             var builder = SimulationRuntimeConfig.create();
 
-            Assertions.assertThat(builder.withFailFast(true)).isSameAs(builder);
+            assertThat(builder.withFailFast(true)).isSameAs(builder);
         }
 
         @Test
@@ -27,7 +27,7 @@ class SimulationRuntimeConfigTest {
                     .withFailFast(true)
                     .build();
 
-            Assertions.assertThat(config.failFast()).isTrue();
+            assertThat(config.failFast()).isTrue();
         }
 
         @Test
@@ -37,7 +37,7 @@ class SimulationRuntimeConfigTest {
                     .withFailFast(false)
                     .build();
 
-            Assertions.assertThat(config.failFast()).isFalse();
+            assertThat(config.failFast()).isFalse();
         }
     }
 
@@ -50,7 +50,7 @@ class SimulationRuntimeConfigTest {
         void should_DisableFailFastByDefault() {
             var config = SimulationRuntimeConfig.create().build();
 
-            Assertions.assertThat(config.failFast()).isFalse();
+            assertThat(config.failFast()).isFalse();
         }
     }
 }
