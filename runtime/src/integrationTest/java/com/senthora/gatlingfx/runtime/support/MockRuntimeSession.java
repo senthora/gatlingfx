@@ -1,7 +1,6 @@
 package com.senthora.gatlingfx.runtime.support;
 
 import com.senthora.gatlingfx.runtime.core.api.*;
-import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationDiscoveryResult;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 
 import org.mockito.MockedStatic;
@@ -14,27 +13,34 @@ import static org.assertj.core.api.Assertions.assertThat;
 public final class MockRuntimeSession implements AutoCloseable {
 
     private final SimulationRunner runner;
-    private final MockedStatic<SimulationRunner> runnerMock;
-    private final MockedStatic<SimulationScanner> scannerMock;
+    private final SimulationScanner scanner;
+    private final MockedStatic<SimulationRunners> runnerMock;
+    private final MockedStatic<SimulationScanners> scannerMock;
 
     private SimulationRuntimeConfig config;
 
     private MockRuntimeSession() {
         this.runner = Mockito.mock(SimulationRunner.class);
-        this.runnerMock = Mockito.mockStatic(SimulationRunner.class);
-        this.scannerMock = Mockito.mockStatic(SimulationScanner.class);
+        this.scanner = Mockito.mock(SimulationScanner.class);
+        this.runnerMock = Mockito.mockStatic(SimulationRunners.class);
+        this.scannerMock = Mockito.mockStatic(SimulationScanners.class);
 
-        runnerMock.when(() -> SimulationRunner.create(Mockito.any()))
+        runnerMock.when(() -> SimulationRunners.create(Mockito.any()))
                 .thenAnswer(invocation -> {
                     config = invocation.getArgument(0);
                     return runner;
                 });
 
-        scannerMock.when(SimulationScanner::scan)
-                .thenReturn(new DefaultSimulationDiscoveryResult(
+        var scanner = Mockito.mock(SimulationScanner.class);
+
+        Mockito.when(scanner.scan())
+                .thenReturn(new SimulationDiscoveryResult(
                         List.of(),
                         List.of()
                 ));
+
+        scannerMock.when(SimulationScanners::create)
+                .thenReturn(scanner);
     }
 
     public static MockRuntimeSession create() {
@@ -51,7 +57,7 @@ public final class MockRuntimeSession implements AutoCloseable {
     }
 
     public void stubDiscoveryResult(SimulationDiscoveryResult result) {
-        scannerMock.when(SimulationScanner::scan).thenReturn(result);
+        Mockito.when(scanner.scan()).thenReturn(result);
     }
 
     public void verifySimulationExecuted(Class<? extends BaseSimulation> clazz) {

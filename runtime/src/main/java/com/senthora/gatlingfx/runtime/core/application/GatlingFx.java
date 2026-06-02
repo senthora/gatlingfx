@@ -56,7 +56,7 @@ public final class GatlingFx {
 
         try (var ignored = LoggingContext.configure(logLevel)) {
             var config = createConfig(arguments);
-            var runner = SimulationRunner.create(config);
+            var runner = SimulationRunners.create(config);
 
             return run(arguments, runner);
         }
@@ -73,7 +73,7 @@ public final class GatlingFx {
             result = runner.run(simulation);
         }
         else {
-            var discoveryResult = SimulationScanner.scan();
+            var discoveryResult = SimulationScanners.create().scan();
 
             log.info("Discovered {} simulation(s)",
                     discoveryResult.supported().size()

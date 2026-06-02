@@ -1,7 +1,5 @@
 package com.senthora.gatlingfx.runtime.core.api;
 
-import com.senthora.gatlingfx.runtime.core.internal.ClasspathSimulationScanner;
-
 /**
  * Discovers classes annotated with {@link GatlingSimulation}
  * available on the runtime classpath.
@@ -18,7 +16,5 @@ public interface SimulationScanner {
      *
      * @return the result of simulation discovery
      */
-    static SimulationDiscoveryResult scan() {
-        return ClasspathSimulationScanner.scan();
-    }
+    SimulationDiscoveryResult scan();
 }

@@ -1,6 +1,7 @@
 package com.senthora.gatlingfx.runtime.core.internal;
 
 import com.senthora.gatlingfx.runtime.core.api.GatlingSimulation;
+import com.senthora.gatlingfx.runtime.core.api.SimulationDiscoveryResult;
 import com.senthora.gatlingfx.runtime.core.api.SimulationScanner;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 
@@ -10,17 +11,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Internal runtime classpath scanner
- * used by {@link SimulationScanner}.
+ * Default {@link SimulationScanner} implementation.
  */
-public final class ClasspathSimulationScanner {
+public final class ClasspathSimulationScanner implements SimulationScanner {
 
     private static final String ANNOTATION_NAME = GatlingSimulation.class.getName();
     private static final ClassGraph CLASS_GRAPH = new ClassGraph()
             .enableClassInfo()
             .enableAnnotationInfo();
 
-    public static DefaultSimulationDiscoveryResult scan() {
+    @Override
+    public SimulationDiscoveryResult scan() {
         try (var scan = CLASS_GRAPH.scan()) {
             var discoveredClasses = scan
                     .getClassesWithAnnotation(ANNOTATION_NAME)
@@ -37,7 +38,7 @@ public final class ClasspathSimulationScanner {
                     unsupportedClasses.add(clazz);
                 }
             }
-            return new DefaultSimulationDiscoveryResult(
+            return new SimulationDiscoveryResult(
                     supportedClasses,
                     unsupportedClasses
             );

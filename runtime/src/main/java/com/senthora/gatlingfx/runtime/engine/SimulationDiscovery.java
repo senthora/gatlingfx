@@ -1,7 +1,7 @@
 package com.senthora.gatlingfx.runtime.engine;
 
 import com.senthora.gatlingfx.runtime.core.api.GatlingSimulation;
-import com.senthora.gatlingfx.runtime.core.api.SimulationScanner;
+import com.senthora.gatlingfx.runtime.core.api.SimulationScanners;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 
 import org.junit.platform.engine.EngineDiscoveryRequest;
@@ -42,7 +42,7 @@ final class SimulationDiscovery {
             }
             return engineDescriptor;
         }
-        for (var simulationClass : SimulationScanner.scan().supported()) {
+        for (var simulationClass : SimulationScanners.create().scan().supported()) {
             addDescriptor(engineDescriptor, id, simulationClass);
         }
         return engineDescriptor;

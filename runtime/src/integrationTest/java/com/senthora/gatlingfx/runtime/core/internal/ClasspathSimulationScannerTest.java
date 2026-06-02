@@ -1,6 +1,5 @@
 package com.senthora.gatlingfx.runtime.core.internal;
 
-import com.senthora.gatlingfx.runtime.core.api.SimulationDiscoveryResult;
 import com.senthora.gatlingfx.runtime.support.TestSimulations;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -11,17 +10,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ClasspathSimulationScannerTest {
 
-    private static SimulationDiscoveryResult result;
+    private static ClasspathSimulationScanner scanner;
 
     @BeforeAll
     static void setupClasspathSimulationScannerTest() {
-        result = ClasspathSimulationScanner.scan();
+        scanner = new ClasspathSimulationScanner();
     }
 
     @Test
     @DisplayName("Should return supported simulations when annotated GatlingFx simulations exist")
     void should_ReturnSupportedSimulations_when_AnnotatedGatlingFxSimulationsExist() {
-        assertThat(result.supported()).contains(
+        assertThat(scanner.scan().supported()).contains(
                 TestSimulations.SupportedSimulation.class
         );
     }
@@ -29,7 +28,7 @@ class ClasspathSimulationScannerTest {
     @Test
     @DisplayName("Should return unsupported simulations when non-GatlingFx simulations are discovered")
     void should_ReturnUnsupportedSimulations_when_NonGatlingFxSimulationsAreDiscovered() {
-        assertThat(result.unsupported()).contains(
+        assertThat(scanner.scan().unsupported()).contains(
                 TestSimulations.UnsupportedSimulation.class
         );
     }
@@ -38,6 +37,7 @@ class ClasspathSimulationScannerTest {
     @DisplayName("Should exclude non-annotated GatlingFx simulations when discovering simulations")
     void should_ExcludeNonAnnotatedGatlingFxSimulations_when_DiscoveringSimulations() {
         var expected = TestSimulations.NonAnnotatedSimulation.class;
+        var result = scanner.scan();
 
         assertThat(result.supported()).doesNotContain(expected);
         assertThat(result.unsupported()).doesNotContain(expected);
@@ -46,7 +46,7 @@ class ClasspathSimulationScannerTest {
     @Test
     @DisplayName("Should exclude non-annotated non-simulation classes when discovering simulations")
     void should_ExcludeNonAnnotatedClasses_when_DiscoveringSimulations() {
-        assertThat(result.unsupported()).doesNotContain(
+        assertThat(scanner.scan().unsupported()).doesNotContain(
                 TestSimulations.NonSimulation.class
         );
     }

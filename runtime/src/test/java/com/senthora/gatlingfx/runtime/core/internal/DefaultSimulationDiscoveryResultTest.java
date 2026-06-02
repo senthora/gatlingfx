@@ -1,5 +1,6 @@
 package com.senthora.gatlingfx.runtime.core.internal;
 
+import com.senthora.gatlingfx.runtime.core.api.SimulationDiscoveryResult;
 import com.senthora.gatlingfx.simulation.api.BaseSimulation;
 import com.senthora.gatlingfx.support.TestSimulation;
 
@@ -19,7 +20,7 @@ class DefaultSimulationDiscoveryResultTest {
     @DisplayName("Should return supported simulations when result is created")
     void should_ReturnSupportedSimulations_when_ResultIsCreated() {
         var expected = TestSimulation.class;
-        var result = new DefaultSimulationDiscoveryResult(
+        var result = new SimulationDiscoveryResult(
                 List.of(expected),
                 List.of()
         );
@@ -30,7 +31,7 @@ class DefaultSimulationDiscoveryResultTest {
     @DisplayName("Should return unsupported simulations when result is created")
     void should_ReturnUnsupportedSimulations_when_ResultIsCreated() {
         var expected = String.class;
-        var result = new DefaultSimulationDiscoveryResult(
+        var result = new SimulationDiscoveryResult(
                 List.of(),
                 List.of(expected)
         );
@@ -40,7 +41,7 @@ class DefaultSimulationDiscoveryResultTest {
     @Test
     @DisplayName("Should create immutable supported simulations list when result is created")
     void should_CreateImmutableSupportedSimulationsList_when_ResultIsCreated() {
-        var result = new DefaultSimulationDiscoveryResult(
+        var result = new SimulationDiscoveryResult(
                 List.of(TestSimulation.class),
                 List.of()
         );
@@ -51,7 +52,7 @@ class DefaultSimulationDiscoveryResultTest {
     @Test
     @DisplayName("Should create immutable unsupported simulations list when result is created")
     void should_CreateImmutableUnsupportedSimulationsList_when_ResultIsCreated() {
-        var result = new DefaultSimulationDiscoveryResult(
+        var result = new SimulationDiscoveryResult(
                 List.of(),
                 List.of(String.class)
         );
@@ -66,7 +67,7 @@ class DefaultSimulationDiscoveryResultTest {
         var supported = new ArrayList<Class<? extends BaseSimulation>>();
         supported.add(expected);
 
-        var result = new DefaultSimulationDiscoveryResult(
+        var result = new SimulationDiscoveryResult(
                 supported,
                 List.of()
         );
@@ -82,7 +83,7 @@ class DefaultSimulationDiscoveryResultTest {
         var unsupported = new ArrayList<Class<?>>();
         unsupported.add(expected);
 
-        var result = new DefaultSimulationDiscoveryResult(
+        var result = new SimulationDiscoveryResult(
                 List.of(),
                 unsupported
         );
@@ -92,10 +93,9 @@ class DefaultSimulationDiscoveryResultTest {
     }
 
     @Test
-    @SuppressWarnings("DataFlowIssue")
     @DisplayName("Should throw NullPointerException when supported simulations are null")
     void should_ThrowNullPointerException_when_SupportedSimulationsAreNull() {
-        var thrown = catchThrowable(() -> new DefaultSimulationDiscoveryResult(
+        var thrown = catchThrowable(() -> new SimulationDiscoveryResult(
                 null,
                 List.of()
         ));
@@ -103,10 +103,9 @@ class DefaultSimulationDiscoveryResultTest {
     }
 
     @Test
-    @SuppressWarnings("DataFlowIssue")
     @DisplayName("Should throw NullPointerException when unsupported simulations are null")
     void should_ThrowNullPointerException_when_UnsupportedSimulationsAreNull() {
-        var thrown = catchThrowable(() -> new DefaultSimulationDiscoveryResult(
+        var thrown = catchThrowable(() -> new SimulationDiscoveryResult(
                 List.of(),
                 null
         ));

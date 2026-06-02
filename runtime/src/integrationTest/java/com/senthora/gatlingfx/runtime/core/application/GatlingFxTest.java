@@ -1,7 +1,7 @@
 package com.senthora.gatlingfx.runtime.core.application;
 
+import com.senthora.gatlingfx.runtime.core.api.SimulationDiscoveryResult;
 import com.senthora.gatlingfx.runtime.core.api.SimulationRuntimeConfig;
-import com.senthora.gatlingfx.runtime.core.internal.DefaultSimulationDiscoveryResult;
 import com.senthora.gatlingfx.runtime.support.MockRuntimeSession;
 import com.senthora.gatlingfx.runtime.support.TestSimulations;
 
@@ -86,7 +86,7 @@ class GatlingFxTest {
         @Test
         @DisplayName("Should return zero exit code when unsupported simulations are discovered")
         void should_ReturnZeroExitCode_when_UnsupportedSimulationsAreDiscovered() {
-            var discoveryResult = new DefaultSimulationDiscoveryResult(
+            var discoveryResult = new SimulationDiscoveryResult(
                     List.of(TestSimulations.SuccessfulSimulation.class),
                     List.of(Object.class)
             );
@@ -101,7 +101,7 @@ class GatlingFxTest {
         @Test
         @DisplayName("Should return zero exit code when only unsupported simulations are discovered")
         void should_ReturnZeroExitCode_when_OnlyUnsupportedSimulationsAreDiscovered() {
-            var discoveryResult = new DefaultSimulationDiscoveryResult(
+            var discoveryResult = new SimulationDiscoveryResult(
                     List.of(),
                     List.of(Object.class)
             );
@@ -116,7 +116,7 @@ class GatlingFxTest {
         @Test
         @DisplayName("Should return zero exit code when no simulations are discovered")
         void should_ReturnZeroExitCode_when_NoSimulationsAreDiscovered() {
-            var discoveryResult = new DefaultSimulationDiscoveryResult(
+            var discoveryResult = new SimulationDiscoveryResult(
                     List.of(),
                     List.of()
             );
@@ -131,7 +131,7 @@ class GatlingFxTest {
         @Test
         @DisplayName("Should pass supported simulations to runner when supported simulations discovered")
         void should_PassSupportedSimulationsToRunner_when_SupportedSimulationsDiscovered() {
-            var discoveryResult = new DefaultSimulationDiscoveryResult(
+            var discoveryResult = new SimulationDiscoveryResult(
                     List.of(TestSimulations.SuccessfulSimulation.class),
                     List.of()
             );
@@ -150,7 +150,7 @@ class GatlingFxTest {
         @Test
         @DisplayName("Should exclude unsupported simulations when unsupported simulations discovered")
         void should_ExcludeUnsupportedSimulations_when_UnsupportedSimulationsDiscovered() {
-            var discoveryResult = new DefaultSimulationDiscoveryResult(
+            var discoveryResult = new SimulationDiscoveryResult(
                     List.of(TestSimulations.SuccessfulSimulation.class),
                     List.of(Object.class)
             );
@@ -174,7 +174,7 @@ class GatlingFxTest {
         @Test
         @DisplayName("Should return non-zero exit code when simulation execution fails")
         void should_ReturnNonZeroExitCode_when_SimulationExecutionFails() {
-            var discoveryResult = new DefaultSimulationDiscoveryResult(
+            var discoveryResult = new SimulationDiscoveryResult(
                     List.of(TestSimulations.SuccessfulSimulation.class),
                     List.of()
             );
@@ -227,7 +227,7 @@ class GatlingFxTest {
         @Test
         @DisplayName("Should suppress logs when quiet argument supplied")
         void should_SuppressInfoLogs_when_QuietArgumentSupplied() {
-            var discoveryResult = new DefaultSimulationDiscoveryResult(
+            var discoveryResult = new SimulationDiscoveryResult(
                     List.of(),
                     List.of()
             );
@@ -248,7 +248,7 @@ class GatlingFxTest {
         @Test
         @DisplayName("Should emit logs when quiet argument not supplied")
         void should_EmitLogs_when_QuietArgumentNotSupplied() {
-            var discoveryResult = new DefaultSimulationDiscoveryResult(
+            var discoveryResult = new SimulationDiscoveryResult(
                     List.of(),
                     List.of()
             );
