@@ -155,8 +155,8 @@ tasks.register("publishToMavenSnapshots") {
     group = "publishing"
     description = "Publishes SNAPSHOT artifacts to Maven Central snapshots"
 
-    dependsOn(libraryProjects.collect {
-        "${it.path}:publishAllPublicationsToSnapshotsRepository"
+    dependsOn(subprojects*.path.collect {
+        "${it}:publishAllPublicationsToSnapshotsRepository"
     })
 }
 
