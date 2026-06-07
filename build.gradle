@@ -1,6 +1,6 @@
 //file:noinspection GroovyAssignabilityCheck
 plugins {
-    id 'base'
+    id 'java'
     id 'jacoco'
 }
 apply from: 'gradle/publish.gradle'
@@ -60,11 +60,8 @@ subprojects {
     }
 
     tasks.jacocoTestReport {
-        dependsOn tasks.test
-
         reports {
             xml.required = true
-            html.required = true
         }
     }
 
@@ -122,10 +119,7 @@ subprojects {
     }
 }
 
-tasks.register('jacocoTestReport', JacocoReport) {
-    group = "verification"
-    description = "Generates aggregate jacoco test coverage report"
-
+tasks.named('jacocoTestReport', JacocoReport) {
     dependsOn subprojects.collectMany { project ->
         project.tasks.matching {
             it.name == 'jacocoTestReport'
