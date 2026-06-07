@@ -41,10 +41,6 @@ subprojects {
         options.addStringOption('Xdoclint:none', '-quiet')
     }
 
-    jacoco {
-        toolVersion = '0.8.14'
-    }
-
     tasks.withType(Test).configureEach {
         outputs.upToDateWhen { false }
         useJUnitPlatform()
