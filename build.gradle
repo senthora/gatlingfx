@@ -2,8 +2,13 @@
 plugins {
     id 'java'
     id 'jacoco'
+    id 'com.senthora.gatlingfx' version '0.1.0-SNAPSHOT'
 }
 apply from: 'gradle/publish.gradle'
+
+repositories {
+    mavenLocal()
+}
 
 allprojects {
     group = 'com.senthora.gatlingfx'
