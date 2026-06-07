@@ -14,11 +14,7 @@ allprojects {
     }
 }
 
-def libraryProjects = subprojects.findAll {
-    it.name != 'launcher'
-}
-
-configure(libraryProjects) {
+subprojects {
     apply plugin: 'java-library'
     apply plugin: 'jacoco'
     apply plugin: 'maven-publish'
@@ -69,35 +65,6 @@ configure(libraryProjects) {
         reports {
             xml.required = true
             html.required = true
-        }
-    }
-
-    testing {
-        suites {
-            integrationTest(JvmTestSuite) {}
-        }
-    }
-
-    if (sourceSets.findByName('integrationTest') != null) {
-        configurations {
-            integrationTestRuntimeElements {
-                canBeConsumed = true
-                canBeResolved = false
-
-                extendsFrom integrationTestRuntimeClasspath
-
-                outgoing.capability(
-                        "${project.group}:${project.name}-integration-tests:${project.version}"
-                )
-            }
-        }
-        tasks.register('integrationTestJar', Jar) {
-            archiveClassifier = 'integration-test'
-
-            from sourceSets.integrationTest.output
-        }
-        artifacts {
-            integrationTestRuntimeElements integrationTestJar
         }
     }
 

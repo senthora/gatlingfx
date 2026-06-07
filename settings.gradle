@@ -5,6 +5,5 @@ include 'runtime'
 include 'runtime-api'
 include 'proxy'
 include 'wiremock'
-include 'launcher'
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
