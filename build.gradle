@@ -45,10 +45,10 @@ configure(libraryProjects) {
     }
 
     tasks.withType(Test).configureEach {
+        outputs.upToDateWhen { false }
         useJUnitPlatform()
 
         if (name == "integrationTest") {
-            outputs.upToDateWhen { false }
             shouldRunAfter(tasks.test)
             systemProperty(
                     "gatlingfx.logs.directory",
