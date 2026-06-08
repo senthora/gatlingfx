@@ -21,7 +21,6 @@ subprojects {
     apply plugin: 'jacoco'
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
-    apply plugin: 'com.senthora.gatlingfx'
 
     base {
         archivesName = "${rootProject.name}-${project.name}"
@@ -46,9 +45,6 @@ subprojects {
             substitute(module('com.senthora.gatlingfx:gatlingfx-runtime-api'))
                     .using(project(':runtime-api'))
         }
-    }
-    gatlingfx {
-        sourceSets = ['integrationTest']
     }
 
     tasks.withType(Test).configureEach {

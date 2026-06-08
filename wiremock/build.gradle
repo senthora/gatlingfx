@@ -1,3 +1,9 @@
+apply plugin: 'com.senthora.gatlingfx'
+
+gatlingfx {
+    sourceSets = ['integrationTest']
+}
+
 dependencies {
     implementation project(':core')
 
