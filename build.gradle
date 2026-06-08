@@ -6,16 +6,13 @@ plugins {
 }
 apply from: 'gradle/publish.gradle'
 
-repositories {
-    mavenLocal()
-}
-
 allprojects {
     group = 'com.senthora.gatlingfx'
     version = '0.1.0-SNAPSHOT'
 
     repositories {
         mavenCentral()
+        mavenLocal()
     }
 }
 
