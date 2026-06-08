@@ -68,8 +68,36 @@ jobs:
           disable_search: true
           fail_ci_if_error: true
 
+      - name: Detect publication changes
+        uses: dorny/paths-filter@v4
+        id: changes
+        with:
+          base: ${{ github.ref_name }}
+          filters: |
+            publish:
+              - 'build.gradle'
+              - 'settings.gradle'
+              - 'gradle.properties'
+              - 'gradle/libs.versions.toml'
+              - 'gradle/publish.gradle'
+          
+              - 'core/build.gradle'
+              - 'core/src/**'
+          
+              - 'proxy/build.gradle'
+              - 'proxy/src/**'
+          
+              - 'runtime/build.gradle'
+              - 'runtime/src/**'
+          
+              - 'runtime-api/build.gradle'
+              - 'runtime-api/src/**'
+          
+              - 'wiremock/build.gradle'
+              - 'wiremock/src/**'
+
       - name: Publish snapshot
-        if: github.ref == 'refs/heads/dev'
+        if: github.ref == 'refs/heads/dev' && steps.changes.outputs.publish == 'true'
         run: ./gradlew publishToMavenSnapshots
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
