@@ -1,10 +1,11 @@
-# Run all Gatling simulations via GatlingFx
+# Run all GatlingFx simulations
 [arg("args", help="GatlingFx arguments")]
 run-simulations *args:
-    @./gradlew :launcher:run {{ if args != '' { '--args="' + args + '"' } else { '' } }}
+    @./gradlew gatlingFxRun {{ if args != '' { '--args="' + args + '"' } else { '' } }}
 
-# Run single Gatling simulation via GatlingFx
+# Run single GatlingFx simulation
+[arg("module", pattern="core|proxy|wiremock", help="project module")]
 [arg("simulation", help="simulation class")]
 [arg("args", help="GatlingFx arguments")]
-run-simulation simulation *args:
-    @./gradlew :launcher:run --args="--simulation {{simulation}} {{args}}"
+run-simulation module simulation *args:
+    @./gradlew :{{module}}:gatlingFxRun --args="--simulation {{simulation}} {{args}}"
